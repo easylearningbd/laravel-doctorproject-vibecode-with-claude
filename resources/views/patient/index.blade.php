@@ -5,28 +5,28 @@
         <div class="dashboard-header">
             <h3>Dashboard</h3>
             <ul class="header-list-btns">
-                <li>
-                    <div class="dropdown header-dropdown">
-                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);">
-                            <img src="assets/img/doctors-dashboard/profile-06.jpg" class="avatar dropdown-avatar" alt="Img">
-                            Hendrita
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <a href="javascript:void(0);" class="dropdown-item">
-                                <img src="assets/img/doctors-dashboard/profile-06.jpg" class="avatar dropdown-avatar" alt="Img">
-                                Hendrita
-                            </a>
-                            <a href="javascript:void(0);" class="dropdown-item">
-                                <img src="assets/img/doctors-dashboard/profile-08.jpg" class="avatar dropdown-avatar" alt="Img">
-                                Laura
-                            </a>
-                            <a href="javascript:void(0);" class="dropdown-item">
-                                <img src="assets/img/doctors-dashboard/profile-07.jpg" class="avatar dropdown-avatar" alt="Img">
-                                Mathew
-                            </a>
-                        </div>
-                    </div>
-                </li>
+<li>
+    <div class="dropdown header-dropdown">
+        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);">
+            <img src="{{ asset('backend/assets/img/doctors-dashboard/profile-06.jpg') }}" class="avatar dropdown-avatar" alt="Img">
+            Hendrita
+        </a>
+        <div class="dropdown-menu dropdown-menu-end">
+            <a href="javascript:void(0);" class="dropdown-item">
+                <img src="{{ asset('backend/assets/img/doctors-dashboard/profile-06.jpg') }}" class="avatar dropdown-avatar" alt="Img">
+                Hendrita
+            </a>
+            <a href="javascript:void(0);" class="dropdown-item">
+                <img src="{{ asset('backend/assets/img/doctors-dashboard/profile-08.jpg') }}" class="avatar dropdown-avatar" alt="Img">
+                Laura
+            </a>
+            <a href="javascript:void(0);" class="dropdown-item">
+                <img src="{{ asset('backend/assets/img/doctors-dashboard/profile-07.jpg') }}" class="avatar dropdown-avatar" alt="Img">
+                Mathew
+            </a>
+        </div>
+    </div>
+</li>
             </ul>								
         </div>
         <div class="row">
@@ -103,75 +103,75 @@
                     
                 </div>
             </div>
-            <div class="col-xl-4 d-flex">
-                <div class="favourites-dashboard w-100">
-                    <div class="book-appointment-head">
-                        <h3><span>Book a new</span>Appointment</h3>
-                        <span class="add-icon"><a href="search.html"><i class="fa-solid fa-circle-plus"></i></a></span>
-                    </div>
-                    <div class="dashboard-card w-100">
-                        <div class="dashboard-card-head">
-                            <div class="header-title">
-                                <h5>Favourites</h5>
-                            </div>
-                            <div class="card-view-link">
-                                <a href="favourites.html">View All</a>
-                            </div>
-                        </div>
-                        <div class="dashboard-card-body">
-                            <div class="doctor-fav-list">
-                                <div class="doctor-info-profile">
-                                    <a href="#" class="table-avatar">
-                                        <img src="assets/img/doctors-dashboard/doctor-profile-img.jpg" alt="Img">
-                                    </a>
-                                    <div class="doctor-name-info">
-                                        <h5><a href="#">Dr. Edalin</a></h5>
-                                        <span>Endodontists</span>
-                                    </div>
-                                </div>
-                                <a href="#" class="cal-plus-icon"><i class="isax isax-calendar5"></i></a>
-                            </div>
-                            <div class="doctor-fav-list">
-                                <div class="doctor-info-profile">
-                                    <a href="#" class="table-avatar">
-                                        <img src="assets/img/doctors/doctor-thumb-11.jpg" alt="Img">
-                                    </a>
-                                    <div class="doctor-name-info">
-                                        <h5><a href="#">Dr. Maloney</a></h5>
-                                        <span>Cardiologist</span>
-                                    </div>
-                                </div>
-                                <a href="#" class="cal-plus-icon"><i class="isax isax-calendar5"></i></a>
-                            </div>
-                            <div class="doctor-fav-list">
-                                <div class="doctor-info-profile">
-                                    <a href="#" class="table-avatar">
-                                        <img src="assets/img/doctors/doctor-14.jpg" alt="Img">
-                                    </a>
-                                    <div class="doctor-name-info">
-                                        <h5><a href="#">Dr. Wayne </a></h5>
-                                        <span>Dental Specialist</span>
-                                    </div>
-                                </div>
-                                <a href="#" class="cal-plus-icon"><i class="isax isax-calendar5"></i></a>
-                            </div>
-                            <div class="doctor-fav-list">
-                                <div class="doctor-info-profile">
-                                    <a href="#" class="table-avatar">
-                                        <img src="assets/img/doctors/doctor-15.jpg" alt="Img">
-                                    </a>
-                                    <div class="doctor-name-info">
-                                        <h5><a href="#">Dr. Marla</a></h5>
-                                        <span>Endodontists</span>
-                                    </div>
-                                </div>
-                                <a href="#" class="cal-plus-icon"><i class="isax isax-calendar5"></i></a>
-                            </div>
-                        </div>
-                        
-                    </div>
-                </div>								
+<div class="col-xl-4 d-flex">
+    <div class="favourites-dashboard w-100">
+        <div class="book-appointment-head">
+            <h3><span>Book a new</span>Appointment</h3>
+            <span class="add-icon"><a href="search.html"><i class="fa-solid fa-circle-plus"></i></a></span>
+        </div>
+        <div class="dashboard-card w-100">
+            <div class="dashboard-card-head">
+                <div class="header-title">
+                    <h5>Favourites</h5>
+                </div>
+                <div class="card-view-link">
+                    <a href="favourites.html">View All</a>
+                </div>
             </div>
+            <div class="dashboard-card-body">
+                <div class="doctor-fav-list">
+                    <div class="doctor-info-profile">
+                        <a href="#" class="table-avatar">
+                            <img src="{{ asset('backend/assets/img/doctors-dashboard/doctor-profile-img.jpg') }}" alt="Img">
+                        </a>
+                        <div class="doctor-name-info">
+                            <h5><a href="#">Dr. Edalin</a></h5>
+                            <span>Endodontists</span>
+                        </div>
+                    </div>
+                    <a href="#" class="cal-plus-icon"><i class="isax isax-calendar5"></i></a>
+                </div>
+                <div class="doctor-fav-list">
+                    <div class="doctor-info-profile">
+                        <a href="#" class="table-avatar">
+                            <img src="{{ asset('backend/assets/img/doctors/doctor-thumb-11.jpg') }}" alt="Img">
+                        </a>
+                        <div class="doctor-name-info">
+                            <h5><a href="#">Dr. Maloney</a></h5>
+                            <span>Cardiologist</span>
+                        </div>
+                    </div>
+                    <a href="#" class="cal-plus-icon"><i class="isax isax-calendar5"></i></a>
+                </div>
+                <div class="doctor-fav-list">
+                    <div class="doctor-info-profile">
+                        <a href="#" class="table-avatar">
+                            <img src="{{ asset('backend/assets/img/doctors/doctor-14.jpg') }}" alt="Img">
+                        </a>
+                        <div class="doctor-name-info">
+                            <h5><a href="#">Dr. Wayne </a></h5>
+                            <span>Dental Specialist</span>
+                        </div>
+                    </div>
+                    <a href="#" class="cal-plus-icon"><i class="isax isax-calendar5"></i></a>
+                </div>
+                <div class="doctor-fav-list">
+                    <div class="doctor-info-profile">
+                        <a href="#" class="table-avatar">
+                            <img src="{{ asset('backend/assets/img/doctors/doctor-15.jpg') }}" alt="Img">
+                        </a>
+                        <div class="doctor-name-info">
+                            <h5><a href="#">Dr. Marla</a></h5>
+                            <span>Endodontists</span>
+                        </div>
+                    </div>
+                    <a href="#" class="cal-plus-icon"><i class="isax isax-calendar5"></i></a>
+                </div>
+            </div>
+            
+        </div>
+    </div>								
+</div>
         </div>
         <div class="row">
             <div class="col-xl-5 d-flex flex-column">
@@ -223,142 +223,53 @@
                                     </a>
                                 </li>
                             </ul>
-                            <div class="appointment-dash-card">
-                                <div class="doctor-fav-list">
-                                    <div class="doctor-info-profile">
-                                        <a href="#" class="table-avatar">
-                                            <img src="assets/img/doctors-dashboard/doctor-profile-img.jpg" alt="Img">
-                                        </a>
-                                        <div class="doctor-name-info">
-                                            <h5><a href="#">Dr.Edalin Hendry</a></h5>
-                                            <span class="fs-12 fw-medium">Dentist</span>
-                                        </div>
-                                    </div>
-                                    <a href="#" class="cal-plus-icon"><i class="isax isax-hospital5"></i></a>
-                                </div>
-                                <div class="date-time">
-                                    <p><i class="isax isax-clock5"></i>21 Mar 2024 - 10:30 PM </p>
-                                </div>
-                                <div class="card-btns gap-3">
-                                    <a href="chat.html" class="btn btn-md btn-light rounded-pill"><i class="isax isax-messages-25"></i>Chat Now</a>
-                                    <a href="patient-appointments.html" class="btn  btn-md btn-primary-gradient rounded-pill"><i class="isax isax-calendar-tick5"></i>Attend</a>
-                                </div>
-                            </div>
-                            <div class="appointment-dash-card">
-                                <div class="doctor-fav-list">
-                                    <div class="doctor-info-profile">
-                                        <a href="#" class="table-avatar">
-                                            <img src="assets/img/doctors/doctor-17.jpg" alt="Img">
-                                        </a>
-                                        <div class="doctor-name-info">
-                                            <h5><a href="#">Dr.Juliet Gabriel</a></h5>
-                                            <span class="fs-12 fw-medium">Cardiologist</span>
-                                        </div>
-                                    </div>
-                                    <a href="#" class="cal-plus-icon"><i class="isax isax-video5"></i></a>
-                                </div>
-                                <div class="date-time">
-                                    <p><i class="isax isax-clock5"></i>22 Mar 2024 - 10:30 PM  </p>
-                                </div>
-                                <div class="card-btns gap-3">
-                                    <a href="chat.html" class="btn btn-md btn-light rounded-pill"><i class="isax isax-messages-25"></i>Chat Now</a>
-                                    <a href="patient-appointments.html" class="btn  btn-md btn-primary-gradient rounded-pill"><i class="isax isax-calendar-tick5"></i>Attend</a>
-                                </div>
-                            </div>
+    <div class="appointment-dash-card">
+        <div class="doctor-fav-list">
+            <div class="doctor-info-profile">
+                <a href="#" class="table-avatar">
+                    <img src="{{ asset('backend/assets/img/doctors-dashboard/doctor-profile-img.jpg') }}" alt="Img">
+                </a>
+                <div class="doctor-name-info">
+                    <h5><a href="#">Dr.Edalin Hendry</a></h5>
+                    <span class="fs-12 fw-medium">Dentist</span>
+                </div>
+            </div>
+            <a href="#" class="cal-plus-icon"><i class="isax isax-hospital5"></i></a>
+        </div>
+        <div class="date-time">
+            <p><i class="isax isax-clock5"></i>21 Mar 2024 - 10:30 PM </p>
+        </div>
+        <div class="card-btns gap-3">
+            <a href="chat.html" class="btn btn-md btn-light rounded-pill"><i class="isax isax-messages-25"></i>Chat Now</a>
+            <a href="patient-appointments.html" class="btn  btn-md btn-primary-gradient rounded-pill"><i class="isax isax-calendar-tick5"></i>Attend</a>
+        </div>
+    </div>
+    <div class="appointment-dash-card">
+        <div class="doctor-fav-list">
+            <div class="doctor-info-profile">
+                <a href="#" class="table-avatar">
+                    <img src="{{ asset('backend/assets/img/doctors/doctor-17.jpg') }}" alt="Img">
+                </a>
+                <div class="doctor-name-info">
+                    <h5><a href="#">Dr.Juliet Gabriel</a></h5>
+                    <span class="fs-12 fw-medium">Cardiologist</span>
+                </div>
+            </div>
+            <a href="#" class="cal-plus-icon"><i class="isax isax-video5"></i></a>
+        </div>
+        <div class="date-time">
+            <p><i class="isax isax-clock5"></i>22 Mar 2024 - 10:30 PM  </p>
+        </div>
+        <div class="card-btns gap-3">
+            <a href="chat.html" class="btn btn-md btn-light rounded-pill"><i class="isax isax-messages-25"></i>Chat Now</a>
+            <a href="patient-appointments.html" class="btn  btn-md btn-primary-gradient rounded-pill"><i class="isax isax-calendar-tick5"></i>Attend</a>
+        </div>
+    </div>
                         </div>
                     </div>
                     
                 </div>
-                <div class="dashboard-card flex-fill">
-                    <div class="dashboard-card-head">
-                        <div class="header-title">
-                            <h5>Notifications</h5>
-                        </div>
-                        <div class="card-view-link">
-                            <a href="#">View All</a>
-                        </div>
-                    </div>
-                    <div class="dashboard-card-body">
-                        <div class="table-responsive">
-                            <table class="table dashboard-table">
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <div class="table-noti-info">
-                                                <div class="table-noti-icon color-violet">
-                                                    <i class="fa-solid fa-bell"></i>
-                                                </div>
-                                                
-                                                <div class="table-noti-message">
-                                                    <h6><a href="#">Booking Confirmed on <span> 21 Mar 2024 </span> 10:30 AM</a></h6>
-                                                    <span class="message-time">Just Now</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="table-noti-info">
-                                                <div class="table-noti-icon color-blue">
-                                                    <i class="fa-solid fa-star"></i>
-                                                </div>
-                                                
-                                                <div class="table-noti-message">
-                                                    <h6><a href="#">You have a  <span> New </span> Review for your Appointment </a></h6>
-                                                    <span class="message-time">5 Days ago</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="table-noti-info">
-                                                <div class="table-noti-icon color-red">
-                                                    <i class="isax isax-calendar-tick5"></i>
-                                                </div>
-                                                
-                                                <div class="table-noti-message">
-                                                    <h6><a href="#">You have Appointment with <span> Ahmed </span> by 01:20 PM </a></h6>
-                                                    <span class="message-time">12:55 PM</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="table-noti-info">
-                                                <div class="table-noti-icon color-yellow">
-                                                    <i class="fa-solid fa-money-bill-1-wave"></i>
-                                                </div>
-                                                
-                                                <div class="table-noti-message">
-                                                    <h6><a href="#">Sent an amount of <span> $200 </span> for an Appointment  by 01:20 PM </a></h6>
-                                                    <span class="message-time">2 Days ago</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="table-noti-info">
-                                                <div class="table-noti-icon color-blue">
-                                                    <i class="fa-solid fa-star"></i>
-                                                </div>
-                                                
-                                                <div class="table-noti-message">
-                                                    <h6><a href="#">You have a  <span> New </span> Review for your Appointment </a></h6>
-                                                    <span class="message-time">5 Days ago</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    
-                </div>
+                
             </div>
             <div class="col-xl-7 d-flex flex-column">
                 <div class="dashboard-card flex-fill">
@@ -413,122 +324,79 @@
                         </div>
                     </div>
                 </div>
-                <div class="dashboard-card flex-fill">
-                    <div class="dashboard-card-head">
-                        <div class="header-title">
-                            <h5>Past Appointments</h5>
+    <div class="dashboard-card flex-fill">
+        <div class="dashboard-card-head">
+            <div class="header-title">
+                <h5>Past Appointments</h5>
+            </div>
+            <div class="card-view-link">
+                <div class="owl-nav slide-nav2 text-end nav-control"></div>
+            </div>
+        </div>
+        <div class="dashboard-card-body">
+            <div class="past-appointments-slider owl-carousel">
+                <div class="appointment-dash-card past-appointment mt-0">
+                    <div class="doctor-fav-list">
+                        <div class="doctor-info-profile">
+                            <a href="#" class="table-avatar">
+                                <img src="assets/img/doctors-dashboard/doctor-profile-img.jpg" alt="Img">
+                            </a>
+                            <div class="doctor-name-info">
+                                <h5><a href="#">Dr.Edalin Hendry</a></h5>
+                                <span>Dental Specialist</span>
+                            </div>
                         </div>
-                        <div class="card-view-link">
-                            <div class="owl-nav slide-nav2 text-end nav-control"></div>
-                        </div>
+                        <span class="bg-orange badge"><i class="isax isax-video5 me-1"></i>30 Min</span>
                     </div>
-                    <div class="dashboard-card-body">
-                        <div class="past-appointments-slider owl-carousel">
-                            <div class="appointment-dash-card past-appointment mt-0">
-                                <div class="doctor-fav-list">
-                                    <div class="doctor-info-profile">
-                                        <a href="#" class="table-avatar">
-                                            <img src="assets/img/doctors-dashboard/doctor-profile-img.jpg" alt="Img">
-                                        </a>
-                                        <div class="doctor-name-info">
-                                            <h5><a href="#">Dr.Edalin Hendry</a></h5>
-                                            <span>Dental Specialist</span>
-                                        </div>
-                                    </div>
-                                    <span class="bg-orange badge"><i class="isax isax-video5 me-1"></i>30 Min</span>
-                                </div>
-                                <div class="appointment-date-info">
-                                    <h6>Thursday, Mar 2024</h6>
-                                    <ul>
-                                        <li>
-                                            <span><i class="isax isax-clock5"></i></span>Time : 04:00 PM - 04:30 PM (30 Min)
-                                        </li>
-                                        <li>
-                                            <span><i class="isax isax-location5"></i></span>Newyork, United States
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="card-btns">
-                                    <a href="patient-appointments.html" class="btn btn-md btn-outline-primary ms-0 me-3 rounded-pill">Reschedule</a>
-                                    <a href="patient-appointment-details.html" class="btn btn-md btn-primary-gradient rounded-pill">View Details</a>
-                                </div>
-                            </div>
-                            <div class="appointment-dash-card past-appointment mt-0">
-                                <div class="doctor-fav-list">
-                                    <div class="doctor-info-profile">
-                                        <a href="#" class="table-avatar">
-                                            <img src="assets/img/doctors/doctor-17.jpg" alt="Img">
-                                        </a>
-                                        <div class="doctor-name-info">
-                                            <h5><a href="#">Dr.Juliet Gabriel</a></h5>
-                                            <span>Cardiologist</span>
-                                        </div>
-                                    </div>
-                                    <span class="bg-orange badge"><i class="isax isax-video5 me-1"></i>30 Min</span>
-                                </div>
-                                <div class="appointment-date-info">
-                                    <h6>Friday, Mar 2024</h6>
-                                    <ul>
-                                        <li>
-                                            <span><i class="isax isax-clock5"></i></span>Time : 03:00 PM - 03:30 PM (30 Min)
-                                        </li>
-                                        <li>
-                                            <span><i class="isax isax-location5"></i></span>Newyork, United States
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="card-btns">
-                                    <a href="patient-appointments.html" class="btn btn-md btn-outline-primary ms-0 me-3 rounded-pill">Reschedule</a>
-                                    <a href="medical-details.html" class="btn btn-md btn-primary-gradient rounded-pill">View Details</a>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="appointment-date-info">
+                        <h6>Thursday, Mar 2024</h6>
+                        <ul>
+                            <li>
+                                <span><i class="isax isax-clock5"></i></span>Time : 04:00 PM - 04:30 PM (30 Min)
+                            </li>
+                            <li>
+                                <span><i class="isax isax-location5"></i></span>Newyork, United States
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-btns">
+                        <a href="patient-appointments.html" class="btn btn-md btn-outline-primary ms-0 me-3 rounded-pill">Reschedule</a>
+                        <a href="patient-appointment-details.html" class="btn btn-md btn-primary-gradient rounded-pill">View Details</a>
                     </div>
                 </div>
-                <div class="dashboard-card flex-fill">
-                    <div class="dashboard-card-head">
-                        <div class="header-title">
-                            <h5>Dependant</h5>
+                <div class="appointment-dash-card past-appointment mt-0">
+                    <div class="doctor-fav-list">
+                        <div class="doctor-info-profile">
+                            <a href="#" class="table-avatar">
+                                <img src="assets/img/doctors/doctor-17.jpg" alt="Img">
+                            </a>
+                            <div class="doctor-name-info">
+                                <h5><a href="#">Dr.Juliet Gabriel</a></h5>
+                                <span>Cardiologist</span>
+                            </div>
                         </div>
-                        <div class="card-view-link">
-                            <a href="#" class="add-new" data-bs-toggle="modal" data-bs-target="#add_dependent"><i class="fa-solid fa-circle-plus me-1"></i>Add New</a>
-                            <a href="dependent.html">View All</a>
-                        </div>
+                        <span class="bg-orange badge"><i class="isax isax-video5 me-1"></i>30 Min</span>
                     </div>
-                    <div class="dashboard-card-body">
-                        <div class="doctor-fav-list">
-                            <div class="doctor-info-profile">
-                                <a href="#" class="table-avatar">
-                                    <img src="assets/img/patients/patient-20.jpg" alt="Img">
-                                </a>
-                                <div class="doctor-name-info">
-                                    <h5><a href="#">Laura</a></h5>
-                                    <span>Mother - 58 years 20 days</span>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center">
-                                <a href="#" class="cal-plus-icon me-2"><i class="isax isax-calendar5"></i></a>
-                                <a href="dependent.html" class="cal-plus-icon"><i class="isax isax-eye4"></i></a>
-                            </div>
-                        </div>
-                        <div class="doctor-fav-list">
-                            <div class="doctor-info-profile">
-                                <a href="#" class="table-avatar">
-                                    <img src="assets/img/patients/patient-21.jpg" alt="Img">
-                                </a>
-                                <div class="doctor-name-info">
-                                    <h5><a href="#">Mathew</a></h5>
-                                    <span>Father - 59 years 15 days</span>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center">
-                                <a href="#" class="cal-plus-icon me-2"><i class="isax isax-calendar5"></i></a>
-                                <a href="dependent.html" class="cal-plus-icon"><i class="isax isax-eye4"></i></a>
-                            </div>
-                        </div>
+                    <div class="appointment-date-info">
+                        <h6>Friday, Mar 2024</h6>
+                        <ul>
+                            <li>
+                                <span><i class="isax isax-clock5"></i></span>Time : 03:00 PM - 03:30 PM (30 Min)
+                            </li>
+                            <li>
+                                <span><i class="isax isax-location5"></i></span>Newyork, United States
+                            </li>
+                        </ul>
                     </div>
-                    
-                </div>									
+                    <div class="card-btns">
+                        <a href="patient-appointments.html" class="btn btn-md btn-outline-primary ms-0 me-3 rounded-pill">Reschedule</a>
+                        <a href="medical-details.html" class="btn btn-md btn-primary-gradient rounded-pill">View Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+                 									
             </div>
         </div>
         <div class="row">
@@ -567,109 +435,109 @@
         <div id="appoint-tab" class="tab-pane fade show active">
         <div class="custom-new-table">
             <div class="table-responsive">
-                <table class="table table-hover table-center mb-0">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Doctor</th>
-                            <th>Date</th>
-                            <th>Type</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <a href="javascript:void(0);"><span class="link-primary">#AP1236</span></a>
-                            </td>
-                            <td>
-                                <h2 class="table-avatar">
-                                    <a href="doctor-profile.html" class="avatar avatar-sm me-2">
-                                        <img class="avatar-img rounded-3" src="assets/img/doctors/doctor-thumb-24.jpg" alt="User Image">
-                                    </a>
-                                    <a href="doctor-profile.html">Dr. Robert Womack</a>
-                                </h2>
-                            </td>
-                            <td>21 Mar 2024, 10:30 AM</td>
-                            <td>Video call</td>
-                            <td>
-                                <span class="badge badge-xs p-2 badge-soft-purple inline-flex align-items-center"><i class="fa-solid fa-circle me-1 fs-5"></i>Upcoming</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <a href="javascript:void(0);"><span class="link-primary">#AP3656</span></a>
-                            </td>	
-                            <td>
-                                <h2 class="table-avatar">
-                                    <a href="doctor-profile.html" class="avatar avatar-sm me-2">
-                                        <img class="avatar-img rounded-3" src="assets/img/doctors/doctor-thumb-23.jpg" alt="User Image">
-                                    </a>
-                                    <a href="doctor-profile.html">Dr. Patricia Cassidy</a>
-                                </h2>
-                            </td>
-                            <td>28 Mar 2024, 11:40 AM</td>	
-                            <td>Clinic Visit</td>
-                            <td>
-                            <span class="badge badge-xs p-2 badge-soft-purple inline-flex align-items-center"><i class="fa-solid fa-circle me-1 fs-5"></i>Completed</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                            <a href="javascript:void(0);"><span class="link-primary">#AP1246</span></a>
-                            </td>	
-                            <td>
-                                <h2 class="table-avatar">
-                                    <a href="doctor-profile.html" class="avatar avatar-sm me-2">
-                                        <img class="avatar-img rounded-3" src="assets/img/doctors/doctor-thumb-22.jpg" alt="User Image">
-                                    </a>
-                                    <a href="doctor-profile.html">Dr. Kevin Evans</a>
-                                </h2>
-                            </td>
-                            <td>02 Apr 2024, 09:20 AM</td>	
-                            <td>Audio Call</td>
-                            <td>
-                            <span class="badge badge-xs p-2 badge-soft-success inline-flex align-items-center"><i class="fa-solid fa-circle me-1 fs-5"></i>Completed</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                            <a href="javascript:void(0);"><span class="link-primary">#AP6985</span></a> 
-                            </td>
-                            <td>
-                                <h2 class="table-avatar">
-                                    <a href="doctor-profile.html" class="avatar avatar-sm me-2">
-                                        <img class="avatar-img rounded-3" src="assets/img/doctors/doctor-thumb-25.jpg" alt="User Image">
-                                    </a>
-                                    <a href="doctor-profile.html">Dr. Lisa Keating</a>
-                                </h2>
-                            </td>
-                            <td>15 Apr 2024, 04:10 PM</td>		
-                            <td>Clinic Visit</td>
-                            <td>
-                            <span class="badge badge-xs p-2 badge-soft-danger inline-flex align-items-center"><i class="fa-solid fa-circle me-1 fs-5"></i>Cancelled</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                            <a href="javascript:void(0);"><span class="link-primary">#AP3659</span></a>
-                            </td>	
-                            <td>
-                                <h2 class="table-avatar">
-                                    <a href="doctor-profile.html" class="avatar avatar-sm me-2">
-                                        <img class="avatar-img rounded-3" src="assets/img/doctors/doctor-thumb-26.jpg" alt="User Image">
-                                    </a>
-                                    <a href="doctor-profile.html">Dr. John Hammer</a>
-                                </h2>
-                            </td>
-                            <td>10 May 2024, 06:00 PM</td>	
-                            <td>Video Call</td>
-                            <td>
-                            <span class="badge badge-xs p-2 badge-soft-purple inline-flex align-items-center"><i class="fa-solid fa-circle me-1 fs-5"></i>Upcoming</span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+    <table class="table table-hover table-center mb-0">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Doctor</th>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <a href="javascript:void(0);"><span class="link-primary">#AP1236</span></a>
+                </td>
+                <td>
+                    <h2 class="table-avatar">
+                        <a href="doctor-profile.html" class="avatar avatar-sm me-2">
+                            <img class="avatar-img rounded-3" src="{{ asset('backend/assets/img/doctors/doctor-thumb-24.jpg') }}" alt="User Image">
+                        </a>
+                        <a href="doctor-profile.html">Dr. Robert Womack</a>
+                    </h2>
+                </td>
+                <td>21 Mar 2024, 10:30 AM</td>
+                <td>Video call</td>
+                <td>
+                    <span class="badge badge-xs p-2 badge-soft-purple inline-flex align-items-center"><i class="fa-solid fa-circle me-1 fs-5"></i>Upcoming</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="javascript:void(0);"><span class="link-primary">#AP3656</span></a>
+                </td>	
+                <td>
+                    <h2 class="table-avatar">
+                        <a href="doctor-profile.html" class="avatar avatar-sm me-2">
+                            <img class="avatar-img rounded-3" src="{{ asset('backend/assets/img/doctors/doctor-thumb-23.jpg') }}" alt="User Image">
+                        </a>
+                        <a href="doctor-profile.html">Dr. Patricia Cassidy</a>
+                    </h2>
+                </td>
+                <td>28 Mar 2024, 11:40 AM</td>	
+                <td>Clinic Visit</td>
+                <td>
+                <span class="badge badge-xs p-2 badge-soft-purple inline-flex align-items-center"><i class="fa-solid fa-circle me-1 fs-5"></i>Completed</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                <a href="javascript:void(0);"><span class="link-primary">#AP1246</span></a>
+                </td>	
+                <td>
+                    <h2 class="table-avatar">
+                        <a href="doctor-profile.html" class="avatar avatar-sm me-2">
+                            <img class="avatar-img rounded-3" src="assets/img/doctors/doctor-thumb-22.jpg" alt="User Image">
+                        </a>
+                        <a href="doctor-profile.html">Dr. Kevin Evans</a>
+                    </h2>
+                </td>
+                <td>02 Apr 2024, 09:20 AM</td>	
+                <td>Audio Call</td>
+                <td>
+                <span class="badge badge-xs p-2 badge-soft-success inline-flex align-items-center"><i class="fa-solid fa-circle me-1 fs-5"></i>Completed</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                <a href="javascript:void(0);"><span class="link-primary">#AP6985</span></a> 
+                </td>
+                <td>
+                    <h2 class="table-avatar">
+                        <a href="doctor-profile.html" class="avatar avatar-sm me-2">
+                            <img class="avatar-img rounded-3" src="assets/img/doctors/doctor-thumb-25.jpg" alt="User Image">
+                        </a>
+                        <a href="doctor-profile.html">Dr. Lisa Keating</a>
+                    </h2>
+                </td>
+                <td>15 Apr 2024, 04:10 PM</td>		
+                <td>Clinic Visit</td>
+                <td>
+                <span class="badge badge-xs p-2 badge-soft-danger inline-flex align-items-center"><i class="fa-solid fa-circle me-1 fs-5"></i>Cancelled</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                <a href="javascript:void(0);"><span class="link-primary">#AP3659</span></a>
+                </td>	
+                <td>
+                    <h2 class="table-avatar">
+                        <a href="doctor-profile.html" class="avatar avatar-sm me-2">
+                            <img class="avatar-img rounded-3" src="assets/img/doctors/doctor-thumb-26.jpg" alt="User Image">
+                        </a>
+                        <a href="doctor-profile.html">Dr. John Hammer</a>
+                    </h2>
+                </td>
+                <td>10 May 2024, 06:00 PM</td>	
+                <td>Video Call</td>
+                <td>
+                <span class="badge badge-xs p-2 badge-soft-purple inline-flex align-items-center"><i class="fa-solid fa-circle me-1 fs-5"></i>Upcoming</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
             </div>
         </div>
         </div>

@@ -89,11 +89,11 @@
         </div>
     </div>
     <div class="footer-bg">
-        <img src="assets/img/bg/footer-bg-01.png" alt="img" class="footer-bg-01">
-        <img src="assets/img/bg/footer-bg-02.png" alt="img" class="footer-bg-02">
-        <img src="assets/img/bg/footer-bg-03.png" alt="img" class="footer-bg-03">
-        <img src="assets/img/bg/footer-bg-04.png" alt="img" class="footer-bg-04">
-        <img src="assets/img/bg/footer-bg-05.png" alt="img" class="footer-bg-05">
+        <img src="{{ asset('backend/assets/img/bg/footer-bg-01.png') }}" alt="img" class="footer-bg-01">
+        <img src="{{ asset('backend/assets/img/bg/footer-bg-02.png') }}" alt="img" class="footer-bg-02">
+        <img src="{{ asset('backend/assets/img/bg/footer-bg-03.png') }}" alt="img" class="footer-bg-03">
+        <img src="{{ asset('backend/assets/img/bg/footer-bg-04.png') }}" alt="img" class="footer-bg-04">
+        <img src="{{ asset('backend/assets/img/bg/footer-bg-05.png') }}" alt="img" class="footer-bg-05">
     </div>
 </div>
 <div class="footer-bottom">
@@ -112,14 +112,14 @@
                 </ul>
             </div>
             <!-- /Copyright Menu -->
-            <ul class="payment-method">
-                <li><a href="javascript:void(0);"><img src="assets/img/icons/card-01.svg" alt="Img"></a></li>
-                <li><a href="javascript:void(0);"><img src="assets/img/icons/card-02.svg" alt="Img"></a></li>
-                <li><a href="javascript:void(0);"><img src="assets/img/icons/card-03.svg" alt="Img"></a></li>
-                <li><a href="javascript:void(0);"><img src="assets/img/icons/card-04.svg" alt="Img"></a></li>
-                <li><a href="javascript:void(0);"><img src="assets/img/icons/card-05.svg" alt="Img"></a></li>
-                <li><a href="javascript:void(0);"><img src="assets/img/icons/card-06.svg" alt="Img"></a></li>
-            </ul>
+    <ul class="payment-method">
+        <li><a href="javascript:void(0);"><img src="{{ asset('backend/assets/img/icons/card-01.svg') }}" alt="Img"></a></li>
+        <li><a href="javascript:void(0);"><img src="{{ asset('backend/assets/img/icons/card-02.svg') }}" alt="Img"></a></li>
+        <li><a href="javascript:void(0);"><img src="{{ asset('backend/assets/img/icons/card-03.svg') }}" alt="Img"></a></li>
+        <li><a href="javascript:void(0);"><img src="{{ asset('backend/assets/img/icons/card-04.svg') }}" alt="Img"></a></li>
+        <li><a href="javascript:void(0);"><img src="{{ asset('backend/assets/img/icons/card-05.svg') }}" alt="Img"></a></li>
+        <li><a href="javascript:void(0);"><img src="{{ asset('backend/assets/img/icons/card-06.svg') }}" alt="Img"></a></li>
+    </ul>
         </div>
         <!-- /Copyright -->					
     </div>

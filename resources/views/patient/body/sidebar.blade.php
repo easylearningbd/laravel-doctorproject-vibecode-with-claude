@@ -5,7 +5,7 @@
     <div class="widget-profile pro-widget-content">
         <div class="profile-info-widget">
             <a href="profile-settings.html" class="booking-doc-img">
-                <img src="assets/img/doctors-dashboard/profile-06.jpg" alt="User Image">
+                <img src="{{ asset('backend/assets/img/doctors-dashboard/profile-06.jpg') }}" alt="User Image">
             </a>
             <div class="profile-det-info">
                 <h3><a href="profile-settings.html">Hendrita Hayes</a></h3>
