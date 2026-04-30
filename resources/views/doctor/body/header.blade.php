@@ -29,11 +29,11 @@
     <a href="javascript:void(0);">Home  </a>
      
     </li>
-    <li class="has-submenu">
+    <li class="has-submenu active">
         <a href="javascript:void(0);">Doctors  </a>
         
     </li>
-    <li class="has-submenu active">
+    <li class="has-submenu ">
         <a href="javascript:void(0);">Patients  </a>
          
     </li>
@@ -139,7 +139,7 @@
                             </div>
                             <div class="user-text">
                                 <h6>Hendrita Hayes</h6>
-                                <p class="text-muted mb-0">Patient</p>
+                                <p class="text-muted mb-0">Doctor</p>
                             </div>
                         </div>
                         <a class="dropdown-item" href="patient-dashboard.html">Dashboard</a>

@@ -2,7 +2,7 @@
         <div class="widget-profile pro-widget-content">
             <div class="profile-info-widget">
                 <a href="doctor-profile.html" class="booking-doc-img">
-                    <img src="assets/img/doctors-dashboard/doctor-profile-img.jpg" alt="User Image">
+                    <img src="{{ asset('backend/assets/img/doctors-dashboard/doctor-profile-img.jpg') }}" alt="User Image">
                 </a>
                 <div class="profile-det-info">
                     <h3><a href="doctor-profile.html">Dr Edalin Hendry</a></h3>
