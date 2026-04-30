@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Patient\PatientController;
+use App\Http\Controllers\Doctor\DoctorController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -14,8 +15,8 @@ Route::get('/dashboard', function () {
 
 Route::get('/patient/logout', [PatientController::class, 'PatientLogout'])->name('patient.logout');
 
-
-
+ 
+Route::get('/doctor/dashboard', [DoctorController::class, 'DoctorDashboard'])->name('doctor.dashboard');
 
 
 
