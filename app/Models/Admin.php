@@ -6,32 +6,24 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class Admin extends Authenticatable
 {
     use HasFactory, Notifiable;
 
     protected $fillable = [
-        'role',
         'first_name',
         'last_name',
         'email',
         'password',
         'phone',
+        'date_of_birth',
         'profile_photo',
+        'about',
         'address',
         'city',
         'state',
+        'zip_code',
         'country',
-        'pincode',
-        // Patient-only
-        'date_of_birth',
-        'blood_group',
-        // Doctor-only
-        'display_name',
-        'designation',
-        'specialization',
-        'known_languages',
-        'is_available',
     ];
 
     protected $hidden = [
@@ -45,18 +37,6 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password'          => 'hashed',
             'date_of_birth'     => 'date',
-            'is_available'      => 'boolean',
-            'known_languages'   => 'array',
         ];
-    }
-
-    public function isDoctor(): bool
-    {
-        return $this->role === 'doctor';
-    }
-
-    public function isPatient(): bool
-    {
-        return $this->role === 'patient';
     }
 }

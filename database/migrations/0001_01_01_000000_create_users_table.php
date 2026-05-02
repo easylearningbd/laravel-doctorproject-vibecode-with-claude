@@ -6,18 +6,44 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+
+            // Role
+            $table->enum('role', ['patient', 'doctor']);
+
+            // Auth
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
+
+            // Shared — both roles
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->string('phone');
+            $table->string('profile_photo')->nullable();
+
+            // Shared address — filled after registration
+            $table->string('address')->nullable();
+            $table->string('city')->nullable();
+            $table->string('state')->nullable();
+            $table->string('country')->nullable();
+            $table->string('pincode')->nullable();
+
+            // Patient-only
+            $table->date('date_of_birth')->nullable();
+            $table->string('blood_group')->nullable();
+
+            // Doctor-only
+            $table->string('display_name')->nullable();
+            $table->string('designation')->nullable();
+            $table->string('specialization')->nullable();
+            $table->text('known_languages')->nullable();
+            $table->boolean('is_available')->nullable()->default(true);
+
             $table->timestamps();
         });
 
@@ -37,9 +63,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('users');
