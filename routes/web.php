@@ -1,26 +1,33 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Patient\PatientController;
 use App\Http\Controllers\Doctor\DoctorController;
 use App\Http\Controllers\Admin\AdminController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('frontend.index');
 });
 
+// Patient dashboard — only accessible by patients
 Route::get('/dashboard', function () {
     return view('patient.index');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'patient'])->name('dashboard');
 
-Route::get('/patient/logout', [PatientController::class, 'PatientLogout'])->name('patient.logout');
+// Doctor dashboard — only accessible by doctors
+Route::get('/doctor/dashboard', [DoctorController::class, 'DoctorDashboard'])
+    ->middleware(['auth', 'doctor'])
+    ->name('doctor.dashboard');
 
- 
-Route::get('/doctor/dashboard', [DoctorController::class, 'DoctorDashboard'])->name('doctor.dashboard');
+// Admin dashboard
+Route::get('/admin/dashboard', [AdminController::class, 'AdminDashboard'])
+    ->name('admin.dashboard');
 
-
-Route::get('/admin/dashboard', [AdminController::class, 'AdminDashboard'])->name('admin.dashboard');
+// Shared logout (works for both roles via the auth guard)
+Route::post('/logout', [App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'destroy'])
+    ->middleware('auth')
+    ->name('logout');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

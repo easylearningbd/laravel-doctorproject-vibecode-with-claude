@@ -11,11 +11,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
-class RegisteredUserController extends Controller
+class DoctorRegisterController extends Controller
 {
     public function create(): View
     {
-        return view('auth.register');
+        return view('auth.doctor-register');
     }
 
     public function store(Request $request): RedirectResponse
@@ -29,7 +29,7 @@ class RegisteredUserController extends Controller
         ]);
 
         $user = User::create([
-            'role'       => 'patient',
+            'role'       => 'doctor',
             'first_name' => $request->first_name,
             'last_name'  => $request->last_name,
             'email'      => $request->email,
@@ -41,6 +41,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('dashboard');
+        return redirect()->route('doctor.dashboard');
     }
 }

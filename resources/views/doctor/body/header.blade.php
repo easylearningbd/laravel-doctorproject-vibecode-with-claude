@@ -129,22 +129,36 @@
                 <li class="nav-item dropdown has-arrow logged-item">
                     <a href="#" class="nav-link ps-0" data-bs-toggle="dropdown">
                         <span class="user-img">
-                            <img class="rounded-circle" src="{{ asset('backend/assets/img/doctors-dashboard/profile-06.jpg') }}" width="31" alt="Darren Elder">
+                            @if(auth()->user()->profile_photo)
+                                <img class="rounded-circle" src="{{ asset('storage/' . auth()->user()->profile_photo) }}" width="31" alt="{{ auth()->user()->first_name }}">
+                            @else
+                                <img class="rounded-circle" src="{{ asset('backend/assets/img/doctors-dashboard/profile-06.jpg') }}" width="31" alt="{{ auth()->user()->first_name }}">
+                            @endif
                         </span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end">
                         <div class="user-header">
                             <div class="avatar avatar-sm">
-                                <img src="{{ asset('backend/assets/img/doctors-dashboard/profile-06.jpg') }}" alt="User Image" class="avatar-img rounded-circle">
+                                @if(auth()->user()->profile_photo)
+                                    <img src="{{ asset('storage/' . auth()->user()->profile_photo) }}" alt="User Image" class="avatar-img rounded-circle">
+                                @else
+                                    <img src="{{ asset('backend/assets/img/doctors-dashboard/profile-06.jpg') }}" alt="User Image" class="avatar-img rounded-circle">
+                                @endif
                             </div>
                             <div class="user-text">
-                                <h6>Hendrita Hayes</h6>
+                                <h6>Dr. {{ auth()->user()->first_name }} {{ auth()->user()->last_name }}</h6>
                                 <p class="text-muted mb-0">Doctor</p>
                             </div>
                         </div>
-                        <a class="dropdown-item" href="patient-dashboard.html">Dashboard</a>
-                        <a class="dropdown-item" href="profile-settings.html">Profile Settings</a>
-    <a class="dropdown-item" href="{{ route('patient.logout')}}">Logout</a>
+                        <a class="dropdown-item" href="{{ route('doctor.dashboard') }}">Dashboard</a>
+
+                        <form method="POST" action="{{ route('logout') }}" id="doctor-logout-form">
+                            @csrf
+                        </form>
+                        <a class="dropdown-item" href="#"
+                           onclick="event.preventDefault(); document.getElementById('doctor-logout-form').submit();">
+                            Logout
+                        </a>
                     </div>
                 </li>
                 <!-- /User Menu -->

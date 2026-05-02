@@ -144,7 +144,7 @@
                         </div>
                         <a class="dropdown-item" href="patient-dashboard.html">Dashboard</a>
                         <a class="dropdown-item" href="profile-settings.html">Profile Settings</a>
-    <a class="dropdown-item" href="{{ route('patient.logout')}}">Logout</a>
+    <a class="dropdown-item" href=" ">Logout</a>
                     </div>
                 </li>
                 <!-- /User Menu -->
