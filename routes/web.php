@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('frontend.index');
 });
-
+ 
 // Patient dashboard — only accessible by patients
 Route::get('/dashboard', function () {
     return view('patient.index');
@@ -20,9 +20,12 @@ Route::get('/doctor/dashboard', [DoctorController::class, 'DoctorDashboard'])
     ->middleware(['auth', 'doctor'])
     ->name('doctor.dashboard');
 
-// Admin dashboard
-Route::get('/admin/dashboard', [AdminController::class, 'AdminDashboard'])
-    ->name('admin.dashboard');
+// Admin agent dashboard
+Route::get('/agent/login', [AdminController::class, 'AdminLogin'])
+    ->name('agent.login');
+
+Route::get('/agent/dashboard', [AdminController::class, 'AdminDashboard'])
+    ->name('agent.dashboard');
 
 // Shared logout (works for both roles via the auth guard)
 Route::post('/logout', [App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'destroy'])
