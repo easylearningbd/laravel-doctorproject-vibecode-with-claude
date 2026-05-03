@@ -20,11 +20,18 @@ Route::get('/doctor/dashboard', [DoctorController::class, 'DoctorDashboard'])
     ->middleware(['auth', 'doctor'])
     ->name('doctor.dashboard');
 
-// Admin agent dashboard
+// Admin routes
 Route::get('/agent/login', [AdminController::class, 'AdminLogin'])
     ->name('agent.login');
 
+Route::post('/agent/login', [AdminController::class, 'AdminLoginPost'])
+    ->name('agent.login.post');
+
+Route::post('/agent/logout', [AdminController::class, 'AdminLogout'])
+    ->name('agent.logout');
+
 Route::get('/agent/dashboard', [AdminController::class, 'AdminDashboard'])
+    ->middleware('admin')
     ->name('agent.dashboard');
 
 // Shared logout (works for both roles via the auth guard)
