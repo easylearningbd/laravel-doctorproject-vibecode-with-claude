@@ -55,6 +55,11 @@ class User extends Authenticatable
         return $this->hasMany(DoctorMembership::class, 'user_id');
     }
 
+    public function experiences()
+    {
+        return $this->hasMany(DoctorExperience::class, 'user_id');
+    }
+
     public function isDoctor(): bool
     {
         return $this->role === 'doctor';

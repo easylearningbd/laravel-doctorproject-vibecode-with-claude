@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Doctor;
 
 use App\Http\Controllers\Controller;
+use App\Models\DoctorExperience;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -89,7 +90,82 @@ class DoctorController extends Controller
 
     public function DoctorExperience()
     {
-        return view('doctor.dashboard.profile.doctor_experience');
+        $doctor      = Auth::user();
+        $experiences = $doctor->experiences()->orderBy('start_date', 'desc')->get();
+        return view('doctor.dashboard.profile.doctor_experience', compact('doctor', 'experiences'));
+    }
+    // End Method
+
+    public function DoctorExperiencePost(Request $request)
+    {
+        $doctor = Auth::user();
+
+        $request->validate([
+            'experiences'                       => 'nullable|array',
+            'experiences.*.hospital_name'       => 'required_with:experiences|string|max:255',
+            'experiences.*.title'               => 'nullable|string|max:255',
+            'experiences.*.years_of_experience' => 'nullable|string|max:50',
+            'experiences.*.location'            => 'nullable|string|max:255',
+            'experiences.*.employment_type'     => 'nullable|in:Full Time,Part Time',
+            'experiences.*.description'         => 'nullable|string',
+            'experiences.*.start_date'          => 'nullable|date',
+            'experiences.*.end_date'            => 'nullable|date|after_or_equal:experiences.*.start_date',
+            'experiences.*.currently_working'   => 'nullable|boolean',
+            'experience_logos.*'                => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg|max:4096',
+        ]);
+
+        // Delete all existing and re-insert (after preserving old logos)
+        $oldLogos = $doctor->experiences()->pluck('logo', 'id')->toArray();
+        $doctor->experiences()->delete();
+
+        if ($request->has('experiences')) {
+            $uploadedLogos = $request->file('experience_logos') ?? [];
+
+            foreach ($request->experiences as $i => $data) {
+                if (empty($data['hospital_name'])) {
+                    continue;
+                }
+
+                // Resolve logo: new upload > keep existing > null
+                $logoPath = $data['existing_logo'] ?? null;
+
+                if (!empty($data['remove_logo'])) {
+                    if ($logoPath) {
+                        Storage::disk('public')->delete($logoPath);
+                    }
+                    $logoPath = null;
+                }
+
+                if (isset($uploadedLogos[$i]) && $uploadedLogos[$i]->isValid()) {
+                    if ($logoPath) {
+                        Storage::disk('public')->delete($logoPath);
+                    }
+                    $logoPath = $uploadedLogos[$i]->store('experiences', 'public');
+                }
+
+                $doctor->experiences()->create([
+                    'hospital_name'       => $data['hospital_name'],
+                    'title'               => $data['title'] ?? null,
+                    'years_of_experience' => $data['years_of_experience'] ?? null,
+                    'location'            => $data['location'] ?? null,
+                    'employment_type'     => $data['employment_type'] ?? 'Full Time',
+                    'description'         => $data['description'] ?? null,
+                    'start_date'          => $data['start_date'] ?: null,
+                    'end_date'            => !empty($data['currently_working']) ? null : ($data['end_date'] ?: null),
+                    'currently_working'   => !empty($data['currently_working']),
+                    'logo'                => $logoPath,
+                ]);
+            }
+
+            // Delete orphaned old logos not re-used
+            foreach ($oldLogos as $oldLogo) {
+                if ($oldLogo && !in_array($oldLogo, array_column($request->experiences, 'existing_logo'))) {
+                    Storage::disk('public')->delete($oldLogo);
+                }
+            }
+        }
+
+        return back()->with('success', 'Experience updated successfully.');
     }
     // End Method
 
