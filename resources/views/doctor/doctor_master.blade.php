@@ -44,6 +44,9 @@
 
 		<!-- Feathericon CSS -->
     	<link rel="stylesheet" href="{{ asset('backend/assets/css/feather.css') }}">
+
+		<!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="{{ asset('backend/assets/plugins/bootstrap-tagsinput/css/bootstrap-tagsinput.css') }}">
 		
 		<!-- Main CSS -->
 		<link rel="stylesheet" href="{{ asset('backend/assets/css/custom.css') }}">
@@ -110,6 +113,12 @@
 		<!-- Apexchart JS -->
 		<script src="{{ asset('backend/assets/plugins/apex/apexcharts.min.js') }}"></script>
 		<script src="{{ asset('backend/assets/plugins/apex/chart-data.js') }}"></script>
+
+		<!-- Bootstrap Tagsinput JS -->
+		<script src="{{ asset('backend/assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.js') }}"></script>
+		
+		<!-- Profile Settings JS -->
+		<script src="{{ asset('backend/assets/js/profile-settings.js') }}"></script>
 		
 		<!-- Circle Progress JS -->
 		<script src="{{ asset('backend/assets/js/circle-progress.min.js') }}"></script>
