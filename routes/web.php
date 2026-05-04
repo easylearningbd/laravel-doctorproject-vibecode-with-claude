@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Patient\PatientController;
 use App\Http\Controllers\Doctor\DoctorController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\SpecialityController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -32,15 +33,18 @@ Route::post('/agent/logout', [AdminController::class, 'AdminLogout'])
 
  
 
-Route::middleware(['admin'])->controller(AdminController::class)->group(function () {
+Route::middleware(['admin'])->group(function () {
 
-Route::get('/agent/dashboard', 'AdminDashboard')->name('agent.dashboard');
+    Route::get('/agent/dashboard', [AdminController::class, 'AdminDashboard'])->name('agent.dashboard');
 
-Route::get('/agent/spcialities', 'AdminSpcialities')->name('agent.spcialities');
-       
+    // Specialities CRUD
+    Route::get('/agent/spcialities', [SpecialityController::class, 'index'])->name('agent.spcialities');
+    Route::post('/agent/spcialities', [SpecialityController::class, 'store'])->name('agent.spcialities.store');
+    Route::put('/agent/spcialities/{id}', [SpecialityController::class, 'update'])->name('agent.spcialities.update');
+    Route::delete('/agent/spcialities/{id}', [SpecialityController::class, 'destroy'])->name('agent.spcialities.destroy');
 
-    });
-    /// End Admin Group Middleware 
+});
+/// End Admin Group Middleware
 
 
 // Shared logout (works for both roles via the auth guard)
