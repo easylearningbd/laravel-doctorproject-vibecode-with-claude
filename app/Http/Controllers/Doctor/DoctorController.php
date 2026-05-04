@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Doctor;
 
 use App\Http\Controllers\Controller;
+use App\Models\DoctorEducation;
 use App\Models\DoctorExperience;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -171,7 +172,66 @@ class DoctorController extends Controller
 
     public function DoctorEducation()
     {
-        return view('doctor.dashboard.profile.doctor_education');
+        $doctor     = Auth::user();
+        $educations = $doctor->educations()->orderBy('start_date', 'desc')->get();
+        return view('doctor.dashboard.profile.doctor_education', compact('doctor', 'educations'));
+    }
+    // End Method
+
+    public function DoctorEducationPost(Request $request)
+    {
+        $doctor = Auth::user();
+
+        $request->validate([
+            'educations'                        => 'nullable|array',
+            'educations.*.institution_name'     => 'required_with:educations|string|max:255',
+            'educations.*.course'               => 'nullable|string|max:255',
+            'educations.*.start_date'           => 'nullable|date',
+            'educations.*.end_date'             => 'nullable|date',
+            'educations.*.no_of_years'          => 'nullable|string|max:50',
+            'educations.*.description'          => 'nullable|string',
+            'education_logos.*'                 => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg|max:4096',
+        ]);
+
+        $doctor->educations()->delete();
+
+        if ($request->has('educations')) {
+            $uploadedLogos = $request->file('education_logos') ?? [];
+
+            foreach ($request->educations as $i => $data) {
+                if (empty($data['institution_name'])) {
+                    continue;
+                }
+
+                $logoPath = $data['existing_logo'] ?? null;
+
+                if (!empty($data['remove_logo'])) {
+                    if ($logoPath) {
+                        Storage::disk('public')->delete($logoPath);
+                    }
+                    $logoPath = null;
+                }
+
+                if (isset($uploadedLogos[$i]) && $uploadedLogos[$i]->isValid()) {
+                    if ($logoPath) {
+                        Storage::disk('public')->delete($logoPath);
+                    }
+                    $logoPath = $uploadedLogos[$i]->store('educations', 'public');
+                }
+
+                $doctor->educations()->create([
+                    'institution_name' => $data['institution_name'],
+                    'course'           => $data['course'] ?? null,
+                    'start_date'       => $data['start_date'] ?: null,
+                    'end_date'         => $data['end_date'] ?: null,
+                    'no_of_years'      => $data['no_of_years'] ?? null,
+                    'description'      => $data['description'] ?? null,
+                    'logo'             => $logoPath,
+                ]);
+            }
+        }
+
+        return back()->with('success', 'Education updated successfully.');
     }
     // End Method
 

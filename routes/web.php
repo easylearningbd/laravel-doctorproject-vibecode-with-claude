@@ -43,6 +43,7 @@ Route::get('/doctor/experience', [DoctorController::class, 'DoctorExperience'])-
 Route::post('/doctor/experience', [DoctorController::class, 'DoctorExperiencePost'])->name('doctor.experience.post');
 
 Route::get('/doctor/education', [DoctorController::class, 'DoctorEducation'])->name('doctor.education');
+Route::post('/doctor/education', [DoctorController::class, 'DoctorEducationPost'])->name('doctor.education.post');
 
 Route::get('/doctor/clinics', [DoctorController::class, 'DoctorClinics'])->name('doctor.clinics');
 

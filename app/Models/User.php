@@ -60,6 +60,11 @@ class User extends Authenticatable
         return $this->hasMany(DoctorExperience::class, 'user_id');
     }
 
+    public function educations()
+    {
+        return $this->hasMany(DoctorEducation::class, 'user_id');
+    }
+
     public function isDoctor(): bool
     {
         return $this->role === 'doctor';
