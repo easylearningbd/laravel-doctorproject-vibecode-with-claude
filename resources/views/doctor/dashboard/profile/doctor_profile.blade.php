@@ -12,13 +12,13 @@
     <div class="appointment-tabs">
         <ul class="nav">
             <li class="nav-item">
-                <a class="nav-link active" href="doctor-profile-settings.html">Basic Details</a>
+                <a class="nav-link active" href="{{ route('doctor.profile') }}">Basic Details</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="doctor-experience-settings.html">Experience</a>
+                <a class="nav-link" href="{{ route('doctor.experience') }}">Experience</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="doctor-education-settings.html">Education</a>
+                <a class="nav-link" href="{{ route('doctor.education') }}">Education</a>
             </li>
              
             <li class="nav-item">

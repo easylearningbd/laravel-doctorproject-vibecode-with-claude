@@ -32,11 +32,15 @@ Route::post('/agent/logout', [AdminController::class, 'AdminLogout'])
     ->name('agent.logout');
 
 
-
+ 
 
 Route::middleware(['auth', 'doctor'])->group(function () {
 
     Route::get('/doctor/profile', [DoctorController::class, 'DoctorProfile'])->name('doctor.profile');
+
+    Route::get('/doctor/experience', [DoctorController::class, 'DoctorExperience'])->name('doctor.experience');
+
+    Route::get('/doctor/education', [DoctorController::class, 'DoctorEducation'])->name('doctor.education');
 
    
 
