@@ -46,6 +46,7 @@ Route::get('/doctor/education', [DoctorController::class, 'DoctorEducation'])->n
 Route::post('/doctor/education', [DoctorController::class, 'DoctorEducationPost'])->name('doctor.education.post');
 
 Route::get('/doctor/clinics', [DoctorController::class, 'DoctorClinics'])->name('doctor.clinics');
+Route::post('/doctor/clinics', [DoctorController::class, 'DoctorClinicsPost'])->name('doctor.clinics.post');
 
 Route::get('/doctor/hours', [DoctorController::class, 'DoctorHours'])->name('doctor.hours');
    

@@ -65,6 +65,11 @@ class User extends Authenticatable
         return $this->hasMany(DoctorEducation::class, 'user_id');
     }
 
+    public function clinics()
+    {
+        return $this->hasMany(DoctorClinic::class, 'user_id');
+    }
+
     public function isDoctor(): bool
     {
         return $this->role === 'doctor';
