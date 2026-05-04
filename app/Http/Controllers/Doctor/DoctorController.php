@@ -12,5 +12,10 @@ class DoctorController extends Controller
    }
     // End Method 
 
+  public function DoctorProfile(){
+    return view('doctor.dashboard.profile.doctor_profile');
+   }
+    // End Method 
+
 
 }

@@ -31,6 +31,18 @@ Route::post('/agent/login', [AdminController::class, 'AdminLoginPost'])
 Route::post('/agent/logout', [AdminController::class, 'AdminLogout'])
     ->name('agent.logout');
 
+
+
+
+Route::middleware(['auth', 'doctor'])->group(function () {
+
+    Route::get('/doctor/profile', [DoctorController::class, 'DoctorProfile'])->name('doctor.profile');
+
+   
+
+});
+/// End Doctor Group Middleware
+
  
 
 Route::middleware(['admin'])->group(function () {
