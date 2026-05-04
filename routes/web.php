@@ -37,6 +37,7 @@ Route::post('/agent/logout', [AdminController::class, 'AdminLogout'])
 Route::middleware(['auth', 'doctor'])->group(function () {
 
 Route::get('/doctor/profile', [DoctorController::class, 'DoctorProfile'])->name('doctor.profile');
+Route::post('/doctor/profile', [DoctorController::class, 'DoctorProfilePost'])->name('doctor.profile.post');
 
 Route::get('/doctor/experience', [DoctorController::class, 'DoctorExperience'])->name('doctor.experience');
 

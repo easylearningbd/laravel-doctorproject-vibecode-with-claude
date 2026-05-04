@@ -50,6 +50,11 @@ class User extends Authenticatable
         ];
     }
 
+    public function memberships()
+    {
+        return $this->hasMany(DoctorMembership::class, 'user_id');
+    }
+
     public function isDoctor(): bool
     {
         return $this->role === 'doctor';
