@@ -50,4 +50,16 @@ class AdminController extends Controller
         return redirect()->route('agent.login');
     }
     // End Method
+
+
+    public function AdminSpcialities(){
+        return view('admin.dashboard.spcialities.all_spcialities');
+    }
+     // End Method
+
+
+
+
+
+
 }
