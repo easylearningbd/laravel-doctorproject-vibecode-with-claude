@@ -27,5 +27,15 @@ class DoctorController extends Controller
    }
     // End Method 
 
+  public function DoctorClinics(){
+    return view('doctor.dashboard.profile.doctor_clinics');
+   }
+    // End Method 
+
+  public function DoctorHours(){
+    return view('doctor.dashboard.profile.doctor_hours');
+   }
+    // End Method 
+
 
 }

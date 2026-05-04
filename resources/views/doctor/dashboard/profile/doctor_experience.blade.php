@@ -10,21 +10,21 @@
 <div class="setting-tab">
     <div class="appointment-tabs">
         <ul class="nav">
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('doctor.profile') }}">Basic Details</a>
+             <li class="nav-item">
+                <a class="nav-link " href="{{ route('doctor.profile') }}">Basic Details</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link active" href="{{ route('doctor.experience') }}">Experience</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('doctor.education') }}">Education</a>
+                <a class="nav-link " href="{{ route('doctor.education') }}">Education</a>
             </li>
-            
+             
             <li class="nav-item">
-                <a class="nav-link" href="doctor-clinics-settings.html">Clinics</a>
+                <a class="nav-link " href="{{ route('doctor.clinics') }}">Clinics</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="doctor-business-settings.html">Business Hours</a>
+                <a class="nav-link " href="{{ route('doctor.hours') }}">Business Hours</a>
             </li>
         </ul>
     </div>

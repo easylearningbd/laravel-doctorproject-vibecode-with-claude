@@ -10,18 +10,18 @@
 <div class="setting-tab">
     <div class="appointment-tabs">
         <ul class="nav">
-            <li class="nav-item">
+        <li class="nav-item">
                 <a class="nav-link " href="{{ route('doctor.profile') }}">Basic Details</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('doctor.experience') }}">Experience</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" href="{{ route('doctor.education') }}">Education</a>
+                <a class="nav-link" href="{{ route('doctor.education') }}">Education</a>
             </li>
              
             <li class="nav-item">
-                <a class="nav-link " href="{{ route('doctor.clinics') }}">Clinics</a>
+                <a class="nav-link active" href="{{ route('doctor.clinics') }}">Clinics</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link " href="{{ route('doctor.hours') }}">Business Hours</a>
@@ -32,21 +32,22 @@
 <!-- /Settings List -->
 
 <div class="dashboard-header border-0 mb-0">
-    <h3>Education</h3>
+    <h3>Clinics</h3>
     <ul>
         <li>
-            <a href="#" class="btn btn-primary prime-btn add-educations">Add New  Education</a>
+            <a href="#" class="btn btn-primary prime-btn add-clinics">Add New Clinic</a>
         </li>
     </ul>
 </div>
 
-<form action="doctor-education-settings.html">
-    <div class="accordions education-infos" id="list-accord">
+<form action="doctor-clinics-settings.html">
 
-        <!-- Education Item -->
+    <div class="accordions clinic-infos" id="list-accord">
+
+        <!-- Clinic Item -->
         <div class="user-accordion-item">
-            <a href="#" class="accordion-wrap" data-bs-toggle="collapse" data-bs-target="#education1">Education<span>Delete</span></a>
-            <div class="accordion-collapse collapse show" id="education1" data-bs-parent="#list-accord">
+            <a href="#" class="accordion-wrap" data-bs-toggle="collapse" data-bs-target="#clinic1">Clinic<span>Delete</span></a>
+            <div class="accordion-collapse collapse show" id="clinic1" data-bs-parent="#list-accord">
                 <div class="content-collapse">
                     <div class="add-service-info">
                         <div class="add-info">
@@ -70,47 +71,42 @@
             </div>			
         </div>	
     </div>	
-</div>
-<div class="col-md-6">
+</div>	
+<div class="col-md-12">
     <div class="form-wrap">
-        <label class="col-form-label">Name of the institution</label>
+        <label class="col-form-label">Clinic Name</label>
         <input type="text" class="form-control">
     </div>													
 </div>
 <div class="col-md-6">
     <div class="form-wrap">
-        <label class="col-form-label">Course</label>
+        <label class="col-form-label">Location</label>
         <input type="text" class="form-control">
     </div>													
 </div>
-<div class="col-lg-4 col-md-6">
+<div class="col-md-6">
     <div class="form-wrap">
-        <label class="col-form-label">Start Date <span class="text-danger">*</span></label>
-        <div class="form-icon">
-            <input type="text" class="form-control datetimepicker">
-            <span class="icon"><i class="fa-regular fa-calendar-days"></i></span>
-        </div>
-    </div>													
-</div>
-<div class="col-lg-4 col-md-6">
-    <div class="form-wrap">
-        <label class="col-form-label">End Date <span class="text-danger">*</span></label>
-        <div class="form-icon">
-            <input type="text" class="form-control datetimepicker">
-            <span class="icon"><i class="fa-regular fa-calendar-days"></i></span>
-        </div>
-    </div>													
-</div>
-<div class="col-lg-4 col-md-6">
-    <div class="form-wrap">
-        <label class="col-form-label">No of Years <span class="text-danger">*</span></label>
+        <label class="col-form-label">Address</label>
         <input type="text" class="form-control">
     </div>													
 </div>
-<div class="col-lg-12">
+<div class="col-md-12">
     <div class="form-wrap">
-        <label class="col-form-label">Description <span class="text-danger">*</span></label>
-        <textarea class="form-control" rows="3"></textarea>
+        <label class="col-form-label">Gallery</label>
+        <div class="drop-file">
+            <p>Drop files or Click to upload</p>
+            <input type="file">
+        </div>
+        <div class="view-imgs">
+            <div class="view-img">
+                <img src="assets/img/doctors-dashboard/clinic-02.jpg" alt="img">
+                <a href="javascript:void(0);">Remove</a>
+            </div>
+            <div class="view-img">
+                <img src="assets/img/doctors-dashboard/clinic-01.jpg" alt="img">
+                <a href="javascript:void(0);">Remove</a>
+            </div>
+        </div>
     </div>													
 </div>
 </div>
@@ -122,12 +118,12 @@
 </div>
 </div>
 </div>
-<!-- /Education Item -->
+<!-- /Clinic Item -->
 
-<!-- Education Item -->
+<!-- Clinic Item -->
 <div class="user-accordion-item">
-<a href="#" class="collapsed accordion-wrap" data-bs-toggle="collapse" data-bs-target="#education2">Cambridge (MBBS)<span>Delete</span></a>
-<div class="accordion-collapse collapse" id="education2" data-bs-parent="#list-accord">
+<a href="#" class="collapsed accordion-wrap" data-bs-toggle="collapse" data-bs-target="#clinic2">Adrian’s Dentistry<span>Delete</span></a>
+<div class="accordion-collapse collapse" id="clinic2" data-bs-parent="#list-accord">
 <div class="content-collapse">
 <div class="add-service-info">
 <div class="add-info">
@@ -151,47 +147,42 @@
             </div>			
         </div>	
     </div>	
-</div>
-<div class="col-md-6">
+</div>	
+<div class="col-md-12">
     <div class="form-wrap">
-        <label class="col-form-label">Name of the institution</label>
-        <input type="text" class="form-control" value="Cambridge">
+        <label class="col-form-label">Clinic Name</label>
+        <input type="text" class="form-control" value="Adrian’s Dentistry">
     </div>													
 </div>
 <div class="col-md-6">
     <div class="form-wrap">
-        <label class="col-form-label">Course</label>
-        <input type="text" class="form-control" value="MBBS">
+        <label class="col-form-label">Location</label>
+        <input type="text" class="form-control">
     </div>													
 </div>
-<div class="col-lg-4 col-md-6">
+<div class="col-md-6">
     <div class="form-wrap">
-        <label class="col-form-label">Start Date <span class="text-danger">*</span></label>
-        <div class="form-icon">
-            <input type="text" class="form-control datetimepicker" value="12-6-2000">
-            <span class="icon"><i class="fa-regular fa-calendar-days"></i></span>
+        <label class="col-form-label">Addrerss</label>
+        <input type="text" class="form-control">
+    </div>													
+</div>
+<div class="col-md-12">
+    <div class="form-wrap">
+        <label class="col-form-label">Gallery</label>
+        <div class="drop-file">
+            <p>Drop files or Click to upload</p>
+            <input type="file">
         </div>
-    </div>													
-</div>
-<div class="col-lg-4 col-md-6">
-    <div class="form-wrap">
-        <label class="col-form-label">End Date <span class="text-danger">*</span></label>
-        <div class="form-icon">
-            <input type="text" class="form-control datetimepicker" value="09-05-2005">
-            <span class="icon"><i class="fa-regular fa-calendar-days"></i></span>
+        <div class="view-imgs">
+            <div class="view-img">
+                <img src="assets/img/doctors-dashboard/clinic-02.jpg" alt="img">
+                <a href="javascript:void(0);">Remove</a>
+            </div>
+            <div class="view-img">
+                <img src="assets/img/doctors-dashboard/clinic-01.jpg" alt="img">
+                <a href="javascript:void(0);">Remove</a>
+            </div>
         </div>
-    </div>													
-</div>
-<div class="col-lg-4 col-md-6">
-    <div class="form-wrap">
-        <label class="col-form-label">No of Years <span class="text-danger">*</span></label>
-        <input type="text" class="form-control" value="5">
-    </div>													
-</div>
-<div class="col-lg-12">
-    <div class="form-wrap">
-        <label class="col-form-label">Description <span class="text-danger">*</span></label>
-        <textarea class="form-control" rows="3"></textarea>
     </div>													
 </div>
 </div>
@@ -203,16 +194,17 @@
 </div>
 </div>
 </div>
-<!-- /Education Item -->
+<!-- /Clinic Item -->
 
 </div>
 
 <div class="modal-btn text-end">
 <a href="#" class="btn btn-gray">Cancel</a>
-<button class="btn btn-primary prime-btn">Save Changes</button>
+<button type="submit" class="btn btn-primary prime-btn">Save Changes</button>
 </div>
+
 </form>
 <!-- /Profile Settings -->
- 
 
+ 
 @endsection

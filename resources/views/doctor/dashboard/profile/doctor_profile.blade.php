@@ -22,10 +22,10 @@
             </li>
              
             <li class="nav-item">
-                <a class="nav-link" href="doctor-clinics-settings.html">Clinics</a>
+                <a class="nav-link" href="{{ route('doctor.clinics') }}">Clinics</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="doctor-business-settings.html">Business Hours</a>
+                <a class="nav-link" href="{{ route('doctor.hours') }}">Business Hours</a>
             </li>
         </ul>
     </div>
