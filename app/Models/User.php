@@ -70,6 +70,11 @@ class User extends Authenticatable
         return $this->hasMany(DoctorClinic::class, 'user_id');
     }
 
+    public function businessHours()
+    {
+        return $this->hasMany(DoctorBusinessHour::class, 'user_id');
+    }
+
     public function isDoctor(): bool
     {
         return $this->role === 'doctor';

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Doctor;
 
 use App\Http\Controllers\Controller;
+use App\Models\DoctorBusinessHour;
 use App\Models\DoctorClinic;
 use App\Models\DoctorEducation;
 use App\Models\DoctorExperience;
@@ -333,7 +334,39 @@ class DoctorController extends Controller
 
     public function DoctorHours()
     {
-        return view('doctor.dashboard.profile.doctor_hours');
+        $doctor = Auth::user();
+        $hours  = $doctor->businessHours()->get()->keyBy('day_of_week');
+        return view('doctor.dashboard.profile.doctor_hours', compact('doctor', 'hours'));
+    }
+    // End Method
+
+    public function DoctorHoursPost(Request $request)
+    {
+        $doctor = Auth::user();
+
+        $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+
+        $request->validate([
+            'hours'                  => 'nullable|array',
+            'hours.*.start_time'     => 'nullable|date_format:H:i',
+            'hours.*.end_time'       => 'nullable|date_format:H:i',
+        ]);
+
+        foreach ($days as $day) {
+            $data   = $request->input("hours.$day", []);
+            $isOpen = !empty($data['is_open']);
+
+            $doctor->businessHours()->updateOrCreate(
+                ['day_of_week' => $day],
+                [
+                    'is_open'    => $isOpen,
+                    'start_time' => $isOpen ? ($data['start_time'] ?? null) : null,
+                    'end_time'   => $isOpen ? ($data['end_time'] ?? null) : null,
+                ]
+            );
+        }
+
+        return back()->with('success', 'Business hours updated successfully.');
     }
     // End Method
 }
