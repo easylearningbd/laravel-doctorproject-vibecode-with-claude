@@ -433,9 +433,46 @@ class DoctorController extends Controller
     }
     // End Method
 
-    public function DoctorChangePassword(){
+    public function DoctorChangePassword()
+    {
         return view('doctor.dashboard.changepassword.change_password');
     }
+    // End Method
+
+    public function DoctorChangePasswordPost(Request $request)
+    {
+        $request->validate([
+            'old_password'     => 'required',
+            'new_password'     => 'required|min:8|confirmed',
+            'new_password_confirmation' => 'required',
+        ], [
+            'new_password.confirmed' => 'New password and confirm password do not match.',
+            'new_password.min'       => 'New password must be at least 8 characters.',
+        ]);
+
+        $doctor = Auth::user();
+
+        if (! \Illuminate\Support\Facades\Hash::check($request->old_password, $doctor->password)) {
+            return back()
+                ->withErrors(['old_password' => 'Old password does not match our records.'])
+                ->withInput();
+        }
+
+        if ($request->old_password === $request->new_password) {
+            return back()
+                ->withErrors(['new_password' => 'New password must be different from the old password.'])
+                ->withInput();
+        }
+
+        $doctor->update(['password' => $request->new_password]);
+
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login')->with('status', 'Password changed successfully. Please log in with your new password.');
+    }
+    // End Method
 
 
 
