@@ -25,6 +25,11 @@ class PatientController extends Controller
     }
     // End Method 
 
+    public function PatientChangePassword(){
+    return view('patient.dashboard.setting.change_password');
+    }
+    // End Method 
+
  
 
 } 

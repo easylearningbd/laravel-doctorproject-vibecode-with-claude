@@ -37,6 +37,8 @@ Route::middleware(['auth', 'patient'])->group(function () {
 
 Route::get('/patient/setting', [PatientController::class, 'PatientSetting'])->name('patient.setting');
 
+Route::get('/patient/change/password', [PatientController::class, 'PatientChangePassword'])->name('patient.change.password');
+
   });
 /// End Patient Group Middleware
  

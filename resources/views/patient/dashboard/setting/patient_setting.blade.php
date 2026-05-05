@@ -2,7 +2,141 @@
 @section('patient')
 
 
-fsdafsadfsadfsa
+<div class="col-lg-8 col-xl-9">
+<nav class="settings-tab mb-1">
+    <ul class="nav nav-tabs-bottom" role="tablist">
+            <li class="nav-item" role="presentation">
+            <a class="nav-link active" href="{{ route('patient.setting') }}">Profile</a>
+            </li>
+            <li class="nav-item" role="presentation">
+            <a class="nav-link" href="{{ route('patient.change.password') }}">Change Password</a>
+            </li>
+             
+            
+    </ul>
+</nav>
+<div class="card">
+    <div class="card-body">
+        <div class="border-bottom pb-3 mb-3">
+            <h5>Profile Settings</h5>
+        </div>
+        <form action="profile-settings.html">
+            <div class="setting-card">
+                <label class="form-label mb-2">Profile Photo</label>
+                <div class="change-avatar img-upload">
+                    <div class="profile-img">
+                        <i class="fa-solid fa-file-image"></i>
+                    </div>
+                    <div class="upload-img">
+                        <div class="imgs-load d-flex align-items-center">
+                            <div class="change-photo">
+                                Upload New 
+                                <input type="file" class="upload">
+                            </div>
+                            <a href="#" class="upload-remove">Remove</a>
+                        </div>
+                        <p>Your Image should Below 4 MB, Accepted format jpg,png,svg</p>
+                    </div>			
+                </div>			
+            </div>
+            <div class="setting-title">
+                <h6>Information</h6>
+            </div>
+            <div class="setting-card">
+                <div class="row">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">First Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Last Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Date of Birth <span class="text-danger">*</span></label>
+                            <div class="form-icon">
+                                <input type="text" class="form-control datetimepicker" placeholder="dd/mm/yyyy">
+                                <span class="icon"><i class="isax isax-calendar-1"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Phone Number <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Email Address <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Blood Group <span class="text-danger">*</span></label>
+                            <select class="select">
+                                <option>Select</option>
+                                <option>B+ve</option>
+                                <option>AB+ve</option>
+                                <option>B-ve</option>
+                                <option>O+ve</option>
+                                <option>O-ve</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="setting-title">
+                <h6>Address</h6>
+            </div>
+            <div class="setting-card">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="mb-3">
+                            <label class="form-label">Address <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">City <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">State <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Country <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Pincode <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-btn text-end">
+                <a href="#" class="btn btn-md btn-light rounded-pill">Cancel</a>
+                <button type="submit" class="btn btn-md btn-primary-gradient rounded-pill">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
 
 
 
