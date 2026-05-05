@@ -7,6 +7,8 @@ use App\Models\DoctorBusinessHour;
 use App\Models\DoctorClinic;
 use App\Models\DoctorEducation;
 use App\Models\DoctorExperience;
+use App\Models\DoctorSpecialityService;
+use App\Models\Speciality;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -373,10 +375,63 @@ class DoctorController extends Controller
     // End Method
 
 
-  public function SpecialitiesServices(){
-        return view('doctor.dashboard.services.specialities_services');
+    public function SpecialitiesServices()
+    {
+        $doctor      = Auth::user();
+        $specialities = Speciality::orderBy('name')->get();
+
+        // Group existing services by speciality_id so each group = one accordion item
+        $grouped = $doctor->specialityServices()
+            ->with('speciality')
+            ->get()
+            ->groupBy('speciality_id');
+
+        return view('doctor.dashboard.services.specialities_services',
+            compact('specialities', 'grouped'));
     }
-     // End Method
+    // End Method
+
+    public function SpecialitiesServicesPost(Request $request)
+    {
+        $doctor = Auth::user();
+
+        $request->validate([
+            'items'                          => 'nullable|array',
+            'items.*.speciality_id'          => 'required_with:items|exists:specialities,id',
+            'items.*.services'               => 'nullable|array',
+            'items.*.services.*.service_name'=> 'required_with:items.*.services|string|max:255',
+            'items.*.services.*.price'       => 'nullable|numeric|min:0',
+            'items.*.services.*.about'       => 'nullable|string|max:500',
+        ]);
+
+        // Delete all and re-insert
+        $doctor->specialityServices()->delete();
+
+        if ($request->has('items')) {
+            foreach ($request->items as $item) {
+                $specialityId = $item['speciality_id'] ?? null;
+                if (!$specialityId) {
+                    continue;
+                }
+
+                foreach ($item['services'] ?? [] as $service) {
+                    if (empty($service['service_name'])) {
+                        continue;
+                    }
+
+                    $doctor->specialityServices()->create([
+                        'speciality_id' => $specialityId,
+                        'service_name'  => $service['service_name'],
+                        'price'         => $service['price'] ?: null,
+                        'about'         => $service['about'] ?? null,
+                    ]);
+                }
+            }
+        }
+
+        return back()->with('success', 'Specialities & Services saved successfully.');
+    }
+    // End Method
 
 
 

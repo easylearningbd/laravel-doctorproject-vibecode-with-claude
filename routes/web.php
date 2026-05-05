@@ -52,6 +52,7 @@ Route::get('/doctor/hours', [DoctorController::class, 'DoctorHours'])->name('doc
 Route::post('/doctor/hours', [DoctorController::class, 'DoctorHoursPost'])->name('doctor.hours.post');
    
 Route::get('/specialities/services', [DoctorController::class, 'SpecialitiesServices'])->name('specialities.services');
+Route::post('/specialities/services', [DoctorController::class, 'SpecialitiesServicesPost'])->name('specialities.services.post');
 
 
 });
