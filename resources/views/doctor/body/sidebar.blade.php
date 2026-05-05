@@ -1,15 +1,28 @@
 <div class="profile-sidebar doctor-sidebar profile-sidebar-new">
         <div class="widget-profile pro-widget-content">
+            @php $doctor = auth()->user(); @endphp
             <div class="profile-info-widget">
-                <a href="doctor-profile.html" class="booking-doc-img">
-                    <img src="{{ asset('backend/assets/img/doctors-dashboard/doctor-profile-img.jpg') }}" alt="User Image">
+                <a href="{{ route('doctor.profile') }}" class="booking-doc-img">
+                    @if ($doctor->profile_photo)
+                        <img src="{{ asset('storage/' . $doctor->profile_photo) }}" alt="User Image">
+                    @else
+                        <img src="{{ asset('backend/assets/img/doctors-dashboard/doctor-profile-img.jpg') }}" alt="User Image">
+                    @endif
                 </a>
                 <div class="profile-det-info">
-                    <h3><a href="doctor-profile.html">Dr Edalin Hendry</a></h3>
+                    <h3>
+                        <a href="{{ route('doctor.profile') }}">
+                            Dr {{ $doctor->first_name }} {{ $doctor->last_name }}
+                        </a>
+                    </h3>
                     <div class="patient-details">
-                        <h5 class="mb-0">BDS, MDS - Oral & Maxillofacial Surgery</h5>
+                        <h5 class="mb-0">{{ $doctor->designation ?? 'Doctor' }}</h5>
                     </div>
-                    <span class="badge doctor-role-badge"><i class="fa-solid fa-circle"></i>Dentist</span>
+                    @if ($doctor->specialization)
+                        <span class="badge doctor-role-badge">
+                            <i class="fa-solid fa-circle"></i>{{ $doctor->specialization }}
+                        </span>
+                    @endif
                 </div>
             </div>
         </div>
