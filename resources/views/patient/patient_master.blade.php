@@ -626,7 +626,7 @@
 		<!-- /Delete -->
 
 		<!-- jQuery -->
-		<script src="{{ asset('backend/') }}assets/js/jquery-3.7.1.min.js"></script>
+		<script src="{{ asset('backend/assets/js/jquery-3.7.1.min.js') }}"></script>
 		
 		<!-- Bootstrap Core JS -->
 		<script src="{{ asset('backend/assets/js/bootstrap.bundle.min.js') }}"></script>

@@ -1,18 +1,43 @@
 <div class="col-lg-4 col-xl-3 theiaStickySidebar">
 							
 <!-- Profile Sidebar -->
+@php
+    $patient = auth()->user();
+    $patientId = 'PT' . str_pad($patient->id, 6, '0', STR_PAD_LEFT);
+
+    $ageYears  = null;
+    $ageMonths = null;
+    if ($patient->date_of_birth) {
+        $diff      = $patient->date_of_birth->diff(now());
+        $ageYears  = $diff->y;
+        $ageMonths = $diff->m;
+    }
+@endphp
 <div class="profile-sidebar patient-sidebar profile-sidebar-new">
     <div class="widget-profile pro-widget-content">
         <div class="profile-info-widget">
-            <a href="profile-settings.html" class="booking-doc-img">
-                <img src="{{ asset('backend/assets/img/doctors-dashboard/profile-06.jpg') }}" alt="User Image">
+            <a href="{{ route('patient.setting') }}" class="booking-doc-img">
+                @if ($patient->profile_photo)
+                    <img src="{{ asset('storage/' . $patient->profile_photo) }}" alt="User Image">
+                @else
+                    <img src="{{ asset('backend/assets/img/doctors-dashboard/profile-06.jpg') }}" alt="User Image">
+                @endif
             </a>
             <div class="profile-det-info">
-                <h3><a href="profile-settings.html">Hendrita Hayes</a></h3>
+                <h3>
+                    <a href="{{ route('patient.setting') }}">
+                        {{ $patient->first_name }} {{ $patient->last_name }}
+                    </a>
+                </h3>
                 <div class="patient-details">
-                    <h5 class="mb-0">Patient ID : PT254654</h5>
+                    <h5 class="mb-0">Patient ID : {{ $patientId }}</h5>
                 </div>
-                <span>Female <i class="fa-solid fa-circle"></i> 32 years 03 Months</span>
+                @if ($ageYears !== null)
+                    <span>
+                        <i class="fa-solid fa-circle"></i>
+                        {{ $ageYears }} Years {{ str_pad($ageMonths, 2, '0', STR_PAD_LEFT) }} Months
+                    </span>
+                @endif
             </div>
         </div>
     </div>

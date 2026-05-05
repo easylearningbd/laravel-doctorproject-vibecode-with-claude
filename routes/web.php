@@ -36,6 +36,7 @@ Route::post('/agent/logout', [AdminController::class, 'AdminLogout'])
 Route::middleware(['auth', 'patient'])->group(function () {
 
 Route::get('/patient/setting', [PatientController::class, 'PatientSetting'])->name('patient.setting');
+Route::post('/patient/setting', [PatientController::class, 'PatientSettingPost'])->name('patient.setting.post');
 
 Route::get('/patient/change/password', [PatientController::class, 'PatientChangePassword'])->name('patient.change.password');
 
