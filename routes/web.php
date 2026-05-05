@@ -39,6 +39,7 @@ Route::get('/patient/setting', [PatientController::class, 'PatientSetting'])->na
 Route::post('/patient/setting', [PatientController::class, 'PatientSettingPost'])->name('patient.setting.post');
 
 Route::get('/patient/change/password', [PatientController::class, 'PatientChangePassword'])->name('patient.change.password');
+Route::post('/patient/change/password', [PatientController::class, 'PatientChangePasswordPost'])->name('patient.change.password.post');
 
   });
 /// End Patient Group Middleware

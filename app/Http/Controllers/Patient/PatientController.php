@@ -79,10 +79,46 @@ class PatientController extends Controller
     }
     // End Method
 
-    public function PatientChangePassword(){
-    return view('patient.dashboard.setting.change_password');
+    public function PatientChangePassword()
+    {
+        return view('patient.dashboard.setting.change_password');
     }
-    // End Method 
+    // End Method
+
+    public function PatientChangePasswordPost(Request $request)
+    {
+        $request->validate([
+            'old_password'              => 'required',
+            'new_password'              => 'required|min:8|confirmed',
+            'new_password_confirmation' => 'required',
+        ], [
+            'new_password.confirmed' => 'New password and confirm password do not match.',
+            'new_password.min'       => 'New password must be at least 8 characters.',
+        ]);
+
+        $patient = Auth::user();
+
+        if (! \Illuminate\Support\Facades\Hash::check($request->old_password, $patient->password)) {
+            return back()
+                ->withErrors(['old_password' => 'Current password does not match our records.'])
+                ->withInput();
+        }
+
+        if ($request->old_password === $request->new_password) {
+            return back()
+                ->withErrors(['new_password' => 'New password must be different from the current password.'])
+                ->withInput();
+        }
+
+        $patient->update(['password' => $request->new_password]);
+
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login')->with('status', 'Password changed successfully. Please log in with your new password.');
+    }
+    // End Method
 
  
 
