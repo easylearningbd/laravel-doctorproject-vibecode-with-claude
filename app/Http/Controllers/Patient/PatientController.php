@@ -20,4 +20,11 @@ class PatientController extends Controller
 
 
 
+    public function PatientSetting(){
+    return view('patient.dashboard.setting.patient_setting');
+    }
+    // End Method 
+
+ 
+
 } 

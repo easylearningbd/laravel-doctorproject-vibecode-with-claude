@@ -75,7 +75,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="profile-settings.html">
+                    <a href="{{ route('patient.setting') }}">
                         <i class="isax isax-setting-2"></i>
                         <span>Settings</span>
                     </a>
