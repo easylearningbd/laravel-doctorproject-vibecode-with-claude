@@ -119,7 +119,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="doctor-change-password.html">
+                        <a href="{{ route('doctor.change.password') }}">
                             <i class="isax isax-key"></i>
                             <span>Change Password</span>
                         </a>

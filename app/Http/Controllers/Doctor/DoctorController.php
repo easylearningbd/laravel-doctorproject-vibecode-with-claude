@@ -433,6 +433,9 @@ class DoctorController extends Controller
     }
     // End Method
 
+    public function DoctorChangePassword(){
+        return view('doctor.dashboard.changepassword.change_password');
+    }
 
 
 

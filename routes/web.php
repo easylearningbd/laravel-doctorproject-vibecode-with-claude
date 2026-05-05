@@ -54,6 +54,7 @@ Route::post('/doctor/hours', [DoctorController::class, 'DoctorHoursPost'])->name
 Route::get('/specialities/services', [DoctorController::class, 'SpecialitiesServices'])->name('specialities.services');
 Route::post('/specialities/services', [DoctorController::class, 'SpecialitiesServicesPost'])->name('specialities.services.post');
 
+Route::get('/doctor/change/password', [DoctorController::class, 'DoctorChangePassword'])->name('doctor.change.password');
 
 });
 /// End Doctor Group Middleware
