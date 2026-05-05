@@ -19,6 +19,8 @@ class DoctorController extends Controller
     }
     // End Method
 
+   
+
     public function DoctorProfile()
     {
         $doctor      = Auth::user();
@@ -369,4 +371,15 @@ class DoctorController extends Controller
         return back()->with('success', 'Business hours updated successfully.');
     }
     // End Method
+
+
+  public function SpecialitiesServices(){
+        return view('doctor.dashboard.services.specialities_services');
+    }
+     // End Method
+
+
+
+
+
 }
