@@ -6,9 +6,19 @@
     </div>
 
     <div class="doctors-slider owl-carousel aos" data-aos="fade-up">
+
+        @forelse ($doctors as $doctor)
         <div class="card">
             <div class="card-img card-img-hover">
-                <a href="doctor-profile.html"><img src="assets/img/doctor-grid/doctor-grid-01.jpg" alt=""></a>
+                <a href="#">
+                    @if ($doctor->profile_photo)
+                        <img src="{{ asset('storage/' . $doctor->profile_photo) }}"
+                             alt="{{ $doctor->first_name }} {{ $doctor->last_name }}">
+                    @else
+                        <img src="{{ asset('assets/img/doctor-grid/doctor-grid-01.jpg') }}"
+                             alt="{{ $doctor->first_name }} {{ $doctor->last_name }}">
+                    @endif
+                </a>
                 <div class="grid-overlay-item d-flex align-items-center justify-content-between">
                     <span class="badge bg-orange"><i class="fa-solid fa-star me-1"></i>5.0</span>
                     <a href="javascript:void(0)" class="fav-icon">
@@ -18,67 +28,52 @@
             </div>
             <div class="card-body p-0">
                 <div class="d-flex active-bar align-items-center justify-content-between p-3">
-                    <a href="#" class="text-indigo fw-medium fs-14">Psychologist</a>
-                    <span class="badge bg-success-light d-inline-flex align-items-center">
-                        <i class="fa-solid fa-circle fs-5 me-1"></i>
-                        Available
-                    </span>
-                </div>
-                <div class="p-3 pt-0">
-                    <div class="doctor-info-detail mb-3 pb-3">
-                        <h3 class="mb-1"><a href="doctor-profile.html">Dr. Michael Brown</a></h3>
-                        <div class="d-flex align-items-center">
-                            <p class="d-flex align-items-center mb-0 fs-14"><i class="isax isax-location me-2"></i>Minneapolis, MN</p>
-                            <i class="fa-solid fa-circle fs-5 text-primary mx-2 me-1"></i>
-                            <span class="fs-14 fw-medium">30 Min</span>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <p class="mb-1">Consultation Fees</p>
-                            <h3 class="text-orange">$650</h3>
-                        </div>
-                        <a href="booking.html" class="btn btn-md btn-dark d-inline-flex align-items-center rounded-pill">
-                            <i class="isax isax-calendar-1 me-2"></i>
-                            Book Now
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-img card-img-hover">
-                <a href="doctor-profile.html"><img src="assets/img/doctor-grid/doctor-grid-02.jpg" alt=""></a>
-                <div class="grid-overlay-item d-flex align-items-center justify-content-between">
-                    <span class="badge bg-orange"><i class="fa-solid fa-star me-1"></i>4.6</span>
-                    <a href="javascript:void(0)" class="fav-icon">
-                        <i class="fa fa-heart"></i>
+                    <a href="#" class="text-indigo fw-medium fs-14">
+                        {{ $doctor->display_speciality }}
                     </a>
-                </div>
-            </div>
-            <div class="card-body p-0">
-                <div class="d-flex active-bar active-bar-pink align-items-center justify-content-between p-3">
-                    <a href="booking-1.html" class="text-pink fw-medium fs-14">Pediatrician</a>
-                    <span class="badge bg-success-light d-inline-flex align-items-center">
-                        <i class="fa-solid fa-circle fs-5 me-1"></i>
-                        Available
-                    </span>
+                    @if ($doctor->is_available)
+                        <span class="badge bg-success-light d-inline-flex align-items-center">
+                            <i class="fa-solid fa-circle fs-5 me-1"></i>
+                            Available
+                        </span>
+                    @else
+                        <span class="badge bg-danger-light d-inline-flex align-items-center">
+                            <i class="fa-solid fa-circle fs-5 me-1"></i>
+                            Unavailable
+                        </span>
+                    @endif
                 </div>
                 <div class="p-3 pt-0">
                     <div class="doctor-info-detail mb-3 pb-3">
-                        <h3 class="mb-1"><a href="doctor-profile.html">Dr. Nicholas Tello</a></h3>
+                        <h3 class="mb-1">
+                            <a href="#">
+                                {{ $doctor->display_name ?: 'Dr. ' . $doctor->first_name . ' ' . $doctor->last_name }}
+                            </a>
+                        </h3>
                         <div class="d-flex align-items-center">
-                            <p class="d-flex align-items-center mb-0 fs-14"><i class="isax isax-location me-2"></i>Ogden, IA</p>
-                            <i class="fa-solid fa-circle fs-5 text-primary mx-2 me-1"></i>
-                            <span class="fs-14 fw-medium">60 Min</span>
+                            @if ($doctor->city || $doctor->country)
+                                <p class="d-flex align-items-center mb-0 fs-14">
+                                    <i class="isax isax-location me-2"></i>
+                                    {{ collect([$doctor->city, $doctor->country])->filter()->implode(', ') }}
+                                </p>
+                            @else
+                                <p class="d-flex align-items-center mb-0 fs-14">
+                                    <i class="isax isax-location me-2"></i>
+                                    Location not set
+                                </p>
+                            @endif
                         </div>
                     </div>
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
                             <p class="mb-1">Consultation Fees</p>
-                            <h3 class="text-orange">$400</h3>
+                            @if ($doctor->min_price)
+                                <h3 class="text-orange">${{ number_format($doctor->min_price, 0) }}</h3>
+                            @else
+                                <h3 class="text-orange">N/A</h3>
+                            @endif
                         </div>
-                        <a href="booking.html" class="btn btn-md btn-dark d-inline-flex align-items-center rounded-pill">
+                        <a href="#" class="btn btn-md btn-dark d-inline-flex align-items-center rounded-pill">
                             <i class="isax isax-calendar-1 me-2"></i>
                             Book Now
                         </a>
@@ -86,127 +81,13 @@
                 </div>
             </div>
         </div>
-        <div class="card">
-            <div class="card-img card-img-hover">
-                <a href="doctor-profile.html"><img src="assets/img/doctor-grid/doctor-grid-03.jpg" alt=""></a>
-                <div class="grid-overlay-item d-flex align-items-center justify-content-between">
-                    <span class="badge bg-orange"><i class="fa-solid fa-star me-1"></i>4.8</span>
-                    <a href="javascript:void(0)" class="fav-icon">
-                        <i class="fa fa-heart"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="card-body p-0">
-                <div class="d-flex active-bar active-bar-teal align-items-center justify-content-between p-3">
-                    <a href="#" class="text-teal fw-medium fs-14">Neurologist</a>
-                    <span class="badge bg-success-light d-inline-flex align-items-center">
-                        <i class="fa-solid fa-circle fs-5 me-1"></i>
-                        Available
-                    </span>
-                </div>
-                <div class="p-3 pt-0">
-                    <div class="doctor-info-detail mb-3 pb-3">
-                        <h3 class="mb-1"><a href="doctor-profile.html">Dr. Harold Bryant</a></h3>
-                        <div class="d-flex align-items-center">
-                            <p class="d-flex align-items-center mb-0 fs-14"><i class="isax isax-location me-2"></i>Winona, MS</p>
-                            <i class="fa-solid fa-circle fs-5 text-primary mx-2 me-1"></i>
-                            <span class="fs-14 fw-medium">30 Min</span>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <p class="mb-1">Consultation Fees</p>
-                            <h3 class="text-orange">$500</h3>
-                        </div>
-                        <a href="booking.html" class="btn btn-md btn-dark d-inline-flex align-items-center rounded-pill">
-                            <i class="isax isax-calendar-1 me-2"></i>
-                            Book Now
-                        </a>
-                    </div>
-                </div>
-            </div>
+        @empty
+        <div class="text-center py-5">
+            <p>No doctors available at the moment.</p>
         </div>
-        <div class="card">
-            <div class="card-img card-img-hover">
-                <a href="doctor-profile.html"><img src="assets/img/doctor-grid/doctor-grid-04.jpg" alt=""></a>
-                <div class="grid-overlay-item d-flex align-items-center justify-content-between">
-                    <span class="badge bg-orange"><i class="fa-solid fa-star me-1"></i>4.8</span>
-                    <a href="javascript:void(0)" class="fav-icon">
-                        <i class="fa fa-heart"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="card-body p-0">
-                <div class="d-flex active-bar active-bar-info align-items-center justify-content-between p-3">
-                    <a href="#" class="text-info fw-medium fs-14">Cardiologist</a>
-                    <span class="badge bg-success-light d-inline-flex align-items-center">
-                        <i class="fa-solid fa-circle fs-5 me-1"></i>
-                        Available
-                    </span>
-                </div>
-                <div class="p-3 pt-0">
-                    <div class="doctor-info-detail mb-3 pb-3">
-                        <h3 class="mb-1"><a href="doctor-profile.html">Dr. Sandra Jones</a></h3>
-                        <div class="d-flex align-items-center">
-                            <p class="d-flex align-items-center mb-0 fs-14"><i class="isax isax-location me-2"></i>Beckley, WV</p>
-                            <i class="fa-solid fa-circle fs-5 text-primary mx-2 me-1"></i>
-                            <span class="fs-14 fw-medium">30 Min</span>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <p class="mb-1">Consultation Fees</p>
-                            <h3 class="text-orange">$550</h3>
-                        </div>
-                        <a href="booking.html" class="btn btn-md btn-dark d-inline-flex align-items-center rounded-pill">
-                            <i class="isax isax-calendar-1 me-2"></i>
-                            Book Now
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-img card-img-hover">
-                <a href="doctor-profile.html"><img src="assets/img/doctor-grid/doctor-grid-05.jpg" alt=""></a>
-                <div class="grid-overlay-item d-flex align-items-center justify-content-between">
-                    <span class="badge bg-orange"><i class="fa-solid fa-star me-1"></i>4.2</span>
-                    <a href="javascript:void(0)" class="fav-icon">
-                        <i class="fa fa-heart"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="card-body p-0">
-                <div class="d-flex active-bar active-bar-teal align-items-center justify-content-between p-3">
-                    <a href="#" class="text-teal fw-medium fs-14">Neurologist</a>
-                    <span class="badge bg-success-light d-inline-flex align-items-center">
-                        <i class="fa-solid fa-circle fs-5 me-1"></i>
-                        Available
-                    </span>
-                </div>
-                <div class="p-3 pt-0">
-                    <div class="doctor-info-detail mb-3 pb-3">
-                        <h3 class="mb-1"><a href="doctor-profile.html">Dr. Charles Scott</a></h3>
-                        <div class="d-flex align-items-center">
-                            <p class="d-flex align-items-center mb-0 fs-14"><i class="isax isax-location me-2"></i>Hamshire, TX</p>
-                            <i class="fa-solid fa-circle fs-5 text-primary mx-2 me-1"></i>
-                            <span class="fs-14 fw-medium">30 Min</span>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <p class="mb-1">Consultation Fees</p>
-                            <h3 class="text-orange">$600</h3>
-                        </div>
-                        <a href="booking.html" class="btn btn-md btn-dark d-inline-flex align-items-center rounded-pill">
-                            <i class="isax isax-calendar-1 me-2"></i>
-                            Book Now
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>					
+        @endforelse
+
+    </div>
     <div class="doctor-nav nav-bottom owl-nav"></div>
 </div>
 </section>

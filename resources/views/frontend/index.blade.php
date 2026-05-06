@@ -17,7 +17,7 @@
 			<!-- Doctor Section -->
 		@include('frontend.layout.doctor')	
 			<!-- /Doctor Section -->
-
+ 
 			<!-- Services Section -->
 		@include('frontend.layout.services')	
 			<!-- /Services Section -->
