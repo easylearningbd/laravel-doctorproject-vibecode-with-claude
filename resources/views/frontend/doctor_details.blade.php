@@ -188,9 +188,9 @@
                                 </span> for a Session
                             </p>
                         @endif
-                        <div class="clinic-booking">
-                            <a class="apt-btn" href="#">Book Appointment</a>
-                        </div>
+    <div class="clinic-booking">
+        <a class="apt-btn" href="{{ route('doctor.booking',$doctor->id) }}">Book Appointment</a>
+    </div>
                     </div>
                 </div>
             </div>

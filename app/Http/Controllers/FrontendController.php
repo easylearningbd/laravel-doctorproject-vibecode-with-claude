@@ -66,4 +66,18 @@ class FrontendController extends Controller
         return view('frontend.doctor_details',
             compact('doctor', 'businessHours', 'todayHours', 'todayKey'));
     }
+
+
+    public function DoctorBooking($id){
+        return view('frontend.doctor_booking');
+    }   
+    //end method 
+
+
+
+
+
+
+
+
 }

@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [FrontendController::class, 'index'])->name('home');
 
 Route::get('/doctor/details/{id}', [FrontendController::class, 'DoctorDetails'])->name('doctor.details');
+
+Route::get('/doctor/booking/{id}', [FrontendController::class, 'DoctorBooking'])->name('doctor.booking');
  
 // Patient dashboard — only accessible by patients
 Route::get('/dashboard', function () {
