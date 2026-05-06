@@ -9,6 +9,8 @@ use App\Http\Controllers\FrontendController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [FrontendController::class, 'index'])->name('home');
+
+Route::get('/doctor/details/{id}', [FrontendController::class, 'DoctorDetails'])->name('doctor.details');
  
 // Patient dashboard — only accessible by patients
 Route::get('/dashboard', function () {

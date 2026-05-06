@@ -27,4 +27,12 @@ class FrontendController extends Controller
 
         return view('frontend.index', compact('doctors'));
     }
+
+
+    public function DoctorDetails($id){
+        return view('frontend.doctor_details');
+    }
+
+
+
 }

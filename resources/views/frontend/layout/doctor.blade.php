@@ -46,7 +46,7 @@
                 <div class="p-3 pt-0">
                     <div class="doctor-info-detail mb-3 pb-3">
                         <h3 class="mb-1">
-                            <a href="#">
+                            <a href="{{ route('doctor.details',$doctor->id) }}">
                                 {{ $doctor->display_name ?: 'Dr. ' . $doctor->first_name . ' ' . $doctor->last_name }}
                             </a>
                         </h3>
