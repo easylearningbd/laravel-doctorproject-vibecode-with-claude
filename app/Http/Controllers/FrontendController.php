@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class FrontendController extends Controller
 {
     public function index()
-    {
+    { 
         $doctors = User::where('role', 'doctor')
             ->with(['specialityServices.speciality'])
             ->get()

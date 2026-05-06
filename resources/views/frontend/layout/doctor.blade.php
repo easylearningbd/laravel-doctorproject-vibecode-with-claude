@@ -4,7 +4,7 @@
         <span class="badge badge-primary">Featured Doctors</span>
         <h2>Our Highlighted Doctors</h2>
     </div>
-
+ 
     <div class="doctors-slider owl-carousel aos" data-aos="fade-up">
 
         @forelse ($doctors as $doctor)
@@ -59,7 +59,7 @@
                             @else
                                 <p class="d-flex align-items-center mb-0 fs-14">
                                     <i class="isax isax-location me-2"></i>
-                                    Location not set
+                                    {{ $doctor->designation }}
                                 </p>
                             @endif
                         </div>
