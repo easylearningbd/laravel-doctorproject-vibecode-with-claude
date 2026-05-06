@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class FrontendController extends Controller
 {
@@ -29,10 +30,40 @@ class FrontendController extends Controller
     }
 
 
-    public function DoctorDetails($id){
-        return view('frontend.doctor_details');
+    public function DoctorDetails($id)
+    {
+        $doctor = User::where('role', 'doctor')
+            ->with([
+                'specialityServices.speciality',
+                'experiences',
+                'clinics',
+                'memberships',
+                'businessHours',
+            ])
+            ->findOrFail($id);
+
+        $doctor->display_speciality = $doctor->specialization
+            ?: ($doctor->specialityServices->first()?->speciality?->name
+                ?? $doctor->designation
+                ?? 'Doctor');
+
+        $doctor->min_price = $doctor->specialityServices->min('price');
+        $doctor->max_price = $doctor->specialityServices->max('price');
+
+        // Years in practice from earliest experience start_date
+        $earliest = $doctor->experiences->whereNotNull('start_date')->min('start_date');
+        $doctor->years_in_practice = $earliest
+            ? (int) Carbon::parse($earliest)->diffInYears(now())
+            : null;
+
+        // Business hours keyed by day_of_week
+        $businessHours = $doctor->businessHours->keyBy('day_of_week');
+
+        // Today
+        $todayKey   = strtolower(now()->format('l'));
+        $todayHours = $businessHours->get($todayKey);
+
+        return view('frontend.doctor_details',
+            compact('doctor', 'businessHours', 'todayHours', 'todayKey'));
     }
-
-
-
 }

@@ -74,7 +74,7 @@
                     <span></span>
                 </span>
             </a>
-            <a href="index.html" class="navbar-brand logo">
+            <a href="{{ url('/') }}" class="navbar-brand logo">
                 <img src="{{ asset('backend/assets/img/logo.svg') }}" class="img-fluid" alt="Logo">
             </a>
         </div>
@@ -90,7 +90,7 @@
                 </div>
                 <ul class="main-nav">
                     <li class="has-submenu megamenu active">
-                        <a href="javascript:void(0);">Home  </a>
+                        <a href="{{ url('/') }}">Home  </a>
                             
                     </li>
                     <li class="has-submenu">
