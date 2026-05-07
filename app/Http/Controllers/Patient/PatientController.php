@@ -120,6 +120,11 @@ class PatientController extends Controller
     }
     // End Method
 
+    public function PatientAppointments(){
+    return view('patient.dashboard.appointments.patient_appointments');
+    }
+      // End Method
+
  
 
 } 
