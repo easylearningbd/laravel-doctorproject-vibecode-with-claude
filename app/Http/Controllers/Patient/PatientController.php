@@ -154,6 +154,10 @@ class PatientController extends Controller
     }
     // End Method
 
+    public function PatientFavourites(){
+    return view('patient.dashboard.favourites.patient_favourites');
+    }
+     // End Method
  
 
 } 

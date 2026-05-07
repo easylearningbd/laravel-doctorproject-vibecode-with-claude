@@ -57,7 +57,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="favourites.html">
+                    <a href="{{ route('patient.favourites') }}">
                         <i class="isax isax-star-1"></i>
                         <span>Favourites</span>
                     </a>
