@@ -80,6 +80,18 @@ class User extends Authenticatable
         return $this->hasMany(DoctorSpecialityService::class, 'user_id');
     }
 
+    // Appointments as patient
+    public function patientAppointments()
+    {
+        return $this->hasMany(Appointment::class, 'patient_id');
+    }
+
+    // Appointments as doctor
+    public function doctorAppointments()
+    {
+        return $this->hasMany(Appointment::class, 'doctor_id');
+    }
+
     public function isDoctor(): bool
     {
         return $this->role === 'doctor';

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Speciality;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -68,10 +69,44 @@ class FrontendController extends Controller
     }
 
 
-    public function DoctorBooking($id){
-        return view('frontend.doctor_booking');
-    }   
-    //end method 
+    public function DoctorBooking($id)
+    {
+        // Guests → redirect to login
+        if (!auth()->check()) {
+            return redirect()->route('login')
+                ->with('error', 'Please log in as a patient to book an appointment.');
+        }
+
+        // Only patients can book
+        if (auth()->user()->role !== 'patient') {
+            return redirect()->route('home')
+                ->with('error', 'Only patients can book appointments.');
+        }
+
+        $doctor = User::where('role', 'doctor')
+            ->with(['specialityServices.speciality', 'clinics', 'businessHours'])
+            ->findOrFail($id);
+
+        $doctor->display_speciality = $doctor->specialization
+            ?: ($doctor->specialityServices->first()?->speciality?->name
+                ?? $doctor->designation ?? 'Doctor');
+
+        // Group services by speciality for step 1
+        $servicesGrouped = $doctor->specialityServices
+            ->groupBy(fn($s) => $s->speciality?->name ?? 'General');
+
+        // Open days for the date picker (disable closed days)
+        $openDays = $doctor->businessHours
+            ->where('is_open', true)
+            ->pluck('day_of_week')
+            ->toArray();
+
+        $patient = auth()->user();
+
+        return view('frontend.doctor_booking',
+            compact('doctor', 'servicesGrouped', 'openDays', 'patient'));
+    }
+    // End Method
 
 
 

@@ -5,6 +5,7 @@ use App\Http\Controllers\Patient\PatientController;
 use App\Http\Controllers\Doctor\DoctorController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\SpecialityController;
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\FrontendController;
 use Illuminate\Support\Facades\Route;
 
@@ -13,6 +14,25 @@ Route::get('/', [FrontendController::class, 'index'])->name('home');
 Route::get('/doctor/details/{id}', [FrontendController::class, 'DoctorDetails'])->name('doctor.details');
 
 Route::get('/doctor/booking/{id}', [FrontendController::class, 'DoctorBooking'])->name('doctor.booking');
+
+// Booking POST — patient only
+Route::post('/doctor/booking/{id}', [AppointmentController::class, 'store'])
+    ->middleware(['auth', 'patient'])
+    ->name('appointment.store');
+
+// Appointment success confirmation
+Route::get('/appointment/success/{appointmentNumber}', [AppointmentController::class, 'success'])
+    ->middleware(['auth', 'patient'])
+    ->name('appointment.success');
+
+// AJAX: load available slots (public — no auth needed)
+Route::get('/ajax/slots/{doctorId}', [AppointmentController::class, 'loadSlots'])
+    ->name('appointment.slots');
+
+// Print invoice
+Route::get('/invoice/print/{appointmentNumber}', [AppointmentController::class, 'printInvoice'])
+    ->middleware(['auth', 'patient'])
+    ->name('invoice.print');
  
 // Patient dashboard — only accessible by patients
 Route::get('/dashboard', function () {
