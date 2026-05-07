@@ -27,7 +27,12 @@ class FrontendController extends Controller
                 return $doctor;
             });
 
-        return view('frontend.index', compact('doctors'));
+        // Favourite IDs for logged-in patient
+        $favouriteIds = (auth()->check() && auth()->user()->role === 'patient')
+            ? auth()->user()->favouriteDoctors()->pluck('users.id')->toArray()
+            : [];
+
+        return view('frontend.index', compact('doctors', 'favouriteIds'));
     }
 
 
@@ -64,8 +69,11 @@ class FrontendController extends Controller
         $todayKey   = strtolower(now()->format('l'));
         $todayHours = $businessHours->get($todayKey);
 
+        $isFavourited = (auth()->check() && auth()->user()->role === 'patient')
+            && auth()->user()->favouriteDoctors()->where('users.id', $id)->exists();
+
         return view('frontend.doctor_details',
-            compact('doctor', 'businessHours', 'todayHours', 'todayKey'));
+            compact('doctor', 'businessHours', 'todayHours', 'todayKey', 'isFavourited'));
     }
 
 

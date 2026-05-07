@@ -21,7 +21,12 @@
                 </a>
                 <div class="grid-overlay-item d-flex align-items-center justify-content-between">
                     <span class="badge bg-orange"><i class="fa-solid fa-star me-1"></i>5.0</span>
-                    <a href="javascript:void(0)" class="fav-icon">
+                    <a href="javascript:void(0)"
+                       class="fav-icon fav-toggle-btn {{ in_array($doctor->id, $favouriteIds ?? []) ? 'fav-active' : '' }}"
+                       data-doctor-id="{{ $doctor->id }}"
+                       data-toggle-url="{{ route('favourite.toggle', $doctor->id) }}"
+                       title="{{ in_array($doctor->id, $favouriteIds ?? []) ? 'Remove from Favourites' : 'Add to Favourites' }}"
+                       style="{{ in_array($doctor->id, $favouriteIds ?? []) ? 'color:#e02020;' : '' }}">
                         <i class="fa fa-heart"></i>
                     </a>
                 </div>

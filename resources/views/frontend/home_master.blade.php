@@ -109,6 +109,46 @@
 				
 		<!-- Custom JS -->
 		<script src="{{ asset('backend/assets/js/script.js') }}"></script>
-	
+
+		<!-- Favourite Toggle (global) -->
+		<script>
+		$(function () {
+			// Toast helper
+			function showToast(msg, type) {
+				var t = $('<div class="alert alert-' + type + ' position-fixed" style="top:20px;right:20px;z-index:9999;min-width:240px;">' + msg + '</div>');
+				$('body').append(t);
+				setTimeout(function () { t.fadeOut(400, function () { t.remove(); }); }, 2500);
+			}
+
+			$(document).on('click', '.fav-toggle-btn', function () {
+				var btn  = $(this);
+				var url  = btn.data('toggle-url');
+				if (!url) return;
+
+				$.ajax({
+					url   : url,
+					method: 'POST',
+					data  : { _token: '{{ csrf_token() }}' },
+					success: function (resp) {
+						if (resp.favourited) {
+							btn.css('color', '#e02020').attr('title', 'Remove from Favourites');
+							btn.addClass('fav-active');
+							showToast('Added to Favourites!', 'success');
+						} else {
+							btn.css('color', '').attr('title', 'Add to Favourites');
+							btn.removeClass('fav-active');
+							showToast('Removed from Favourites.', 'warning');
+						}
+					},
+					error: function (xhr) {
+						if (xhr.status === 401) {
+							showToast('Please log in as a patient to save favourites.', 'danger');
+						}
+					}
+				});
+			});
+		});
+		</script>
+
 	</body>
 </html>

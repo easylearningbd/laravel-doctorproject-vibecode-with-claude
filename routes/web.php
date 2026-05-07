@@ -6,6 +6,7 @@ use App\Http\Controllers\Doctor\DoctorController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\SpecialityController;
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\FavouriteController;
 use App\Http\Controllers\FrontendController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,6 +29,10 @@ Route::get('/appointment/success/{appointmentNumber}', [AppointmentController::c
 // AJAX: load available slots (public — no auth needed)
 Route::get('/ajax/slots/{doctorId}', [AppointmentController::class, 'loadSlots'])
     ->name('appointment.slots');
+
+// Favourite toggle (AJAX — patient only, no extra middleware; controller checks role)
+Route::post('/favourite/toggle/{doctorId}', [FavouriteController::class, 'toggle'])
+    ->name('favourite.toggle');
 
 // Print invoice
 Route::get('/invoice/print/{appointmentNumber}', [AppointmentController::class, 'printInvoice'])

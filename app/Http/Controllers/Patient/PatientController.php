@@ -154,10 +154,16 @@ class PatientController extends Controller
     }
     // End Method
 
-    public function PatientFavourites(){
-    return view('patient.dashboard.favourites.patient_favourites');
+    public function PatientFavourites()
+    {
+        $favourites = Auth::user()
+            ->favouriteDoctors()
+            ->with(['specialityServices.speciality', 'businessHours'])
+            ->get();
+
+        return view('patient.dashboard.favourites.patient_favourites', compact('favourites'));
     }
-     // End Method
+    // End Method
  
 
 } 

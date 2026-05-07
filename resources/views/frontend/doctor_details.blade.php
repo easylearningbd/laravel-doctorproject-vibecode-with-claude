@@ -106,7 +106,16 @@
                                     <p>{{ $empType }}, Online Therapy Available</p>
                                 </div>
                                 <ul class="sub-links">
-                                    <li><a href="#"><i class="feather-heart"></i></a></li>
+                                    <li>
+                                        <a href="javascript:void(0)"
+                                           class="fav-toggle-btn {{ $isFavourited ? 'fav-active' : '' }}"
+                                           data-doctor-id="{{ $doctor->id }}"
+                                           data-toggle-url="{{ route('favourite.toggle', $doctor->id) }}"
+                                           title="{{ $isFavourited ? 'Remove from Favourites' : 'Add to Favourites' }}"
+                                           style="{{ $isFavourited ? 'color:#e02020;' : '' }}">
+                                            <i class="feather-heart"></i>
+                                        </a>
+                                    </li>
                                     <li><a href="#"><i class="feather-share-2"></i></a></li>
                                     <li><a href="#"><i class="feather-link"></i></a></li>
                                 </ul>
