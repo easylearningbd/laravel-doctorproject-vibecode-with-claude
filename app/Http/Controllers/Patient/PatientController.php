@@ -142,6 +142,12 @@ class PatientController extends Controller
     }
     // End Method
 
+
+    public function PatientInvoices(){
+    return view('patient.dashboard.invoices.patient_invoices');
+    }
+    // End Method
+
  
 
 } 

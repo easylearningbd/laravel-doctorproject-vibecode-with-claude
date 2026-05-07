@@ -81,7 +81,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="patient-invoices.html">
+                    <a href="{{ route('patient.invoices') }}">
                         <i class="isax isax-document-text"></i>
                         <span>Invoices</span>
                     </a>

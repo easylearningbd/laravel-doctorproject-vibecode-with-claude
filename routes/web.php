@@ -67,6 +67,7 @@ Route::post('/patient/change/password', [PatientController::class, 'PatientChang
 
 Route::get('/patient/appointments', [PatientController::class, 'PatientAppointments'])->name('patient.appointments');
 
+Route::get('/patient/invoices', [PatientController::class, 'PatientInvoices'])->name('patient.invoices');
 
   });
 /// End Patient Group Middleware
