@@ -1,6 +1,15 @@
 @extends('patient.patient_master')
 @section('patient')
 
+@php
+    $typeLabels = [
+        'clinic'     => 'Clinic Visit',
+        'video_call' => 'Video Call',
+        'audio_call' => 'Audio Call',
+        'chat'       => 'Chat',
+        'home_visit' => 'Home Visit',
+    ];
+@endphp
 
 <div class="col-lg-8 col-xl-9">
 <div class="dashboard-header">
@@ -14,182 +23,227 @@
         </li>
         <li>
             <div class="view-icons">
-                <a href="patient-appointments.html" class="active"><i class="isax isax-grid-7"></i></a>
-            </div>
-        </li>
-        <li>
-            <div class="view-icons">
-                <a href="patient-appointments-grid.html"><i class="fa-solid fa-th"></i></a>
+                <a href="{{ route('patient.appointments') }}" class="active">
+                    <i class="isax isax-grid-7"></i>
+                </a>
             </div>
         </li>
     </ul>
 </div>
+
 <div class="appointment-tab-head">
     <div class="appointment-tabs">
-        <ul class="nav nav-pills inner-tab " id="pills-tab" role="tablist">
+        <ul class="nav nav-pills inner-tab" id="pills-tab" role="tablist">
             <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="pills-upcoming-tab" data-bs-toggle="pill" data-bs-target="#pills-upcoming" type="button" role="tab" aria-controls="pills-upcoming" aria-selected="false">Upcoming<span>21</span></button>
-            </li>	
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="pills-cancel-tab" data-bs-toggle="pill" data-bs-target="#pills-cancel" type="button" role="tab" aria-controls="pills-cancel" aria-selected="true">Cancelled<span>16</span></button>
+                <button class="nav-link active" id="pills-upcoming-tab"
+                        data-bs-toggle="pill" data-bs-target="#pills-upcoming"
+                        type="button" role="tab">
+                    Upcoming<span>{{ $upcoming->total() }}</span>
+                </button>
             </li>
-           
+            <li class="nav-item" role="presentation">
+                <button class="nav-link {{ request()->has('cancelled_page') ? 'active' : '' }}"
+                        id="pills-cancel-tab"
+                        data-bs-toggle="pill" data-bs-target="#pills-cancel"
+                        type="button" role="tab">
+                    Cancelled<span>{{ $cancelled->total() }}</span>
+                </button>
+            </li>
         </ul>
     </div>
-     
 </div>
 
 <div class="tab-content appointment-tab-content">
-    <div class="tab-pane fade show active" id="pills-upcoming" role="tabpanel" aria-labelledby="pills-upcoming-tab">
-        <!-- Appointment List -->
+
+    {{-- ── UPCOMING TAB ────────────────────────────────────────────────── --}}
+    <div class="tab-pane fade {{ !request()->has('cancelled_page') ? 'show active' : '' }}"
+         id="pills-upcoming" role="tabpanel">
+
         <div class="appointment-wrap">
             <ul>
+            @forelse ($upcoming as $apt)
+                @php
+                    $doctor      = $apt->doctor;
+                    $doctorName  = $doctor->display_name ?: 'Dr. ' . $doctor->first_name . ' ' . $doctor->last_name;
+                    $doctorPhoto = $doctor->profile_photo
+                        ? asset('storage/' . $doctor->profile_photo)
+                        : asset('assets/img/doctors/doctor-thumb-21.jpg');
+                    $apptDate    = $apt->appointment_date->format('d M Y');
+                    $apptTime    = \Carbon\Carbon::createFromFormat('H:i', $apt->appointment_time)->format('h:i A');
+                    $typeLabel   = $typeLabels[$apt->appointment_type] ?? ucfirst($apt->appointment_type);
+                @endphp
                 <li>
                     <div class="patinet-information">
-                        <a href="patient-upcoming-appointment.html">
-                            <img src="assets/img/doctors/doctor-thumb-21.jpg" alt="User Image">
+                        <a href="{{ route('invoice.print', $apt->appointment_number) }}" target="_blank">
+                            <img src="{{ $doctorPhoto }}" alt="{{ $doctorName }}">
                         </a>
                         <div class="patient-info">
-                            <p>#Apt0001</p>
-                            <h6><a href="patient-upcoming-appointment.html">Dr Edalin</a></h6>
+                            <p>#{{ $apt->appointment_number }}</p>
+                            <h6><a href="{{ route('doctor.details', $doctor->id) }}">{{ $doctorName }}</a></h6>
+                            @if ($apt->clinic)
+                                <p class="small text-muted mb-0">{{ $apt->clinic->clinic_name }}</p>
+                            @endif
                         </div>
                     </div>
                 </li>
                 <li class="appointment-info">
-                    <p><i class="isax isax-clock5"></i>11 Nov 2024 10.45 AM</p>
+                    <p><i class="isax isax-clock5"></i>{{ $apptDate }} {{ $apptTime }}</p>
                     <ul class="d-flex apponitment-types">
-                        <li>General Visit</li>
-                        <li>Video Call</li>
-                    </ul>												
+                        <li>{{ $typeLabel }}</li>
+                        <li>
+                            <span class="badge {{ $apt->status === 'confirmed' ? 'bg-success-light' : 'bg-warning-light' }}">
+                                {{ ucfirst($apt->status) }}
+                            </span>
+                        </li>
+                    </ul>
                 </li>
                 <li class="mail-info-patient">
                     <ul>
-                        <li><i class="isax isax-sms5"></i>edalin@example.com</li>
-                        <li><i class="isax isax-call5"></i>+1 504 368 6874</li>
+                        <li><i class="isax isax-sms5"></i>{{ $doctor->email }}</li>
+                        <li><i class="isax isax-call5"></i>{{ $doctor->phone }}</li>
                     </ul>
                 </li>
                 <li class="appointment-action">
                     <ul>
                         <li>
-                            <a href="patient-upcoming-appointment.html"><i class="isax isax-eye4"></i></a>
+                            <a href="{{ route('invoice.print', $apt->appointment_number) }}"
+                               target="_blank" title="View Invoice">
+                                <i class="isax isax-eye4"></i>
+                            </a>
                         </li>
                         <li>
-                            <a href="#"><i class="isax isax-messages-25"></i></a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="isax isax-close-circle5"></i></a>
+                            <a href="#" title="Message"><i class="isax isax-messages-25"></i></a>
                         </li>
                     </ul>
                 </li>
                 <li class="appointment-detail-btn">
-                    <a href="#" class="btn btn-md btn-primary-gradient"><i class="isax isax-calendar-tick5 me-1"></i>Attend</a>
+                    <a href="{{ route('invoice.print', $apt->appointment_number) }}"
+                       target="_blank"
+                       class="btn btn-md btn-primary-gradient">
+                        <i class="isax isax-calendar-tick5 me-1"></i>View Details
+                    </a>
                 </li>
+            @empty
+                <li class="w-100 text-center py-4 text-muted">
+                    No upcoming appointments found.
+                </li>
+            @endforelse
             </ul>
         </div>
-        <!-- /Appointment List -->
 
-        
-
-        <!-- Pagination -->
+        {{-- Upcoming Pagination --}}
+        @if ($upcoming->hasPages())
         <div class="pagination dashboard-pagination">
             <ul>
                 <li>
-                    <a href="#" class="page-link prev">Prev</a>
+                    <a href="{{ $upcoming->previousPageUrl() }}"
+                       class="page-link prev {{ $upcoming->onFirstPage() ? 'disabled' : '' }}">Prev</a>
                 </li>
+                @foreach ($upcoming->getUrlRange(1, $upcoming->lastPage()) as $page => $url)
                 <li>
-                    <a href="#" class="page-link">1</a>
+                    <a href="{{ $url }}"
+                       class="page-link {{ $page == $upcoming->currentPage() ? 'active' : '' }}">
+                        {{ $page }}
+                    </a>
                 </li>
+                @endforeach
                 <li>
-                    <a href="#" class="page-link active">2</a>
-                </li>
-                <li>
-                    <a href="#" class="page-link">3</a>
-                </li>
-                <li>
-                    <a href="#" class="page-link">4</a>
-                </li>
-                <li>
-                    <a href="#" class="page-link next">Next</a>
+                    <a href="{{ $upcoming->nextPageUrl() }}"
+                       class="page-link next {{ !$upcoming->hasMorePages() ? 'disabled' : '' }}">Next</a>
                 </li>
             </ul>
         </div>
-        <!-- /Pagination -->
+        @endif
 
     </div>
-    <div class="tab-pane fade" id="pills-cancel" role="tabpanel" aria-labelledby="pills-cancel-tab">
-        <!-- Appointment List -->
+
+    {{-- ── CANCELLED TAB ───────────────────────────────────────────────── --}}
+    <div class="tab-pane fade {{ request()->has('cancelled_page') ? 'show active' : '' }}"
+         id="pills-cancel" role="tabpanel">
+
         <div class="appointment-wrap">
             <ul>
+            @forelse ($cancelled as $apt)
+                @php
+                    $doctor      = $apt->doctor;
+                    $doctorName  = $doctor->display_name ?: 'Dr. ' . $doctor->first_name . ' ' . $doctor->last_name;
+                    $doctorPhoto = $doctor->profile_photo
+                        ? asset('storage/' . $doctor->profile_photo)
+                        : asset('assets/img/doctors/doctor-thumb-21.jpg');
+                    $apptDate    = $apt->appointment_date->format('d M Y');
+                    $apptTime    = \Carbon\Carbon::createFromFormat('H:i', $apt->appointment_time)->format('h:i A');
+                    $typeLabel   = $typeLabels[$apt->appointment_type] ?? ucfirst($apt->appointment_type);
+                @endphp
                 <li>
                     <div class="patinet-information">
-                        <a href="patient-cancelled-appointment.html">
-                            <img src="assets/img/doctors/doctor-thumb-21.jpg" alt="User Image">
+                        <a href="{{ route('doctor.details', $doctor->id) }}">
+                            <img src="{{ $doctorPhoto }}" alt="{{ $doctorName }}">
                         </a>
                         <div class="patient-info">
-                            <p>#Apt00011</p>
-                            <h6><a href="patient-cancelled-appointment.html">Dr Edalin</a></h6>
+                            <p>#{{ $apt->appointment_number }}</p>
+                            <h6><a href="{{ route('doctor.details', $doctor->id) }}">{{ $doctorName }}</a></h6>
+                            @if ($apt->clinic)
+                                <p class="small text-muted mb-0">{{ $apt->clinic->clinic_name }}</p>
+                            @endif
                         </div>
                     </div>
                 </li>
                 <li class="appointment-info">
-                    <p><i class="isax isax-clock5"></i>11 Nov 2024 10.45 AM</p>
+                    <p><i class="isax isax-clock5"></i>{{ $apptDate }} {{ $apptTime }}</p>
                     <ul class="d-flex apponitment-types">
-                        <li>General Visit</li>
-                        <li>Video Call</li>
+                        <li>{{ $typeLabel }}</li>
+                        <li>
+                            <span class="badge bg-danger-light">Cancelled</span>
+                        </li>
                     </ul>
-                    
                 </li>
-                
                 <li class="mail-info-patient">
                     <ul>
-                        <li><i class="isax isax-sms5"></i>edalin@example.com</li>
-                        <li><i class="isax isax-call5"></i>+1 504 368 6874</li>
+                        <li><i class="isax isax-sms5"></i>{{ $doctor->email }}</li>
+                        <li><i class="isax isax-call5"></i>{{ $doctor->phone }}</li>
                     </ul>
                 </li>
                 <li class="appointment-detail-btn">
-                    <a href="patient-cancelled-appointment.html" class="btn btn-md btn-primary-gradient"><i class="isax isax-calendar-tick5 me-1"></i>Reschedule</a>
+                    <a href="{{ route('doctor.booking', $doctor->id) }}"
+                       class="btn btn-md btn-primary-gradient">
+                        <i class="isax isax-calendar-tick5 me-1"></i>Rebook
+                    </a>
                 </li>
+            @empty
+                <li class="w-100 text-center py-4 text-muted">
+                    No cancelled appointments.
+                </li>
+            @endforelse
             </ul>
         </div>
-        <!-- /Appointment List -->
 
-      
-
-        <!-- Pagination -->
+        {{-- Cancelled Pagination --}}
+        @if ($cancelled->hasPages())
         <div class="pagination dashboard-pagination">
             <ul>
                 <li>
-                    <a href="#" class="page-link prev">Prev</a>
+                    <a href="{{ $cancelled->previousPageUrl() }}"
+                       class="page-link prev {{ $cancelled->onFirstPage() ? 'disabled' : '' }}">Prev</a>
                 </li>
+                @foreach ($cancelled->getUrlRange(1, $cancelled->lastPage()) as $page => $url)
                 <li>
-                    <a href="#" class="page-link">1</a>
+                    <a href="{{ $url }}"
+                       class="page-link {{ $page == $cancelled->currentPage() ? 'active' : '' }}">
+                        {{ $page }}
+                    </a>
                 </li>
+                @endforeach
                 <li>
-                    <a href="#" class="page-link active">2</a>
-                </li>
-                <li>
-                    <a href="#" class="page-link">3</a>
-                </li>
-                <li>
-                    <a href="#" class="page-link">4</a>
-                </li>
-                <li>
-                    <a href="#" class="page-link">...</a>
-                </li>
-                <li>
-                    <a href="#" class="page-link next">Next</a>
+                    <a href="{{ $cancelled->nextPageUrl() }}"
+                       class="page-link next {{ !$cancelled->hasMorePages() ? 'disabled' : '' }}">Next</a>
                 </li>
             </ul>
         </div>
-        <!-- /Pagination -->
+        @endif
+
     </div>
-     
-</div>
 
 </div>
-
-
-
-
+</div>
 
 @endsection

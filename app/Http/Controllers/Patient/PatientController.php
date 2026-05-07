@@ -120,10 +120,27 @@ class PatientController extends Controller
     }
     // End Method
 
-    public function PatientAppointments(){
-    return view('patient.dashboard.appointments.patient_appointments');
+    public function PatientAppointments()
+    {
+        $patient = Auth::user();
+
+        $upcoming = $patient->patientAppointments()
+            ->with(['doctor', 'clinic'])
+            ->whereIn('status', ['pending', 'confirmed'])
+            ->orderBy('appointment_date', 'asc')
+            ->orderBy('appointment_time', 'asc')
+            ->paginate(10, ['*'], 'upcoming_page');
+
+        $cancelled = $patient->patientAppointments()
+            ->with(['doctor', 'clinic'])
+            ->where('status', 'cancelled')
+            ->orderBy('appointment_date', 'desc')
+            ->paginate(10, ['*'], 'cancelled_page');
+
+        return view('patient.dashboard.appointments.patient_appointments',
+            compact('upcoming', 'cancelled'));
     }
-      // End Method
+    // End Method
 
  
 
