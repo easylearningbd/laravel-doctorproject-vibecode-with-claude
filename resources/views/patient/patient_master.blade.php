@@ -654,6 +654,7 @@
 		
 		<!-- Custom JS -->
 		<script src="{{ asset('backend/assets/js/script.js') }}"></script>
-		
+
+		@stack('scripts')
 	</body>
 </html>

@@ -113,6 +113,9 @@
 
 </div>
 
+@endsection
+
+@push('scripts')
 <script>
 $(function () {
     $(document).on('click', '.fav-toggle-btn', function () {
@@ -127,10 +130,8 @@ $(function () {
             data  : { _token: '{{ csrf_token() }}' },
             success: function (resp) {
                 if (!resp.favourited) {
-                    // Removed — animate card out
                     card.fadeOut(400, function () {
                         card.remove();
-                        // Show empty state if no cards left
                         if ($('#favouritesGrid .fav-card').length === 0) {
                             $('#favouritesGrid').html(`
                                 <div class="col-12 text-center py-5">
@@ -151,5 +152,4 @@ $(function () {
     });
 });
 </script>
-
-@endsection
+@endpush
