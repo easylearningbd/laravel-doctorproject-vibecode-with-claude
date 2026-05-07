@@ -93,6 +93,7 @@
         $doctorName = $doctor->display_name ?: 'Dr. ' . $doctor->first_name . ' ' . $doctor->last_name;
         $doctorLocation = collect([$doctor->city, $doctor->state, $doctor->country])->filter()->implode(', ') ?: 'Location not set';
         $doctorPhoto = $doctor->profile_photo ? asset('storage/' . $doctor->profile_photo) : asset('backend/assets/img/doctors/doc-profile-02.jpg');
+        $doctorDesignation = $doctor->designation;
     @endphp
 
     <!-- ═══ BOOKING FORM ═══════════════════════════════════════════════ -->
@@ -121,8 +122,8 @@
                                         <h4 class="mb-1">{{ $doctorName }}
                                             <span class="badge bg-orange fs-12"><i class="fa-solid fa-star me-1"></i>5.0</span>
                                         </h4>
-                                        <p class="text-indigo mb-3 fw-medium">{{ $doctor->display_speciality }}</p>
-                                        <p class="mb-0"><i class="isax isax-location me-2"></i>{{ $doctorLocation }}</p>
+        <p class="text-indigo mb-3 fw-medium">{{ $doctor->display_speciality }}</p>
+        <p class="mb-0"> {{ $doctorDesignation }}</p>
                                     </div>
                                 </div>
                             </div>

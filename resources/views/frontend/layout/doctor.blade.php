@@ -73,7 +73,7 @@
                                 <h3 class="text-orange">N/A</h3>
                             @endif
                         </div>
-                        <a href="#" class="btn btn-md btn-dark d-inline-flex align-items-center rounded-pill">
+                        <a href="{{ route('doctor.booking', $doctor->id) }}" class="btn btn-md btn-dark d-inline-flex align-items-center rounded-pill">
                             <i class="isax isax-calendar-1 me-2"></i>
                             Book Now
                         </a>
