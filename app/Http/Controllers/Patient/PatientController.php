@@ -143,8 +143,14 @@ class PatientController extends Controller
     // End Method
 
 
-    public function PatientInvoices(){
-    return view('patient.dashboard.invoices.patient_invoices');
+    public function PatientInvoices()
+    {
+        $invoices = \App\Models\Invoice::where('patient_id', Auth::id())
+            ->with(['appointment.doctor', 'appointment.clinic'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return view('patient.dashboard.invoices.patient_invoices', compact('invoices'));
     }
     // End Method
 
