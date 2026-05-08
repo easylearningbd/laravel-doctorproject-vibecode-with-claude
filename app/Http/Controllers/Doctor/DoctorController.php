@@ -521,5 +521,10 @@ class DoctorController extends Controller
     }
     // End Method
 
+    public function DoctorDetailsPage($id){
+         return view('doctor.dashboard.appointments.doctor_detailspage');
+    }
+     // End Method
+
   
 }
