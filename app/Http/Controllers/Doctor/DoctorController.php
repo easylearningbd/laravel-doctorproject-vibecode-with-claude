@@ -511,5 +511,15 @@ class DoctorController extends Controller
     }
     // End Method
 
+    public function DoctorAppointments(){
+        return view('doctor.dashboard.appointments.doctor_appointments');
+    }
+    // End Method
 
+     public function DoctorPatients(){
+        return view('doctor.dashboard.appointments.doctor_patients');
+    }
+    // End Method
+
+  
 }
