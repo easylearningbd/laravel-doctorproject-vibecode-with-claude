@@ -164,6 +164,12 @@ class PatientController extends Controller
         return view('patient.dashboard.favourites.patient_favourites', compact('favourites'));
     }
     // End Method
+
+
+    public function PatientMedicalRecords(){
+    return view('patient.dashboard.medical.medical_records');
+    }
+     // End Method
  
 
 } 

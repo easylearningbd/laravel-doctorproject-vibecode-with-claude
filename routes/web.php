@@ -76,6 +76,10 @@ Route::get('/patient/invoices', [PatientController::class, 'PatientInvoices'])->
 
 Route::get('/patient/favourites', [PatientController::class, 'PatientFavourites'])->name('patient.favourites');
 
+
+Route::get('/patient/medical/records', [PatientController::class, 'PatientMedicalRecords'])->name('patient.medical.records');
+
+
   });
 /// End Patient Group Middleware
  
