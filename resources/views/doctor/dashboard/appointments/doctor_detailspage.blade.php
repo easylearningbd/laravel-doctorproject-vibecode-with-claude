@@ -319,7 +319,7 @@
                         </div>
                     </div>
 
-                    {{-- Medicine rows --}}
+                    {{-- Medicine rows — Select2 must NOT touch these selects, so no "select" class --}}
                     <div id="medicineRows">
                         <div class="add-prescripe-info">
                             <div class="row prescripe-cont medicine-row align-items-end">
@@ -332,7 +332,7 @@
                                 <div class="col-xl-2 col-lg-3 col-md-6">
                                     <div class="form-wrap">
                                         <label class="col-form-label">Form</label>
-                                        <select name="medicines[0][type]" class="select form-select">
+                                        <select name="medicines[0][type]" class="form-select">
                                             <option value="">Select</option>
                                             <option>Oral Tab</option>
                                             <option>Capsule</option>
@@ -369,7 +369,7 @@
                                         </div>
                                         <div class="form-wrap">
                                             <label class="d-block">&nbsp;</label>
-                                            <a href="#" class="trash text-danger remove-row d-none">
+                                            <a href="#" class="text-danger remove-row d-none">
                                                 <i class="isax isax-trash"></i>
                                             </a>
                                         </div>
@@ -380,7 +380,7 @@
                     </div>
 
                     <div class="text-end mb-3">
-                        <a href="#" id="addMoreMed" class="add-prescribe">+ Add More</a>
+                        <a href="#" id="addMoreMed">+ Add More</a>
                     </div>
 
                     {{-- Other info & follow-up --}}
@@ -442,25 +442,60 @@
 <script>
 $(function () {
 
-    // ── Add More medicine rows ────────────────────────────────────
-    var rowIndex = 1;
+    // ── Medicine row template (built from string — avoids Select2 clone issues) ──
+    function buildMedicineRow(idx) {
+        return '<div class="add-prescripe-info">' +
+            '<div class="row prescripe-cont medicine-row align-items-end">' +
+            '<div class="col-xl-2 col-lg-3 col-md-6"><div class="form-wrap">' +
+            '<label class="col-form-label">Medicine Name</label>' +
+            '<input type="text" name="medicines[' + idx + '][name]" class="form-control" placeholder="e.g. Aspirin 75mg">' +
+            '</div></div>' +
+            '<div class="col-xl-2 col-lg-3 col-md-6"><div class="form-wrap">' +
+            '<label class="col-form-label">Form</label>' +
+            '<select name="medicines[' + idx + '][type]" class="form-select">' +
+            '<option value="">Select</option><option>Oral Tab</option><option>Capsule</option>' +
+            '<option>Syrup</option><option>Injection</option><option>Drops</option><option>Cream</option>' +
+            '</select></div></div>' +
+            '<div class="col-xl-2 col-lg-3 col-md-6"><div class="form-wrap">' +
+            '<label class="col-form-label">Dosage</label>' +
+            '<input type="text" name="medicines[' + idx + '][dosage]" class="form-control" placeholder="e.g. 75 mg">' +
+            '</div></div>' +
+            '<div class="col-xl-2 col-lg-3 col-md-6"><div class="form-wrap">' +
+            '<label class="col-form-label">Frequency</label>' +
+            '<input type="text" name="medicines[' + idx + '][frequency]" class="form-control" placeholder="e.g. 1-0-1">' +
+            '</div></div>' +
+            '<div class="col-xl-2 col-lg-3 col-md-6"><div class="form-wrap">' +
+            '<label class="col-form-label">Duration</label>' +
+            '<input type="text" name="medicines[' + idx + '][duration]" class="form-control" placeholder="e.g. 1 Month">' +
+            '</div></div>' +
+            '<div class="col-xl-2 col-lg-3 col-md-6">' +
+            '<div class="d-flex align-items-end gap-2">' +
+            '<div class="form-wrap w-100"><label class="col-form-label">Instruction</label>' +
+            '<input type="text" name="medicines[' + idx + '][instruction]" class="form-control" placeholder="Before/After Meal">' +
+            '</div>' +
+            '<div class="form-wrap"><label class="d-block">&nbsp;</label>' +
+            '<a href="#" class="text-danger remove-row"><i class="isax isax-trash"></i></a>' +
+            '</div></div></div>' +
+            '</div></div>';
+    }
+
+    // ── Reset modal each time it opens ───────────────────────────
+    $('#add_prescription').on('show.bs.modal', function () {
+        // Remove any extra rows added in a previous open
+        $('#medicineRows .add-prescripe-info:not(:first)').remove();
+        // Clear first row values
+        $('#medicineRows .add-prescripe-info:first input').val('');
+        $('#medicineRows .add-prescripe-info:first select').val('');
+        // Reset counter
+        rowIdx = 1;
+    });
+
+    var rowIdx = 1;
 
     $('#addMoreMed').on('click', function (e) {
         e.preventDefault();
-        var $first = $('#medicineRows .add-prescripe-info').first();
-        var $clone = $first.clone();
-
-        // Update name indices
-        $clone.find('[name]').each(function () {
-            var name = $(this).attr('name').replace(/\[\d+\]/, '[' + rowIndex + ']');
-            $(this).attr('name', name).val('');
-        });
-
-        // Show remove button
-        $clone.find('.remove-row').removeClass('d-none');
-
-        $clone.appendTo('#medicineRows');
-        rowIndex++;
+        $('#medicineRows').append(buildMedicineRow(rowIdx));
+        rowIdx++;
     });
 
     $(document).on('click', '.remove-row', function (e) {
