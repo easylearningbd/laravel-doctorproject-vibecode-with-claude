@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Patient\PatientController;
+use App\Http\Controllers\Patient\MedicalRecordController;
 use App\Http\Controllers\Doctor\DoctorController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\SpecialityController;
@@ -77,7 +78,12 @@ Route::get('/patient/invoices', [PatientController::class, 'PatientInvoices'])->
 Route::get('/patient/favourites', [PatientController::class, 'PatientFavourites'])->name('patient.favourites');
 
 
-Route::get('/patient/medical/records', [PatientController::class, 'PatientMedicalRecords'])->name('patient.medical.records');
+// Medical Records CRUD
+Route::get('/patient/medical/records', [MedicalRecordController::class, 'index'])->name('patient.medical.records');
+Route::post('/patient/medical/records', [MedicalRecordController::class, 'store'])->name('patient.medical.records.store');
+Route::put('/patient/medical/records/{id}', [MedicalRecordController::class, 'update'])->name('patient.medical.records.update');
+Route::delete('/patient/medical/records/{id}', [MedicalRecordController::class, 'destroy'])->name('patient.medical.records.destroy');
+Route::get('/patient/medical/records/{id}/download', [MedicalRecordController::class, 'download'])->name('patient.medical.records.download');
 
 
   });
