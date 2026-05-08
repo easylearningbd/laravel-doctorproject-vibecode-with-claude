@@ -105,6 +105,7 @@ Route::post('/doctor/change/password', [DoctorController::class, 'DoctorChangePa
 
 
 Route::get('/doctor/requests', [DoctorController::class, 'DoctorRequests'])->name('doctor.requests');
+Route::post('/doctor/appointments/{id}/status', [DoctorController::class, 'DoctorAppointmentStatus'])->name('doctor.appointment.status');
 
 
 

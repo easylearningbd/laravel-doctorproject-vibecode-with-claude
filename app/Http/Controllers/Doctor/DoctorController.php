@@ -474,8 +474,40 @@ class DoctorController extends Controller
     }
     // End Method
 
-    public function DoctorRequests(){
-    return view('doctor.dashboard.request.doctor_request');
+    public function DoctorRequests()
+    {
+        $doctor = Auth::user();
+
+        $appointments = $doctor->doctorAppointments()
+            ->with(['patient', 'clinic'])
+            ->where('status', 'pending')
+            ->orderBy('appointment_date', 'asc')
+            ->orderBy('appointment_time', 'asc')
+            ->paginate(10);
+
+        return view('doctor.dashboard.request.doctor_request', compact('appointments'));
+    }
+    // End Method
+
+    public function DoctorAppointmentStatus(Request $request, $id)
+    {
+        $doctor = Auth::user();
+
+        $appointment = $doctor->doctorAppointments()->findOrFail($id);
+
+        $request->validate([
+            'status' => 'required|in:confirmed,cancelled',
+        ]);
+
+        $appointment->update(['status' => $request->status]);
+
+        return response()->json([
+            'success' => true,
+            'status'  => $appointment->status,
+            'message' => $request->status === 'confirmed'
+                ? 'Appointment accepted successfully.'
+                : 'Appointment rejected successfully.',
+        ]);
     }
     // End Method
 
