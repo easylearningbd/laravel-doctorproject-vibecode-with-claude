@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Patient;
 
 use App\Http\Controllers\Controller;
 use App\Models\PatientMedicalRecord;
+use App\Models\Prescription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -16,9 +17,24 @@ class MedicalRecordController extends Controller
 
         $records = PatientMedicalRecord::where('patient_id', $patient->id)
             ->orderBy('record_date', 'desc')
-            ->paginate(10);
+            ->paginate(10, ['*'], 'records');
 
-        return view('patient.dashboard.medical.medical_records', compact('records'));
+        $prescriptions = Prescription::where('patient_id', $patient->id)
+            ->with(['doctor', 'items'])
+            ->orderBy('issued_date', 'desc')
+            ->paginate(10, ['*'], 'prescriptions');
+
+        return view('patient.dashboard.medical.medical_records', compact('records', 'prescriptions'));
+    }
+
+    public function getPrescription($id)
+    {
+        $patient      = Auth::user();
+        $prescription = Prescription::where('patient_id', $patient->id)
+            ->with(['doctor', 'patient', 'items'])
+            ->findOrFail($id);
+
+        return response()->json($prescription);
     }
 
     public function store(Request $request)

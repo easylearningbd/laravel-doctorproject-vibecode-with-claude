@@ -3,14 +3,19 @@
 namespace App\Http\Controllers\Doctor;
 
 use App\Http\Controllers\Controller;
+use App\Models\Appointment;
 use App\Models\DoctorBusinessHour;
 use App\Models\DoctorClinic;
 use App\Models\DoctorEducation;
 use App\Models\DoctorExperience;
 use App\Models\DoctorSpecialityService;
+use App\Models\PatientMedicalRecord;
+use App\Models\Prescription;
 use App\Models\Speciality;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class DoctorController extends Controller
@@ -511,20 +516,157 @@ class DoctorController extends Controller
     }
     // End Method
 
-    public function DoctorAppointments(){
-        return view('doctor.dashboard.appointments.doctor_appointments');
+    public function DoctorAppointments()
+    {
+        $doctor = Auth::user();
+
+        $upcoming  = $doctor->doctorAppointments()->with(['patient', 'clinic'])
+            ->where('status', 'confirmed')
+            ->orderBy('appointment_date', 'asc')->orderBy('appointment_time', 'asc')
+            ->paginate(10, ['*'], 'upcoming');
+
+        $cancelled = $doctor->doctorAppointments()->with(['patient', 'clinic'])
+            ->where('status', 'cancelled')
+            ->orderBy('appointment_date', 'desc')
+            ->paginate(10, ['*'], 'cancelled');
+
+        $completed = $doctor->doctorAppointments()->with(['patient', 'clinic'])
+            ->where('status', 'completed')
+            ->orderBy('appointment_date', 'desc')
+            ->paginate(10, ['*'], 'completed');
+
+        return view('doctor.dashboard.appointments.doctor_appointments',
+            compact('upcoming', 'cancelled', 'completed'));
     }
     // End Method
 
-     public function DoctorPatients(){
-        return view('doctor.dashboard.appointments.doctor_patients');
+    public function DoctorPatients()
+    {
+        $doctor = Auth::user();
+
+        // Unique patients from completed appointments
+        $rows = $doctor->doctorAppointments()
+            ->with('patient')
+            ->where('status', 'completed')
+            ->orderBy('appointment_date', 'desc')
+            ->get()
+            ->unique('patient_id');
+
+        // Attach last booking info to each patient model
+        $patients = $rows->map(function ($apt) {
+            $apt->patient->last_booking_date   = $apt->appointment_date;
+            $apt->patient->last_apt_number     = $apt->appointment_number;
+            return $apt->patient;
+        })->values();
+
+        return view('doctor.dashboard.appointments.doctor_patients', compact('patients'));
     }
     // End Method
 
-    public function DoctorDetailsPage($id){
-         return view('doctor.dashboard.appointments.doctor_detailspage');
-    }
-     // End Method
+    public function DoctorDetailsPage($id)
+    {
+        $doctor  = Auth::user();
+        $patient = User::where('role', 'patient')->findOrFail($id);
 
-  
+        $appointments = Appointment::where('doctor_id', $doctor->id)
+            ->where('patient_id', $patient->id)
+            ->with(['clinic'])
+            ->orderBy('appointment_date', 'desc')
+            ->paginate(10, ['*'], 'appts');
+
+        $medicalRecords = PatientMedicalRecord::where('patient_id', $patient->id)
+            ->orderBy('record_date', 'desc')
+            ->paginate(10, ['*'], 'records');
+
+        $prescriptions = Prescription::where('doctor_id', $doctor->id)
+            ->where('patient_id', $patient->id)
+            ->with(['items'])
+            ->orderBy('issued_date', 'desc')
+            ->paginate(10, ['*'], 'prescriptions');
+
+        $lastBooking = Appointment::where('doctor_id', $doctor->id)
+            ->where('patient_id', $patient->id)
+            ->orderBy('appointment_date', 'desc')
+            ->first();
+
+        return view('doctor.dashboard.appointments.doctor_detailspage',
+            compact('patient', 'doctor', 'appointments', 'medicalRecords', 'prescriptions', 'lastBooking'));
+    }
+    // End Method
+
+    public function DoctorCompleteAppointment(Request $request, $id)
+    {
+        $doctor      = Auth::user();
+        $appointment = $doctor->doctorAppointments()->findOrFail($id);
+        $appointment->update(['status' => 'completed']);
+
+        return response()->json(['success' => true, 'message' => 'Appointment marked as completed.']);
+    }
+    // End Method
+
+    public function StorePrescription(Request $request, $patientId)
+    {
+        $doctor  = Auth::user();
+        $patient = User::where('role', 'patient')->findOrFail($patientId);
+
+        $request->validate([
+            'prescription_type'        => 'nullable|string|max:50',
+            'issued_date'              => 'required|date',
+            'other_info'               => 'nullable|string|max:2000',
+            'follow_up'                => 'nullable|string|max:500',
+            'medicines'                => 'required|array|min:1',
+            'medicines.*.name'         => 'required|string|max:255',
+            'medicines.*.type'         => 'nullable|string|max:100',
+            'medicines.*.dosage'       => 'nullable|string|max:100',
+            'medicines.*.frequency'    => 'nullable|string|max:100',
+            'medicines.*.duration'     => 'nullable|string|max:100',
+            'medicines.*.instruction'  => 'nullable|string|max:255',
+        ]);
+
+        $year   = now()->year;
+        $count  = Prescription::whereYear('created_at', $year)->count();
+        $seq    = str_pad($count + 1, 6, '0', STR_PAD_LEFT);
+        $number = "PRX-{$year}-{$seq}";
+
+        DB::transaction(function () use ($request, $doctor, $patient, $number) {
+            $prescription = Prescription::create([
+                'prescription_number' => $number,
+                'doctor_id'           => $doctor->id,
+                'patient_id'          => $patient->id,
+                'prescription_type'   => $request->prescription_type ?? 'Visit',
+                'issued_date'         => $request->issued_date,
+                'other_info'          => $request->other_info,
+                'follow_up'           => $request->follow_up,
+            ]);
+
+            foreach ($request->medicines as $med) {
+                if (!empty($med['name'])) {
+                    $prescription->items()->create([
+                        'medicine_name' => $med['name'],
+                        'medicine_type' => $med['type']        ?? null,
+                        'dosage'        => $med['dosage']      ?? null,
+                        'frequency'     => $med['frequency']   ?? null,
+                        'duration'      => $med['duration']    ?? null,
+                        'instruction'   => $med['instruction'] ?? null,
+                    ]);
+                }
+            }
+        });
+
+        return back()->with('success', 'Prescription added successfully.');
+    }
+    // End Method
+
+    public function GetPrescription($id)
+    {
+        $doctor       = Auth::user();
+        $prescription = Prescription::where('doctor_id', $doctor->id)
+            ->with(['doctor', 'patient', 'items'])
+            ->findOrFail($id);
+
+        return response()->json($prescription);
+    }
+    // End Method
+
+
 }

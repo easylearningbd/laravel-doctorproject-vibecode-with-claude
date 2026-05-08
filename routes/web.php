@@ -84,6 +84,7 @@ Route::post('/patient/medical/records', [MedicalRecordController::class, 'store'
 Route::put('/patient/medical/records/{id}', [MedicalRecordController::class, 'update'])->name('patient.medical.records.update');
 Route::delete('/patient/medical/records/{id}', [MedicalRecordController::class, 'destroy'])->name('patient.medical.records.destroy');
 Route::get('/patient/medical/records/{id}/download', [MedicalRecordController::class, 'download'])->name('patient.medical.records.download');
+Route::get('/patient/prescriptions/{id}', [MedicalRecordController::class, 'getPrescription'])->name('patient.prescription.show');
 
 
   });
@@ -116,6 +117,9 @@ Route::post('/doctor/change/password', [DoctorController::class, 'DoctorChangePa
 
 Route::get('/doctor/requests', [DoctorController::class, 'DoctorRequests'])->name('doctor.requests');
 Route::post('/doctor/appointments/{id}/status', [DoctorController::class, 'DoctorAppointmentStatus'])->name('doctor.appointment.status');
+Route::post('/doctor/appointments/{id}/complete', [DoctorController::class, 'DoctorCompleteAppointment'])->name('doctor.appointment.complete');
+Route::post('/doctor/patients/{patientId}/prescriptions', [DoctorController::class, 'StorePrescription'])->name('doctor.prescription.store');
+Route::get('/doctor/prescriptions/{id}', [DoctorController::class, 'GetPrescription'])->name('doctor.prescription.show');
  
 
 Route::get('/doctor/appointments', [DoctorController::class, 'DoctorAppointments'])->name('doctor.appointments');

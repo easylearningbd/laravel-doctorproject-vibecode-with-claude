@@ -38,7 +38,7 @@
 
 <div class="tab-content pt-0">
 
-    <!-- Prescription Tab (static placeholder) -->
+    <!-- Prescription Tab -->
     <div class="tab-pane fade" id="prescription">
         <div class="dashboard-header border-0 m-0">
             <ul class="header-list-btns">
@@ -56,20 +56,59 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Name</th>
-                            <th>Created Date</th>
                             <th>Prescribed By</th>
+                            <th>Type</th>
+                            <th>Date</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td colspan="5" class="text-center py-4 text-muted">No prescriptions available yet.</td>
-                        </tr>
+                    @forelse ($prescriptions as $rx)
+                    <tr>
+                        <td>
+                            <a class="link-primary view-patient-rx-btn" href="javascript:void(0);"
+                               data-id="{{ $rx->id }}"
+                               data-url="{{ route('patient.prescription.show', $rx->id) }}">
+                                #{{ $rx->prescription_number }}
+                            </a>
+                        </td>
+                        <td>
+                            <h2 class="table-avatar">
+                                @if ($rx->doctor->profile_photo)
+                                    <a href="#" class="avatar avatar-sm me-2">
+                                        <img class="avatar-img rounded-3"
+                                             src="{{ asset('storage/' . $rx->doctor->profile_photo) }}"
+                                             alt="{{ $rx->doctor->first_name }}">
+                                    </a>
+                                @endif
+                                <a href="#">Dr. {{ $rx->doctor->first_name }} {{ $rx->doctor->last_name }}</a>
+                            </h2>
+                        </td>
+                        <td>{{ $rx->prescription_type }}</td>
+                        <td>{{ $rx->issued_date->format('d M Y') }}</td>
+                        <td>
+                            <div class="action-item">
+                                <a href="javascript:void(0);" class="view-patient-rx-btn"
+                                   data-id="{{ $rx->id }}"
+                                   data-url="{{ route('patient.prescription.show', $rx->id) }}"
+                                   title="View">
+                                    <i class="isax isax-link-2"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="5" class="text-center py-4 text-muted">No prescriptions yet.</td>
+                    </tr>
+                    @endforelse
                     </tbody>
                 </table>
             </div>
         </div>
+        @if ($prescriptions->hasPages())
+            <div class="mt-3 d-flex justify-content-center">{{ $prescriptions->links() }}</div>
+        @endif
     </div>
     <!-- /Prescription Tab -->
 
@@ -452,6 +491,26 @@
 </div>
 <!-- /Delete Modal -->
 
+<!-- View Prescription Modal (AJAX-populated) -->
+<div class="modal fade custom-modals" id="view_prescription">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">View Prescription</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body pb-0" id="patientRxModalBody">
+                <div class="text-center py-4">
+                    <div class="spinner-border text-primary" role="status"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /View Prescription Modal -->
+
 @endsection
 
 @push('scripts')
@@ -516,6 +575,70 @@ $(function () {
 
         $('#deleteRecordForm').attr('action', '{{ url("patient/medical/records") }}/' + id);
         $('#deleteRecordTitle').text('"' + title + '"');
+    });
+
+    // ── View Prescription (AJAX) ──────────────────────────────────────────
+    $(document).on('click', '.view-patient-rx-btn', function () {
+        var url = $(this).data('url');
+        $('#patientRxModalBody').html('<div class="text-center py-4"><div class="spinner-border text-primary"></div></div>');
+        $('#view_prescription').modal('show');
+
+        $.ajax({
+            url    : url,
+            method : 'GET',
+            success: function (rx) {
+                var html = '';
+
+                html += '<div class="prescribe-download gap-2">';
+                html +=   '<div>';
+                html +=     '<h5 class="mb-0">#' + rx.prescription_number + '</h5>';
+                html +=     '<p class="text-muted fs-13 mb-0">' + rx.prescription_type + ' &mdash; Issued: ' + rx.issued_date + '</p>';
+                html +=   '</div>';
+                html += '</div>';
+
+                html += '<div class="view-prescribe invoice-content mt-3">';
+
+                html += '<div class="invoice-item"><div class="row">';
+                html += '<div class="col-md-6"><div class="invoice-info"><h6 class="customer-text">Doctor Details</h6>';
+                html += '<p class="invoice-details">Dr. ' + rx.doctor.first_name + ' ' + rx.doctor.last_name + '<br>' + (rx.doctor.designation || '') + '</p></div></div>';
+                html += '<div class="col-md-6"><div class="invoice-info invoice-info2"><h6 class="customer-text">Patient Details</h6>';
+                html += '<p class="invoice-details">' + rx.patient.first_name + ' ' + rx.patient.last_name + '<br>' + rx.patient.email + '</p></div></div>';
+                html += '</div></div>';
+
+                html += '<div class="invoice-item invoice-table-wrap"><div class="row"><div class="col-md-12">';
+                html += '<h6>Prescription Details</h6><div class="table-responsive">';
+                html += '<table class="invoice-table table table-bordered"><thead><tr>';
+                html += '<th>Medicine Name</th><th>Form</th><th>Dosage</th><th>Frequency</th><th>Duration</th><th>Instruction</th>';
+                html += '</tr></thead><tbody>';
+
+                if (rx.items && rx.items.length) {
+                    $.each(rx.items, function (i, item) {
+                        html += '<tr><td>' + (item.medicine_name || '—') + '</td><td>' + (item.medicine_type || '—') + '</td>';
+                        html += '<td>' + (item.dosage || '—') + '</td><td>' + (item.frequency || '—') + '</td>';
+                        html += '<td>' + (item.duration || '—') + '</td><td>' + (item.instruction || '—') + '</td></tr>';
+                    });
+                } else {
+                    html += '<tr><td colspan="6" class="text-center text-muted">No medicines.</td></tr>';
+                }
+
+                html += '</tbody></table></div></div></div></div>';
+
+                if (rx.other_info) {
+                    html += '<div class="other-info"><h4>Other Information</h4><p class="text-muted mb-0">' + rx.other_info + '</p></div>';
+                }
+                if (rx.follow_up) {
+                    html += '<div class="other-info"><h4>Follow Up</h4><p class="text-muted mb-0">' + rx.follow_up + '</p></div>';
+                }
+
+                html += '<div class="prescriber-info"><h6>Dr. ' + rx.doctor.first_name + ' ' + rx.doctor.last_name + '</h6>';
+                html += '<p>' + (rx.doctor.designation || 'Doctor') + '</p></div></div>';
+
+                $('#patientRxModalBody').html(html);
+            },
+            error: function () {
+                $('#patientRxModalBody').html('<div class="text-center text-danger py-4">Failed to load prescription.</div>');
+            }
+        });
     });
 
 });
