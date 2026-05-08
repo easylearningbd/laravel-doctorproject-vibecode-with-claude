@@ -474,7 +474,10 @@ class DoctorController extends Controller
     }
     // End Method
 
-
+    public function DoctorRequests(){
+    return view('doctor.dashboard.request.doctor_request');
+    }
+    // End Method
 
 
 }

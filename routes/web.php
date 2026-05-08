@@ -103,6 +103,11 @@ Route::post('/specialities/services', [DoctorController::class, 'SpecialitiesSer
 Route::get('/doctor/change/password', [DoctorController::class, 'DoctorChangePassword'])->name('doctor.change.password');
 Route::post('/doctor/change/password', [DoctorController::class, 'DoctorChangePasswordPost'])->name('doctor.change.password.post');
 
+
+Route::get('/doctor/requests', [DoctorController::class, 'DoctorRequests'])->name('doctor.requests');
+
+
+
 });
 /// End Doctor Group Middleware
 
