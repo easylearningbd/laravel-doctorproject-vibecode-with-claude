@@ -15,6 +15,8 @@ Route::get('/', [FrontendController::class, 'index'])->name('home');
 
 Route::get('/doctor/details/{id}', [FrontendController::class, 'DoctorDetails'])->name('doctor.details');
 
+Route::get('/doctor/all/speciality/{id}', [FrontendController::class, 'DoctorAllSpeciality'])->name('doctor.all.speciality');
+
 Route::get('/doctor/booking/{id}', [FrontendController::class, 'DoctorBooking'])->name('doctor.booking');
 
 // Booking POST — patient only

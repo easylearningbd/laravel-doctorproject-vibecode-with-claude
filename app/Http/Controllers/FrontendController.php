@@ -129,7 +129,10 @@ class FrontendController extends Controller
     // End Method
 
 
-
+  public function DoctorAllSpeciality($id){
+    return view('frontend.doctor_speciality');
+  }
+  // End Method
 
 
 

@@ -19,7 +19,7 @@
                 @endif
             </span>
         </div>
-        <h6><a href="doctor-grid.html">{{ $speciality->name }}</a></h6>
+        <h6><a href="{{ route('doctor.all.speciality',$speciality->id) }}">{{ $speciality->name }}</a></h6>
         <p class="mb-0">{{ $speciality->doctor_count }}
                 {{ $speciality->doctor_count == 1 ? 'Doctor' : 'Doctors' }}</p>
     </div>
