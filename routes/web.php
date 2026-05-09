@@ -132,6 +132,8 @@ Route::get('/doctor/details/page/{id}', [DoctorController::class, 'DoctorDetails
 Route::get('/doctor/invoices', [DoctorController::class, 'DoctorInvoices'])->name('doctor.invoices');
 Route::get('/doctor/invoices/{appointmentNumber}/print', [DoctorController::class, 'DoctorPrintInvoice'])->name('doctor.invoice.print');
 
+Route::get('/doctor/accounts', [DoctorController::class, 'DoctorAccounts'])->name('doctor.accounts');
+
 
 
 });

@@ -77,7 +77,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="accounts.html">
+                        <a href="{{ route('doctor.accounts') }}">
                             <i class="isax isax-profile-tick"></i>
                             <span>Accounts</span>
                         </a>

@@ -701,5 +701,10 @@ class DoctorController extends Controller
     }
     // End Method
 
+    public function DoctorAccounts(){
+    return view('doctor.dashboard.accounts.doctor_accounts');
+    }
+     // End Method
+
 
 }
