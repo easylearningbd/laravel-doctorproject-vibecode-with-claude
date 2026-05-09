@@ -129,10 +129,83 @@ class FrontendController extends Controller
     // End Method
 
 
-  public function DoctorAllSpeciality($id){
-    return view('frontend.doctor_speciality');
-  }
-  // End Method
+    public function DoctorAllSpeciality(Request $request, $id)
+    {
+        $speciality = Speciality::findOrFail($id);
+
+        // Which speciality IDs are active (current + any extra checked in sidebar)
+        $checkedIds = array_filter(array_map('intval', (array) $request->get('specialities', [])));
+        if (!in_array((int)$id, $checkedIds)) {
+            array_unshift($checkedIds, (int)$id);
+        }
+
+        $today = strtolower(now()->format('l'));
+
+        // Base query — doctors who have a service in any of the selected specialities
+        $query = User::where('role', 'doctor')
+            ->select('users.*')
+            ->selectSub(
+                DB::table('doctor_speciality_services')
+                    ->selectRaw('MIN(price)')
+                    ->whereColumn('user_id', 'users.id'),
+                'min_price'
+            )
+            ->whereHas('specialityServices', fn($q) => $q->whereIn('speciality_id', $checkedIds))
+            ->with(['specialityServices.speciality', 'businessHours', 'experiences']);
+
+        // Availability filter
+        if ($request->boolean('available')) {
+            $query->whereHas('businessHours',
+                fn($q) => $q->where('day_of_week', $today)->where('is_open', true));
+        }
+
+        // Experience filter (min years)
+        if ($request->filled('experience') && (int)$request->experience > 0) {
+            $minYears = (int)$request->experience;
+            $query->whereHas('experiences', function ($q) use ($minYears) {
+                $q->whereNotNull('start_date')
+                  ->whereRaw('TIMESTAMPDIFF(YEAR, start_date, CURDATE()) >= ?', [$minYears]);
+            });
+        }
+
+        // Sort
+        $sort = $request->get('sort', 'price_asc');
+        $query->orderByRaw('min_price IS NULL, min_price ' . ($sort === 'price_desc' ? 'DESC' : 'ASC'))
+              ->orderBy('users.id');
+
+        $doctors = $query->paginate(9)->withQueryString();
+
+        $doctors->each(function ($doctor) use ($today) {
+            $doctor->display_speciality = $doctor->specialization
+                ?: ($doctor->specialityServices->first()?->speciality?->name
+                    ?? $doctor->designation ?? 'Doctor');
+
+            $doctor->is_available = $doctor->businessHours
+                ->where('day_of_week', $today)
+                ->where('is_open', true)
+                ->isNotEmpty();
+        });
+
+        // All specialities for the sidebar filter (with doctor count)
+        $allSpecialities = Speciality::select('specialities.*')
+            ->selectSub(
+                DB::table('doctor_speciality_services')
+                    ->selectRaw('COUNT(DISTINCT user_id)')
+                    ->whereColumn('speciality_id', 'specialities.id'),
+                'doctor_count'
+            )
+            ->orderBy('name')
+            ->get();
+
+        $favouriteIds = (auth()->check() && auth()->user()->role === 'patient')
+            ? auth()->user()->favouriteDoctors()->pluck('users.id')->toArray()
+            : [];
+
+        return view('frontend.doctor_speciality',
+            compact('speciality', 'doctors', 'allSpecialities',
+                    'favouriteIds', 'sort', 'checkedIds', 'id'));
+    }
+    // End Method
 
 
 
