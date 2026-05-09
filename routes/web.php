@@ -128,6 +128,11 @@ Route::get('/doctor/patients', [DoctorController::class, 'DoctorPatients'])->nam
 
 Route::get('/doctor/details/page/{id}', [DoctorController::class, 'DoctorDetailsPage'])->name('patient.details.page');
 
+
+Route::get('/doctor/invoices', [DoctorController::class, 'DoctorInvoices'])->name('doctor.invoices');
+
+
+
 });
 /// End Doctor Group Middleware
 

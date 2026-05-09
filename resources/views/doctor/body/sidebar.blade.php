@@ -57,12 +57,7 @@
                             <span>Appointments</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="available-timings.html">
-                            <i class="isax isax-calendar-tick"></i>
-                            <span>Available Timings</span>
-                        </a>
-                    </li>
+                     
                     <li>
                         <a href="{{ route('doctor.patients') }}">
                             <i class="fa-solid fa-user-injured"></i>
@@ -88,17 +83,12 @@
                         </a>
                     </li>
                     <li>
-                        <a href="invoices.html">
+                        <a href="{{ route('doctor.invoices') }}">
                             <i class="isax isax-document-text"></i>
                             <span>Invoices</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="doctor-payment.html">
-                            <i class="fa-solid fa-money-bill-1"></i>
-                            <span>Payout Settings</span>
-                        </a>
-                    </li>																																				
+                    																																			
                     <li>
                         <a href="chat-doctor.html">
                             <i class="isax isax-messages-1"></i>

@@ -669,4 +669,10 @@ class DoctorController extends Controller
     // End Method
 
 
+    public function DoctorInvoices(){
+        return view('doctor.dashboard.invoices.doctor_invoices');
+    }
+    // End Method
+
+
 }
