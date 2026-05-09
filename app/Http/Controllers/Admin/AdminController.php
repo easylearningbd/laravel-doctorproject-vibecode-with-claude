@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\PaymentRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -55,9 +56,45 @@ class AdminController extends Controller
     public function AdminSpcialities(){
         return view('admin.dashboard.spcialities.all_spcialities');
     }
-     // End Method
+    // End Method
 
+    public function AdminPaymentRequests()
+    {
+        $requests = PaymentRequest::with('doctor')
+            ->orderByRaw("FIELD(status,'pending','approved','cancelled')")
+            ->orderBy('created_at', 'desc')
+            ->paginate(15);
 
+        $pendingCount = PaymentRequest::where('status', 'pending')->count();
+
+        return view('admin.dashboard.payment_requests.all_payment_requests',
+            compact('requests', 'pendingCount'));
+    }
+    // End Method
+
+    public function AdminPaymentRequestAction(Request $request, $id)
+    {
+        $request->validate([
+            'action'     => 'required|in:approved,cancelled',
+            'admin_note' => 'nullable|string|max:500',
+        ]);
+
+        $pr = PaymentRequest::findOrFail($id);
+
+        if ($pr->status !== 'pending') {
+            return back()->with('error', 'This request has already been processed.');
+        }
+
+        $pr->update([
+            'status'      => $request->action,
+            'admin_note'  => $request->admin_note,
+            'credited_on' => $request->action === 'approved' ? now()->toDateString() : null,
+        ]);
+
+        return back()->with('success',
+            $request->action === 'approved' ? 'Payment request approved.' : 'Payment request cancelled.');
+    }
+    // End Method
 
 
 

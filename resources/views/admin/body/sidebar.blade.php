@@ -11,8 +11,11 @@
             <li> 
                 <a href="appointment-list.html"><i class="fe fe-layout"></i> <span>Appointments</span></a>
             </li>
-            <li> 
+            <li>
                 <a href="{{ route('agent.spcialities') }}"><i class="fe fe-users"></i> <span>Specialities</span></a>
+            </li>
+            <li>
+                <a href="{{ route('agent.payment.requests') }}"><i class="fe fe-dollar-sign"></i> <span>Payment Requests</span></a>
             </li>
             <li> 
                 <a href="doctor-list.html"><i class="fe fe-user-plus"></i> <span>Doctors</span></a>

@@ -133,6 +133,8 @@ Route::get('/doctor/invoices', [DoctorController::class, 'DoctorInvoices'])->nam
 Route::get('/doctor/invoices/{appointmentNumber}/print', [DoctorController::class, 'DoctorPrintInvoice'])->name('doctor.invoice.print');
 
 Route::get('/doctor/accounts', [DoctorController::class, 'DoctorAccounts'])->name('doctor.accounts');
+Route::post('/doctor/accounts', [DoctorController::class, 'DoctorAccountsPost'])->name('doctor.accounts.post');
+Route::post('/doctor/payment-request', [DoctorController::class, 'DoctorPaymentRequestPost'])->name('doctor.payment.request');
 
 
 
@@ -144,6 +146,10 @@ Route::get('/doctor/accounts', [DoctorController::class, 'DoctorAccounts'])->nam
 Route::middleware(['admin'])->group(function () {
 
     Route::get('/agent/dashboard', [AdminController::class, 'AdminDashboard'])->name('agent.dashboard');
+
+    // Payment Requests management
+    Route::get('/agent/payment-requests', [AdminController::class, 'AdminPaymentRequests'])->name('agent.payment.requests');
+    Route::post('/agent/payment-requests/{id}/action', [AdminController::class, 'AdminPaymentRequestAction'])->name('agent.payment.requests.action');
 
     // Specialities CRUD
     Route::get('/agent/spcialities', [SpecialityController::class, 'index'])->name('agent.spcialities');

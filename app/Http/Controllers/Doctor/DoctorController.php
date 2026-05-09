@@ -4,12 +4,15 @@ namespace App\Http\Controllers\Doctor;
 
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
+use App\Models\DoctorBankAccount;
 use App\Models\DoctorBusinessHour;
 use App\Models\DoctorClinic;
 use App\Models\DoctorEducation;
 use App\Models\DoctorExperience;
 use App\Models\DoctorSpecialityService;
+use App\Models\Invoice;
 use App\Models\PatientMedicalRecord;
+use App\Models\PaymentRequest;
 use App\Models\Prescription;
 use App\Models\Speciality;
 use App\Models\User;
@@ -701,10 +704,108 @@ class DoctorController extends Controller
     }
     // End Method
 
-    public function DoctorAccounts(){
-    return view('doctor.dashboard.accounts.doctor_accounts');
+    public function DoctorAccounts()
+    {
+        $doctor = Auth::user();
+
+        // Financial statistics
+        $totalBalance = Invoice::where('doctor_id', $doctor->id)
+            ->where('status', 'paid')
+            ->sum('total');
+
+        $earned = PaymentRequest::where('doctor_id', $doctor->id)
+            ->where('status', 'approved')
+            ->sum('amount');
+
+        $requested = PaymentRequest::where('doctor_id', $doctor->id)
+            ->where('status', 'pending')
+            ->sum('amount');
+
+        $available = max(0, $totalBalance - $earned - $requested);
+
+        // Bank account
+        $bankAccount = DoctorBankAccount::where('doctor_id', $doctor->id)->first();
+
+        // Payment requests table (paginated)
+        $paymentRequests = PaymentRequest::where('doctor_id', $doctor->id)
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        // Last pending/approved request date
+        $lastRequest = PaymentRequest::where('doctor_id', $doctor->id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        return view('doctor.dashboard.accounts.doctor_accounts',
+            compact('totalBalance', 'earned', 'requested', 'available',
+                    'bankAccount', 'paymentRequests', 'lastRequest'));
     }
-     // End Method
+    // End Method
+
+    public function DoctorAccountsPost(Request $request)
+    {
+        $doctor = Auth::user();
+
+        $request->validate([
+            'bank_name'      => 'required|string|max:255',
+            'branch_name'    => 'nullable|string|max:255',
+            'account_number' => 'required|string|max:50',
+            'account_name'   => 'required|string|max:255',
+        ]);
+
+        DoctorBankAccount::updateOrCreate(
+            ['doctor_id' => $doctor->id],
+            [
+                'bank_name'      => $request->bank_name,
+                'branch_name'    => $request->branch_name,
+                'account_number' => $request->account_number,
+                'account_name'   => $request->account_name,
+            ]
+        );
+
+        return back()->with('success', 'Bank account details saved successfully.');
+    }
+    // End Method
+
+    public function DoctorPaymentRequestPost(Request $request)
+    {
+        $doctor = Auth::user();
+
+        $request->validate([
+            'amount'      => 'required|numeric|min:1',
+            'description' => 'nullable|string|max:1000',
+        ]);
+
+        // Recompute available balance
+        $totalBalance = Invoice::where('doctor_id', $doctor->id)->where('status', 'paid')->sum('total');
+        $earned       = PaymentRequest::where('doctor_id', $doctor->id)->where('status', 'approved')->sum('amount');
+        $requested    = PaymentRequest::where('doctor_id', $doctor->id)->where('status', 'pending')->sum('amount');
+        $available    = max(0, $totalBalance - $earned - $requested);
+
+        if ($request->amount > $available) {
+            return back()->withErrors(['amount' => 'Requested amount exceeds your available balance of $' . number_format($available, 2) . '.'])->withInput();
+        }
+
+        if (!DoctorBankAccount::where('doctor_id', $doctor->id)->exists()) {
+            return back()->with('error', 'Please add your bank account details before requesting payment.');
+        }
+
+        $year   = now()->year;
+        $count  = PaymentRequest::whereYear('created_at', $year)->count();
+        $seq    = str_pad($count + 1, 6, '0', STR_PAD_LEFT);
+        $number = "PR-{$year}-{$seq}";
+
+        PaymentRequest::create([
+            'request_number' => $number,
+            'doctor_id'      => $doctor->id,
+            'amount'         => $request->amount,
+            'description'    => $request->description,
+            'status'         => 'pending',
+        ]);
+
+        return back()->with('success', 'Payment request submitted successfully.');
+    }
+    // End Method
 
 
 }
