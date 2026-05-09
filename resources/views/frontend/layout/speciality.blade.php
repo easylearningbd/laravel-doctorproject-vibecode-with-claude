@@ -7,21 +7,23 @@
 
     <div class="owl-carousel spciality-slider aos" data-aos="fade-up">
 
-        @forelse ($specialities as $speciality)
+        @forelse ($specialities as $speciality) 
         <div class="spaciality-item">
-            <div class="spaciality-img">
+        <div class="spaciality-img">
+            <img src="{{ asset('backend/assets/img/specialities/speciality-01.jpg') }}" alt="img">
+            <span class="spaciality-icon"> 
                 @if ($speciality->image)
-                    <img src="{{ asset('storage/' . $speciality->image) }}" alt="{{ $speciality->name }}">
+                    <img src="{{ asset('storage/' . $speciality->image) }}" alt="{{ $speciality->name }}" style="width: 45px;">
                 @else
                     <img src="{{ asset('backend/assets/img/specialities/speciality-01.jpg') }}" alt="{{ $speciality->name }}">
                 @endif
-            </div>
-            <h6><a href="#">{{ $speciality->name }}</a></h6>
-            <p class="mb-0">
-                {{ $speciality->doctor_count }}
-                {{ $speciality->doctor_count == 1 ? 'Doctor' : 'Doctors' }}
-            </p>
+            </span>
         </div>
+        <h6><a href="doctor-grid.html">{{ $speciality->name }}</a></h6>
+        <p class="mb-0">{{ $speciality->doctor_count }}
+                {{ $speciality->doctor_count == 1 ? 'Doctor' : 'Doctors' }}</p>
+    </div>
+ 
         @empty
         <div class="spaciality-item text-center py-4">
             <p class="text-muted">No specialities available yet.</p>
