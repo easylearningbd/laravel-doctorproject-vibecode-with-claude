@@ -6,6 +6,7 @@ use App\Models\Speciality;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class FrontendController extends Controller
 {
@@ -32,7 +33,18 @@ class FrontendController extends Controller
             ? auth()->user()->favouriteDoctors()->pluck('users.id')->toArray()
             : [];
 
-        return view('frontend.index', compact('doctors', 'favouriteIds'));
+        // Specialities with distinct doctor count (subquery for accuracy)
+        $specialities = Speciality::select('specialities.*')
+            ->selectSub(
+                DB::table('doctor_speciality_services')
+                    ->selectRaw('COUNT(DISTINCT user_id)')
+                    ->whereColumn('speciality_id', 'specialities.id'),
+                'doctor_count'
+            )
+            ->orderBy('name')
+            ->get();
+
+        return view('frontend.index', compact('doctors', 'favouriteIds', 'specialities'));
     }
 
 
