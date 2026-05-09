@@ -669,8 +669,35 @@ class DoctorController extends Controller
     // End Method
 
 
-    public function DoctorInvoices(){
-        return view('doctor.dashboard.invoices.doctor_invoices');
+    public function DoctorInvoices()
+    {
+        $doctor = Auth::user();
+
+        $invoices = \App\Models\Invoice::where('doctor_id', $doctor->id)
+            ->with(['patient', 'appointment'])
+            ->orderBy('generated_at', 'desc')
+            ->paginate(10);
+
+        return view('doctor.dashboard.invoices.doctor_invoices', compact('invoices'));
+    }
+    // End Method
+
+    public function DoctorPrintInvoice($appointmentNumber)
+    {
+        $doctor = Auth::user();
+
+        $appointment = Appointment::where('appointment_number', $appointmentNumber)
+            ->where('doctor_id', $doctor->id)
+            ->with(['doctor', 'patient', 'clinic', 'payment', 'invoice'])
+            ->firstOrFail();
+
+        $services = \App\Models\DoctorSpecialityService::with('speciality')
+            ->whereIn('id', $appointment->service_ids ?? [])
+            ->get();
+
+        $backUrl = route('doctor.invoices');
+
+        return view('frontend.invoice_print', compact('appointment', 'services', 'backUrl'));
     }
     // End Method
 

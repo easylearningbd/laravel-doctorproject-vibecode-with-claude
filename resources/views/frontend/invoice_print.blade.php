@@ -41,7 +41,7 @@
         <button onclick="window.print()" class="btn btn-primary btn-sm">
             🖨 Print / Save as PDF
         </button>
-        <a href="{{ route('appointment.success', $appointment->appointment_number) }}"
+        <a href="{{ $backUrl ?? route('appointment.success', $appointment->appointment_number) }}"
            class="btn btn-light btn-sm ms-2">← Back</a>
     </div>
 
