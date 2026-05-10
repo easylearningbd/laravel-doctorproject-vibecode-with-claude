@@ -9,13 +9,13 @@
                 <a href="index.html"><i class="fe fe-home"></i> <span>Dashboard</span></a>
             </li>
             <li> 
-                <a href="appointment-list.html"><i class="fe fe-layout"></i> <span>Appointments</span></a>
+                <a href="{{ route('agent.appointments') }}"><i class="fe fe-layout"></i> <span>Appointments</span></a>
             </li>
             <li>
                 <a href="{{ route('agent.spcialities') }}"><i class="fe fe-users"></i> <span>Specialities</span></a>
             </li>
             <li>
-                <a href="{{ route('agent.payment.requests') }}"><i class="fe fe-dollar-sign"></i> <span>Payment Requests</span></a>
+                <a href="{{ route('agent.payment.requests') }}"><i class="fe fe-document"></i> <span>Payment Requests</span></a>
             </li>
             <li>
                 <a href="{{ route('agent.reviews') }}"><i class="fe fe-star"></i> <span>Reviews</span></a>

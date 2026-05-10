@@ -114,4 +114,10 @@ class AdminController extends Controller
     // End Method
 
 
+    public function AdminAppointments(){
+    return view('admin.dashboard.appointments.all_appointments');
+    }
+    // End Method
+
+
 }

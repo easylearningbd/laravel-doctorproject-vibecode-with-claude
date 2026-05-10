@@ -166,6 +166,13 @@ Route::middleware(['admin'])->group(function () {
     Route::get('/agent/reviews', [AdminController::class, 'AdminReviews'])->name('agent.reviews');
     Route::delete('/agent/reviews/{id}', [AdminController::class, 'AdminDeleteReview'])->name('agent.reviews.delete');
 
+
+    Route::get('/agent/appointments', [AdminController::class, 'AdminAppointments'])->name('agent.appointments');
+
+
+
+
+
 });
 /// End Admin Group Middleware
 
