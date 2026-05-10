@@ -169,6 +169,12 @@ Route::middleware(['admin'])->group(function () {
 
     Route::get('/agent/appointments', [AdminController::class, 'AdminAppointments'])->name('agent.appointments');
 
+    Route::get('/all/doctors/agent', [AdminController::class, 'AllDoctorsAgent'])->name('all.doctors.agent');
+
+    Route::get('/all/patients/agent', [AdminController::class, 'AllPatientsAgent'])->name('all.patients.agent');
+
+     
+
 
 
 

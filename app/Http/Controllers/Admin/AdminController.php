@@ -146,5 +146,13 @@ class AdminController extends Controller
     }
     // End Method
 
+    public function AllDoctorsAgent(){
+        return view('admin.dashboard.doctors.all_doctors');
+    }
+
+     public function AllPatientsAgent(){
+        return view('admin.dashboard.patients.all_patients');
+    }
+
 
 }

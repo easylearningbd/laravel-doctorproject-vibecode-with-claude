@@ -21,10 +21,10 @@
                 <a href="{{ route('agent.reviews') }}"><i class="fe fe-star"></i> <span>Reviews</span></a>
             </li>
             <li> 
-                <a href="doctor-list.html"><i class="fe fe-user-plus"></i> <span>Doctors</span></a>
+                <a href="{{ route('all.doctors.agent') }}"><i class="fe fe-user-plus"></i> <span>Doctors</span></a>
             </li>
             <li> 
-                <a href="patient-list.html"><i class="fe fe-user"></i> <span>Patients</span></a>
+                <a href="{{ route('all.patients.agent') }}"><i class="fe fe-user"></i> <span>Patients</span></a>
             </li>
             <li> 
                 <a href="{{ route('agent.reviews') }}"><i class="fe fe-star-o"></i> <span>Reviews</span></a>
