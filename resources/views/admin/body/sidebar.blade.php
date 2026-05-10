@@ -17,6 +17,9 @@
             <li>
                 <a href="{{ route('agent.payment.requests') }}"><i class="fe fe-dollar-sign"></i> <span>Payment Requests</span></a>
             </li>
+            <li>
+                <a href="{{ route('agent.reviews') }}"><i class="fe fe-star"></i> <span>Reviews</span></a>
+            </li>
             <li> 
                 <a href="doctor-list.html"><i class="fe fe-user-plus"></i> <span>Doctors</span></a>
             </li>

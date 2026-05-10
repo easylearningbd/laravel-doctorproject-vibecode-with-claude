@@ -88,6 +88,8 @@ Route::delete('/patient/medical/records/{id}', [MedicalRecordController::class, 
 Route::get('/patient/medical/records/{id}/download', [MedicalRecordController::class, 'download'])->name('patient.medical.records.download');
 Route::get('/patient/prescriptions/{id}', [MedicalRecordController::class, 'getPrescription'])->name('patient.prescription.show');
 
+// Doctor review — patient only
+Route::post('/doctor/review/{doctorId}', [\App\Http\Controllers\ReviewController::class, 'store'])->name('doctor.review.store');
 
   });
 /// End Patient Group Middleware
@@ -162,6 +164,7 @@ Route::middleware(['admin'])->group(function () {
 
 
     Route::get('/agent/reviews', [AdminController::class, 'AdminReviews'])->name('agent.reviews');
+    Route::delete('/agent/reviews/{id}', [AdminController::class, 'AdminDeleteReview'])->name('agent.reviews.delete');
 
 });
 /// End Admin Group Middleware

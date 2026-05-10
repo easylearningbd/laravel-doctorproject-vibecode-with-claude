@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Appointment;
+use App\Models\DoctorReview;
 use App\Models\Speciality;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -84,8 +86,49 @@ class FrontendController extends Controller
         $isFavourited = (auth()->check() && auth()->user()->role === 'patient')
             && auth()->user()->favouriteDoctors()->where('users.id', $id)->exists();
 
+        // Reviews
+        $reviews = DoctorReview::where('doctor_id', $id)
+            ->with('patient')
+            ->latest()
+            ->paginate(5);
+
+        $avgRating   = DoctorReview::where('doctor_id', $id)->avg('rating') ?? 0;
+        $reviewCount = DoctorReview::where('doctor_id', $id)->count();
+
+        // Rating breakdown (5→1)
+        $ratingBreakdown = [];
+        for ($s = 5; $s >= 1; $s--) {
+            $count = DoctorReview::where('doctor_id', $id)->where('rating', $s)->count();
+            $ratingBreakdown[$s] = [
+                'count'   => $count,
+                'percent' => $reviewCount > 0 ? round(($count / $reviewCount) * 100) : 0,
+            ];
+        }
+
+        // Can current patient review?
+        $canReview    = false;
+        $hasReviewed  = false;
+        $notMet       = false;
+
+        if (auth()->check() && auth()->user()->role === 'patient') {
+            $pid = auth()->id();
+            $hasCompleted = Appointment::where('patient_id', $pid)
+                ->where('doctor_id', $id)
+                ->where('status', 'completed')
+                ->exists();
+
+            $hasReviewed = DoctorReview::where('patient_id', $pid)
+                ->where('doctor_id', $id)
+                ->exists();
+
+            $canReview = $hasCompleted && !$hasReviewed;
+            $notMet    = !$hasCompleted;
+        }
+
         return view('frontend.doctor_details',
-            compact('doctor', 'businessHours', 'todayHours', 'todayKey', 'isFavourited'));
+            compact('doctor', 'businessHours', 'todayHours', 'todayKey', 'isFavourited',
+                    'reviews', 'avgRating', 'reviewCount', 'ratingBreakdown',
+                    'canReview', 'hasReviewed', 'notMet'));
     }
 
 

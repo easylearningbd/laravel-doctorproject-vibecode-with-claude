@@ -808,11 +808,22 @@ class DoctorController extends Controller
     // End Method
 
 
-    public function DoctorReviews(){
-    return view('doctor.dashboard.reviews.doctor_reviews');
+    public function DoctorReviews()
+    {
+        $doctor  = Auth::user();
 
+        $reviews = \App\Models\DoctorReview::where('doctor_id', $doctor->id)
+            ->with('patient')
+            ->latest()
+            ->paginate(10);
+
+        $avgRating   = \App\Models\DoctorReview::where('doctor_id', $doctor->id)->avg('rating') ?? 0;
+        $reviewCount = \App\Models\DoctorReview::where('doctor_id', $doctor->id)->count();
+
+        return view('doctor.dashboard.reviews.doctor_reviews',
+            compact('reviews', 'avgRating', 'reviewCount'));
     }
-     // End Method
+    // End Method
 
 
 }

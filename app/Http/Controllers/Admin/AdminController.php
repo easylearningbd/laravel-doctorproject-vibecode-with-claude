@@ -96,11 +96,22 @@ class AdminController extends Controller
     }
     // End Method
 
-    public function AdminReviews(){
-    return view('admin.dashboard.reviews.all_reviews');
-    }
-      // End Method
+    public function AdminReviews()
+    {
+        $reviews = \App\Models\DoctorReview::with(['patient', 'doctor'])
+            ->latest()
+            ->paginate(15);
 
+        return view('admin.dashboard.reviews.all_reviews', compact('reviews'));
+    }
+    // End Method
+
+    public function AdminDeleteReview(Request $request, $id)
+    {
+        \App\Models\DoctorReview::findOrFail($id)->delete();
+        return back()->with('success', 'Review deleted successfully.');
+    }
+    // End Method
 
 
 }

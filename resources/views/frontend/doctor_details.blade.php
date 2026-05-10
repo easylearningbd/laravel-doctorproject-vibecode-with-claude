@@ -490,33 +490,169 @@
                 <!-- Review -->
                 <div class="doc-information-details" id="review">
                     <div class="detail-title">
-                        <h4>Reviews</h4>
+                        <h4>Reviews
+                            @if($reviewCount > 0)
+                                <small class="text-muted fs-14 fw-normal ms-2">({{ $reviewCount }} review{{ $reviewCount != 1 ? 's' : '' }})</small>
+                            @endif
+                        </h4>
                     </div>
+
+                    {{-- Overall rating summary --}}
+                    @if($reviewCount > 0)
+                    <div class="doc-review-card mb-3">
+                        <div class="d-flex align-items-center gap-4 flex-wrap">
+                            <div class="text-center">
+                                <h1 class="mb-0 fw-bold text-orange">{{ number_format($avgRating, 1) }}</h1>
+                                <div class="rating">
+                                    @for($s = 1; $s <= 5; $s++)
+                                        <i class="fas fa-star {{ $s <= round($avgRating) ? 'filled' : '' }}"></i>
+                                    @endfor
+                                </div>
+                                <p class="text-muted mb-0 fs-13">{{ $reviewCount }} review{{ $reviewCount != 1 ? 's' : '' }}</p>
+                            </div>
+                            <div class="flex-fill" style="max-width:340px;">
+                                @foreach($ratingBreakdown as $stars => $data)
+                                <div class="d-flex align-items-center gap-2 mb-1">
+                                    <span class="fs-13 text-nowrap">{{ $stars }} <i class="fas fa-star text-warning fs-11"></i></span>
+                                    <div class="progress flex-fill" style="height:8px;">
+                                        <div class="progress-bar bg-warning" style="width:{{ $data['percent'] }}%"></div>
+                                    </div>
+                                    <span class="fs-13 text-muted" style="min-width:28px;">{{ $data['count'] }}</span>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+
+                    {{-- Individual reviews --}}
+                    @forelse($reviews as $review)
+                    @php
+                        $rPhoto = $review->patient?->profile_photo
+                            ? asset('storage/' . $review->patient->profile_photo)
+                            : asset('backend/assets/img/doctors-dashboard/profile-01.jpg');
+                        $rName = trim(($review->patient?->first_name ?? '') . ' ' . ($review->patient?->last_name ?? '')) ?: 'Patient';
+                    @endphp
                     <div class="doc-review-card">
                         <div class="user-info-review">
                             <div class="reviewer-img">
                                 <a href="#" class="avatar-img">
-                                    <img src="{{ asset('backend/assets/img/clients/client-13.jpg') }}" alt="Img">
+                                    <img src="{{ $rPhoto }}" alt="{{ $rName }}">
                                 </a>
                                 <div class="review-star">
-                                    <a href="#">Patient</a>
+                                    <a href="#">{{ $rName }}</a>
                                     <div class="rating">
-                                        <i class="fas fa-star filled"></i>
-                                        <i class="fas fa-star filled"></i>
-                                        <i class="fas fa-star filled"></i>
-                                        <i class="fas fa-star filled"></i>
-                                        <i class="fas fa-star filled"></i>
-                                        <span>5.0</span>
+                                        @for($s = 1; $s <= 5; $s++)
+                                            <i class="fas fa-star {{ $s <= $review->rating ? 'filled' : '' }}"></i>
+                                        @endfor
+                                        <span>{{ number_format($review->rating, 1) }}</span>
                                     </div>
+                                    <small class="text-muted fs-12">{{ $review->created_at->format('d M Y') }}</small>
                                 </div>
                             </div>
+                            @if($review->recommend)
                             <span class="thumb-icon">
                                 <i class="fa-regular fa-thumbs-up"></i>Yes, Recommend for Appointment
                             </span>
+                            @endif
                         </div>
-                        <p>Reviews coming soon.</p>
+                        @if($review->comment)
+                        <p class="mt-2 mb-0">{{ $review->comment }}</p>
+                        @endif
                     </div>
+                    @empty
+                    <div class="doc-review-card text-center py-3">
+                        <p class="text-muted mb-0">No reviews yet. Be the first to review!</p>
+                    </div>
+                    @endforelse
+
+                    {{-- Pagination --}}
+                    @if($reviews->hasPages())
+                    <div class="mt-3">{{ $reviews->links() }}</div>
+                    @endif
+
+                    {{-- ── Write a Review ──────────────────────────────────── --}}
+                    <div class="write-review mt-4">
+                        <h5 class="mb-3">Write a Review</h5>
+
+                        @if(session('review_success'))
+                            <div class="alert alert-success alert-dismissible fade show">
+                                {{ session('review_success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        @endif
+                        @if(session('review_error'))
+                            <div class="alert alert-danger alert-dismissible fade show">
+                                {{ session('review_error') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        @endif
+
+                        @auth
+                            @if(auth()->user()->role === 'patient')
+                                @if($hasReviewed)
+                                    <div class="alert alert-info">
+                                        <i class="fa-solid fa-circle-check me-2"></i>
+                                        You have already submitted a review for this doctor. Thank you!
+                                    </div>
+                                @elseif($notMet)
+                                    <div class="alert alert-warning">
+                                        <i class="fa-solid fa-triangle-exclamation me-2"></i>
+                                        You didn't meet with this doctor yet. Only patients who have completed an appointment can leave a review.
+                                    </div>
+                                @elseif($canReview)
+                                <form action="{{ route('doctor.review.store', $doctor->id) }}" method="POST" id="reviewForm">
+                                    @csrf
+                                    <div class="mb-3">
+                                        <label class="form-label fw-medium">Your Rating <span class="text-danger">*</span></label>
+                                        <div class="star-rating d-flex gap-2" id="starRating">
+                                            @for($s = 1; $s <= 5; $s++)
+                                            <i class="fas fa-star review-star-btn" data-value="{{ $s }}"
+                                               style="font-size:2rem;cursor:pointer;color:#ddd;transition:color .15s;"></i>
+                                            @endfor
+                                        </div>
+                                        <input type="hidden" name="rating" id="ratingInput" value="">
+                                        @error('rating')<small class="text-danger">{{ $message }}</small>@enderror
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-medium">Your Review</label>
+                                        <textarea name="comment" class="form-control" rows="4"
+                                                  placeholder="Share your experience with this doctor...">{{ old('comment') }}</textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="recommend"
+                                                   value="1" id="recommendCheck" checked>
+                                            <label class="form-check-label" for="recommendCheck">
+                                                <i class="fa-regular fa-thumbs-up me-1"></i>
+                                                I recommend this doctor
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary rounded-pill px-4"
+                                            id="submitReviewBtn" disabled>
+                                        Submit Review
+                                    </button>
+                                    <small class="text-muted ms-2">Please select a star rating first.</small>
+                                </form>
+                                @endif
+                            @else
+                                <div class="alert alert-info">
+                                    <i class="isax isax-info-circle me-2"></i>
+                                    Only patients can write reviews. Please log in as a patient.
+                                </div>
+                            @endif
+                        @else
+                            <div class="alert alert-info">
+                                <i class="isax isax-login me-2"></i>
+                                <a href="{{ route('login') }}">Log in</a> to write a review for this doctor.
+                            </div>
+                        @endauth
+                    </div>
+                    {{-- /Write a Review --}}
+
                 </div>
+                {{-- /Review --}}
 
             </div>
         </div>
@@ -527,3 +663,36 @@
 <!-- /Page Content -->
 
 @endsection
+
+@push('scripts')
+<script>
+$(function () {
+    var selected = 0;
+
+    // Hover — highlight up to hovered star
+    $(document).on('mouseenter', '.review-star-btn', function () {
+        var val = $(this).data('value');
+        $('.review-star-btn').each(function () {
+            $(this).css('color', $(this).data('value') <= val ? '#f4c150' : '#ddd');
+        });
+    });
+
+    // Mouse leave — restore to selected state
+    $(document).on('mouseleave', '#starRating', function () {
+        $('.review-star-btn').each(function () {
+            $(this).css('color', $(this).data('value') <= selected ? '#f4c150' : '#ddd');
+        });
+    });
+
+    // Click — lock selection
+    $(document).on('click', '.review-star-btn', function () {
+        selected = $(this).data('value');
+        $('#ratingInput').val(selected);
+        $('#submitReviewBtn').prop('disabled', false).siblings('small').hide();
+        $('.review-star-btn').each(function () {
+            $(this).css('color', $(this).data('value') <= selected ? '#f4c150' : '#ddd');
+        });
+    });
+});
+</script>
+@endpush
