@@ -114,8 +114,35 @@ class AdminController extends Controller
     // End Method
 
 
-    public function AdminAppointments(){
-    return view('admin.dashboard.appointments.all_appointments');
+    public function AdminAppointments(Request $request)
+    {
+        $query = \App\Models\Appointment::with([
+            'doctor',
+            'doctor.specialityServices.speciality',
+            'patient',
+        ]);
+
+        // Optional status filter
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $appointments = $query->orderBy('appointment_date', 'desc')
+                              ->orderBy('appointment_time', 'desc')
+                              ->paginate(15)
+                              ->withQueryString();
+
+        // Counts per status for summary cards
+        $counts = [
+            'total'     => \App\Models\Appointment::count(),
+            'pending'   => \App\Models\Appointment::where('status', 'pending')->count(),
+            'confirmed' => \App\Models\Appointment::where('status', 'confirmed')->count(),
+            'completed' => \App\Models\Appointment::where('status', 'completed')->count(),
+            'cancelled' => \App\Models\Appointment::where('status', 'cancelled')->count(),
+        ];
+
+        return view('admin.dashboard.appointments.all_appointments',
+            compact('appointments', 'counts'));
     }
     // End Method
 
