@@ -146,13 +146,57 @@ class AdminController extends Controller
     }
     // End Method
 
-    public function AllDoctorsAgent(){
-        return view('admin.dashboard.doctors.all_doctors');
-    }
+    public function AllDoctorsAgent()
+    {
+        $doctors = \App\Models\User::where('role', 'doctor')
+            ->select('users.*')
+            ->selectSub(
+                \Illuminate\Support\Facades\DB::table('doctor_speciality_services')
+                    ->select('specialities.name')
+                    ->join('specialities', 'specialities.id', '=', 'doctor_speciality_services.speciality_id')
+                    ->whereColumn('doctor_speciality_services.user_id', 'users.id')
+                    ->orderBy('doctor_speciality_services.id')
+                    ->limit(1),
+                'primary_speciality'
+            )
+            ->selectSub(
+                \Illuminate\Support\Facades\DB::table('payment_requests')
+                    ->selectRaw('COALESCE(SUM(amount), 0)')
+                    ->whereColumn('doctor_id', 'users.id')
+                    ->where('status', 'approved'),
+                'total_earned'
+            )
+            ->orderBy('users.created_at', 'desc')
+            ->paginate(15);
 
-     public function AllPatientsAgent(){
-        return view('admin.dashboard.patients.all_patients');
+        return view('admin.dashboard.doctors.all_doctors', compact('doctors'));
     }
+    // End Method
+
+    public function AllPatientsAgent()
+    {
+        $patients = \App\Models\User::where('role', 'patient')
+            ->select('users.*')
+            ->selectSub(
+                \Illuminate\Support\Facades\DB::table('appointments')
+                    ->selectRaw('MAX(appointment_date)')
+                    ->whereColumn('patient_id', 'users.id')
+                    ->where('status', 'completed'),
+                'last_visit'
+            )
+            ->selectSub(
+                \Illuminate\Support\Facades\DB::table('invoices')
+                    ->selectRaw('COALESCE(SUM(total), 0)')
+                    ->whereColumn('patient_id', 'users.id')
+                    ->where('status', 'paid'),
+                'total_paid'
+            )
+            ->orderBy('users.created_at', 'desc')
+            ->paginate(15);
+
+        return view('admin.dashboard.patients.all_patients', compact('patients'));
+    }
+    // End Method
 
 
 }
