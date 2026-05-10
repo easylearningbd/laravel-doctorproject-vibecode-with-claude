@@ -160,6 +160,9 @@ Route::middleware(['admin'])->group(function () {
     Route::put('/agent/spcialities/{id}', [SpecialityController::class, 'update'])->name('agent.spcialities.update');
     Route::delete('/agent/spcialities/{id}', [SpecialityController::class, 'destroy'])->name('agent.spcialities.destroy');
 
+
+    Route::get('/agent/reviews', [AdminController::class, 'AdminReviews'])->name('agent.reviews');
+
 });
 /// End Admin Group Middleware
 

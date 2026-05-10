@@ -24,7 +24,7 @@
                 <a href="patient-list.html"><i class="fe fe-user"></i> <span>Patients</span></a>
             </li>
             <li> 
-                <a href="reviews.html"><i class="fe fe-star-o"></i> <span>Reviews</span></a>
+                <a href="{{ route('agent.reviews') }}"><i class="fe fe-star-o"></i> <span>Reviews</span></a>
             </li>
             <li> 
                 <a href="transactions-list.html"><i class="fe fe-activity"></i> <span>Transactions</span></a>

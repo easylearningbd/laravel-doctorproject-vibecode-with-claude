@@ -96,6 +96,10 @@ class AdminController extends Controller
     }
     // End Method
 
+    public function AdminReviews(){
+    return view('admin.dashboard.reviews.all_reviews');
+    }
+      // End Method
 
 
 
