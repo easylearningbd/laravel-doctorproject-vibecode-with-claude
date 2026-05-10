@@ -81,8 +81,8 @@
                 </li>
 
                 {{-- Reviews (no route yet) --}}
-                <li>
-                    <a href="#">
+                <li class="{{ request()->routeIs('doctor.reviews') ? 'active' : '' }}">
+                    <a href="{{ route('doctor.reviews') }}">
                         <i class="isax isax-star-1"></i>
                         <span>Reviews</span>
                     </a>

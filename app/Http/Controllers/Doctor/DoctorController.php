@@ -808,4 +808,11 @@ class DoctorController extends Controller
     // End Method
 
 
+    public function DoctorReviews(){
+    return view('doctor.dashboard.reviews.doctor_reviews');
+
+    }
+     // End Method
+
+
 }

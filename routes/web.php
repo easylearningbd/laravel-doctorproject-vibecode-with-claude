@@ -139,6 +139,7 @@ Route::post('/doctor/accounts', [DoctorController::class, 'DoctorAccountsPost'])
 Route::post('/doctor/payment-request', [DoctorController::class, 'DoctorPaymentRequestPost'])->name('doctor.payment.request');
 
 
+Route::get('/doctor/reviews', [DoctorController::class, 'DoctorReviews'])->name('doctor.reviews');
 
 });
 /// End Doctor Group Middleware
