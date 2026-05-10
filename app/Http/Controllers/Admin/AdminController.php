@@ -3,15 +3,130 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Appointment;
+use App\Models\Invoice;
 use App\Models\PaymentRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
     public function AdminDashboard()
     {
-        return view('admin.index');
+        // ── Stat cards ────────────────────────────────────────────
+        $doctorCount      = User::where('role', 'doctor')->count();
+        $patientCount     = User::where('role', 'patient')->count();
+        $appointmentCount = Appointment::count();
+        $totalRevenue     = Invoice::where('status', 'paid')->sum('total');
+
+        // ── Top 5 doctors: most earned, with avg review rating ────
+        $topDoctors = User::where('role', 'doctor')
+            ->select('users.*')
+            ->selectSub(
+                DB::table('doctor_speciality_services')
+                    ->select('specialities.name')
+                    ->join('specialities', 'specialities.id', '=', 'doctor_speciality_services.speciality_id')
+                    ->whereColumn('doctor_speciality_services.user_id', 'users.id')
+                    ->limit(1),
+                'primary_speciality'
+            )
+            ->selectSub(
+                DB::table('payment_requests')
+                    ->selectRaw('COALESCE(SUM(amount),0)')
+                    ->whereColumn('doctor_id', 'users.id')
+                    ->where('status', 'approved'),
+                'total_earned'
+            )
+            ->selectSub(
+                DB::table('doctor_reviews')
+                    ->selectRaw('COALESCE(AVG(rating),0)')
+                    ->whereColumn('doctor_id', 'users.id'),
+                'avg_rating'
+            )
+            ->orderByDesc('total_earned')
+            ->limit(5)
+            ->get();
+
+        // ── Latest 5 patients: most recent join, with last visit & paid ──
+        $latestPatients = User::where('role', 'patient')
+            ->select('users.*')
+            ->selectSub(
+                DB::table('appointments')
+                    ->selectRaw('MAX(appointment_date)')
+                    ->whereColumn('patient_id', 'users.id')
+                    ->where('status', 'completed'),
+                'last_visit'
+            )
+            ->selectSub(
+                DB::table('invoices')
+                    ->selectRaw('COALESCE(SUM(total),0)')
+                    ->whereColumn('patient_id', 'users.id')
+                    ->where('status', 'paid'),
+                'total_paid'
+            )
+            ->orderByDesc('users.created_at')
+            ->limit(5)
+            ->get();
+
+        // ── Latest 5 appointments ─────────────────────────────────
+        $latestAppointments = Appointment::with([
+                'doctor',
+                'doctor.specialityServices.speciality',
+                'patient',
+            ])
+            ->orderByDesc('appointment_date')
+            ->orderByDesc('appointment_time')
+            ->limit(5)
+            ->get()
+            ->each(function ($apt) {
+                $apt->doctor->display_speciality =
+                    $apt->doctor->specialization
+                    ?: ($apt->doctor->specialityServices->first()?->speciality?->name
+                        ?? $apt->doctor->designation
+                        ?? '—');
+            });
+
+        // ── Monthly revenue chart (last 12 months) ────────────────
+        $monthlyRevenue = Invoice::where('status', 'paid')
+            ->where('generated_at', '>=', now()->subMonths(11)->startOfMonth())
+            ->selectRaw('DATE_FORMAT(generated_at, "%Y-%m") as period, ROUND(SUM(total), 2) as revenue')
+            ->groupBy('period')
+            ->orderBy('period')
+            ->get()
+            ->map(fn($r) => ['y' => $r->period, 'a' => (float) $r->revenue]);
+
+        // ── Monthly appointment status chart (last 6 months) ──────
+        $months = collect();
+        for ($i = 5; $i >= 0; $i--) {
+            $months->push(now()->subMonths($i)->format('Y-m'));
+        }
+
+        $apptByMonth = Appointment::where('appointment_date', '>=', now()->subMonths(5)->startOfMonth())
+            ->selectRaw('DATE_FORMAT(appointment_date, "%Y-%m") as period,
+                         SUM(status = "completed") as completed,
+                         SUM(status = "cancelled") as cancelled,
+                         SUM(status = "confirmed") as confirmed,
+                         SUM(status = "pending")   as pending')
+            ->groupBy('period')
+            ->orderBy('period')
+            ->get()
+            ->keyBy('period');
+
+        $monthlyAppointments = $months->map(fn($m) => [
+            'y'         => $m,
+            'completed' => (int) ($apptByMonth[$m]->completed ?? 0),
+            'cancelled' => (int) ($apptByMonth[$m]->cancelled ?? 0),
+            'confirmed' => (int) ($apptByMonth[$m]->confirmed ?? 0),
+            'pending'   => (int) ($apptByMonth[$m]->pending   ?? 0),
+        ])->values();
+
+        return view('admin.index', compact(
+            'doctorCount', 'patientCount', 'appointmentCount', 'totalRevenue',
+            'topDoctors', 'latestPatients', 'latestAppointments',
+            'monthlyRevenue', 'monthlyAppointments'
+        ));
     }
     // End Method
 
