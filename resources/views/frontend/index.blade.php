@@ -28,7 +28,7 @@
 
 			<!-- Bookus Section -->
 		@include('frontend.layout.bookus')	
-			<!-- /Bookus Section -->
+			<!-- /Bookus Section --> 
 			
 			<!-- Testimonial Section -->
 		@include('frontend.layout.testimonial')	

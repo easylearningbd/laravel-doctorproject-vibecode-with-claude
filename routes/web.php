@@ -6,6 +6,7 @@ use App\Http\Controllers\Patient\MedicalRecordController;
 use App\Http\Controllers\Doctor\DoctorController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\BannerController;
+use App\Http\Controllers\Admin\BookusController;
 use App\Http\Controllers\Admin\ServicesController;
 use App\Http\Controllers\Admin\SpecialityController;
 use App\Http\Controllers\AppointmentController;
@@ -178,6 +179,10 @@ Route::middleware(['admin'])->group(function () {
     // Manage Home — Services / Reasons
     Route::get('/agent/manage/services',  [ServicesController::class, 'index'])->name('agent.manage.services');
     Route::post('/agent/manage/services', [ServicesController::class, 'update'])->name('agent.manage.services.update');
+
+    // Manage Home — Book Us
+    Route::get('/agent/manage/bookus',  [BookusController::class, 'index'])->name('agent.manage.bookus');
+    Route::post('/agent/manage/bookus', [BookusController::class, 'update'])->name('agent.manage.bookus.update');
 
     Route::get('/all/doctors/agent', [AdminController::class, 'AllDoctorsAgent'])->name('all.doctors.agent');
 
