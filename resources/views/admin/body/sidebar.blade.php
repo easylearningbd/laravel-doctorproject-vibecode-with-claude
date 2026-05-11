@@ -33,6 +33,9 @@
                     <li class="{{ request()->routeIs('agent.manage.banner') ? 'active' : '' }}">
                         <a href="{{ route('agent.manage.banner') }}">Manage Banner</a>
                     </li>
+                    <li class="{{ request()->routeIs('agent.manage.services') ? 'active' : '' }}">
+                        <a href="{{ route('agent.manage.services') }}">Manage Services</a>
+                    </li>
                 </ul>
             </li>
 
