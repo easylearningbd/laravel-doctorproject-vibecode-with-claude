@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\BookusController;
 use App\Http\Controllers\Admin\ServicesController;
+use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\SpecialityController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\FavouriteController;
@@ -183,6 +184,12 @@ Route::middleware(['admin'])->group(function () {
     // Manage Home — Book Us
     Route::get('/agent/manage/bookus',  [BookusController::class, 'index'])->name('agent.manage.bookus');
     Route::post('/agent/manage/bookus', [BookusController::class, 'update'])->name('agent.manage.bookus.update');
+
+    // Manage Home — Testimonials (full CRUD)
+    Route::get('/agent/manage/testimonials',           [TestimonialController::class, 'index'])->name('agent.manage.testimonials');
+    Route::post('/agent/manage/testimonials',          [TestimonialController::class, 'store'])->name('agent.manage.testimonials.store');
+    Route::post('/agent/manage/testimonials/{id}',     [TestimonialController::class, 'update'])->name('agent.manage.testimonials.update');
+    Route::delete('/agent/manage/testimonials/{id}',   [TestimonialController::class, 'destroy'])->name('agent.manage.testimonials.destroy');
 
     Route::get('/all/doctors/agent', [AdminController::class, 'AllDoctorsAgent'])->name('all.doctors.agent');
 
