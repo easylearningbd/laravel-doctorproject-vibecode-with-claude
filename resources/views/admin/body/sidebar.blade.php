@@ -1,7 +1,7 @@
 <div class="sidebar" id="sidebar">
 <div class="sidebar-inner slimscroll">
     <div id="sidebar-menu" class="sidebar-menu">
-        <ul>
+        <ul> 
             <li class="menu-title">
                 <span>Main</span>
             </li>
@@ -26,6 +26,17 @@
             <li class="{{ request()->routeIs('agent.payment.requests') ? 'active' : '' }}">
                 <a href="{{ route('agent.payment.requests') }}"><i class="fe fe-layout"></i> <span>Payment Requests</span></a>
             </li>
+
+            <li class="submenu">
+            <a href="#"><i class="fe fe-document"></i> <span> Manage Home</span> <span class="menu-arrow"></span></a>
+            <ul style="display: none;">
+                <li><a href="invoice-report.html">Manage Banner</a></li>
+                <li><a href="invoice-report.html">Manage Services</a></li>
+                <li><a href="invoice-report.html">Manage Reasons</a></li>
+            </ul>
+        </li>
+
+
         </ul>
     </div>
 </div>
