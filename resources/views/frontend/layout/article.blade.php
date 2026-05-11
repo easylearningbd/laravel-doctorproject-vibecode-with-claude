@@ -9,7 +9,7 @@
             <div class="article-item aos" data-aos="fade-up">
                 <div class="article-img">
                     <a href="blog-details.html">
-                        <img src="assets/img/blog/article-01.jpg" class="img-fluid" alt="img">
+                        <img src="{{ asset('backend/assets/img/blog/article-01.jpg') }}" class="img-fluid" alt="img">
                     </a>
                     <div class="date-icon">
                         <span>15</span>May
@@ -26,7 +26,7 @@
             <div class="article-item aos" data-aos="fade-up">
                 <div class="article-img">
                     <a href="blog-details.html">
-                        <img src="assets/img/blog/article-02.jpg" class="img-fluid" alt="img">
+                        <img src="{{ asset('backend/assets/img/blog/article-02.jpg') }}" class="img-fluid" alt="img">
                     </a>
                     <div class="date-icon">
                         <span>18</span>May
@@ -43,7 +43,7 @@
             <div class="article-item aos" data-aos="fade-up">
                 <div class="article-img">
                     <a href="blog-details.html">
-                        <img src="assets/img/blog/article-03.jpg" class="img-fluid" alt="img">
+                        <img src="{{ asset('backend/assets/img/blog/article-03.jpg') }}" class="img-fluid" alt="img">
                     </a>
                     <div class="date-icon">
                         <span>21</span>Apr
@@ -60,7 +60,7 @@
             <div class="article-item aos" data-aos="fade-up">
                 <div class="article-img">
                     <a href="blog-details.html">
-                        <img src="assets/img/blog/article-04.jpg" class="img-fluid" alt="img">
+                        <img src="{{ asset('backend/assets/img/blog/article-04.jpg') }}" class="img-fluid" alt="img">
                     </a>
                     <div class="date-icon">
                         <span>22</span>Jan

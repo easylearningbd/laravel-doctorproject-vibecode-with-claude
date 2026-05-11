@@ -5,28 +5,28 @@
     </div>
     <div class="owl-carousel company-slider">
         <div>
-            <img src="assets/img/company/company-01.svg" alt="img">
+            <img src="{{ asset('backend/assets/img/company/company-01.svg') }}" alt="img">
         </div>
         <div>
-            <img src="assets/img/company/company-02.svg" alt="img">
+            <img src="{{ asset('backend/assets/img/company/company-02.svg') }}" alt="img">
         </div>
         <div>
-            <img src="assets/img/company/company-03.svg" alt="img">
+            <img src="{{ asset('backend/assets/img/company/company-03.svg') }}" alt="img">
         </div>
         <div>
-            <img src="assets/img/company/company-04.svg" alt="img">
+            <img src="{{ asset('backend/assets/img/company/company-04.svg') }}" alt="img">
         </div>
         <div>
-            <img src="assets/img/company/company-05.svg" alt="img">
+            <img src="{{ asset('backend/assets/img/company/company-05.svg') }}" alt="img">
         </div>
         <div>
-            <img src="assets/img/company/company-06.svg" alt="img">
+            <img src="{{ asset('backend/assets/img/company/company-06.svg') }}" alt="img">
         </div>
         <div>
-            <img src="assets/img/company/company-07.svg" alt="img">
+            <img src="{{ asset('backend/assets/img/company/company-07.svg') }}" alt="img">
         </div>
         <div>
-            <img src="assets/img/company/company-08.svg" alt="img">
+            <img src="{{ asset('backend/assets/img/company/company-08.svg') }}" alt="img">
         </div>
     </div>
 </div>
