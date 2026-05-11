@@ -27,14 +27,14 @@
                 <a href="{{ route('agent.payment.requests') }}"><i class="fe fe-layout"></i> <span>Payment Requests</span></a>
             </li>
 
-            <li class="submenu">
-            <a href="#"><i class="fe fe-document"></i> <span> Manage Home</span> <span class="menu-arrow"></span></a>
-            <ul style="display: none;">
-                <li><a href="invoice-report.html">Manage Banner</a></li>
-                <li><a href="invoice-report.html">Manage Services</a></li>
-                <li><a href="invoice-report.html">Manage Reasons</a></li>
-            </ul>
-        </li>
+            <li class="submenu {{ request()->routeIs('agent.manage.*') ? 'active' : '' }}">
+                <a href="#"><i class="fe fe-home"></i> <span>Manage Home</span> <span class="menu-arrow"></span></a>
+                <ul style="{{ request()->routeIs('agent.manage.*') ? 'display:block;' : 'display:none;' }}">
+                    <li class="{{ request()->routeIs('agent.manage.banner') ? 'active' : '' }}">
+                        <a href="{{ route('agent.manage.banner') }}">Manage Banner</a>
+                    </li>
+                </ul>
+            </li>
 
 
         </ul>
