@@ -1,3 +1,10 @@
+@php
+    use App\Models\Faq;
+    $siteFaqs = Faq::where('is_active', true)
+        ->orderBy('sort_order')
+        ->orderBy('id')
+        ->get();
+@endphp
 <section class="faq-section-one">
 <div class="container">
     <div class="section-header sec-header-one text-center aos" data-aos="fade-up">
@@ -9,7 +16,31 @@
             <div class="faq-info aos" data-aos="fade-up">
                 <div class="accordion" id="faq-details">
 
-                    <!-- FAQ Item -->
+                    @forelse($siteFaqs as $faq)
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="faqHeading{{ $faq->id }}">
+                            <a href="javascript:void(0);"
+                               class="accordion-button {{ $loop->first ? '' : 'collapsed' }}"
+                               data-bs-toggle="collapse"
+                               data-bs-target="#faqCollapse{{ $faq->id }}"
+                               aria-expanded="{{ $loop->first ? 'true' : 'false' }}"
+                               aria-controls="faqCollapse{{ $faq->id }}">
+                                {{ $faq->question }}
+                            </a>
+                        </h2>
+                        <div id="faqCollapse{{ $faq->id }}"
+                             class="accordion-collapse collapse {{ $loop->first ? 'show' : '' }}"
+                             aria-labelledby="faqHeading{{ $faq->id }}"
+                             data-bs-parent="#faq-details">
+                            <div class="accordion-body">
+                                <div class="accordion-content">
+                                    <p>{{ $faq->answer }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @empty
+                    {{-- Fallback static FAQs when no active FAQs exist in DB --}}
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingOne">
                             <a href="javascript:void(0);" class="accordion-button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -20,17 +51,14 @@
                             <div class="accordion-body">
                                 <div class="accordion-content">
                                     <p>Yes, simply visit our website and log in or create an account. Search for a doctor based on specialization, location, or availability & confirm your booking.</p>
-                                </div> 
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <!-- /FAQ Item -->
-
-                    <!-- FAQ Item -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingTwo">
                             <a href="javascript:void(0);" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                Can I request a specific doctor when booking my appointment? 
+                                Can I request a specific doctor when booking my appointment?
                             </a>
                         </h2>
                         <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faq-details">
@@ -41,9 +69,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- /FAQ Item -->
-
-                    <!-- FAQ Item -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingThree">
                             <a href="javascript:void(0);" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
@@ -58,9 +83,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- /FAQ Item -->
-
-                    <!-- FAQ Item -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingFour">
                             <a href="javascript:void(0);" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
@@ -75,9 +97,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- /FAQ Item -->
-
-                    <!-- FAQ Item -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingFive">
                             <a href="javascript:void(0);" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
@@ -92,8 +111,8 @@
                             </div>
                         </div>
                     </div>
-                    <!-- /FAQ Item -->
-                                
+                    @endforelse
+
                 </div>
             </div>
 

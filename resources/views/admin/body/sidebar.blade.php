@@ -42,6 +42,9 @@
                     <li class="{{ request()->routeIs('agent.manage.testimonials') ? 'active' : '' }}">
                         <a href="{{ route('agent.manage.testimonials') }}">Manage Testimonials</a>
                     </li>
+                    <li class="{{ request()->routeIs('agent.manage.faqs') ? 'active' : '' }}">
+                        <a href="{{ route('agent.manage.faqs') }}">Manage FAQs</a>
+                    </li>
                 </ul>
             </li>
 
