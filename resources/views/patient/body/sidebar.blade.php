@@ -87,10 +87,10 @@
                     </a>
                 </li>																																				
                 <li>
-                    <a href="chat.html">
+                    <a href="{{ route('patient.message') }}">
                         <i class="isax isax-messages-1"></i>
                         <span>Message</span>
-                        <small class="unread-msg">7</small>
+                        <small class="unread-msg">0</small>
                     </a>
                 </li>
                 <li>

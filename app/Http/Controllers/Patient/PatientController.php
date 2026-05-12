@@ -170,6 +170,11 @@ class PatientController extends Controller
     return view('patient.dashboard.medical.medical_records');
     }
      // End Method
+
+     public function PatientMessage(){
+      return view('patient.dashboard.message.patient_message');
+     }
+      // End Method
  
 
 } 

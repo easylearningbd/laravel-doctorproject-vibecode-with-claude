@@ -96,6 +96,13 @@ Route::get('/patient/prescriptions/{id}', [MedicalRecordController::class, 'getP
 // Doctor review — patient only
 Route::post('/doctor/review/{doctorId}', [\App\Http\Controllers\ReviewController::class, 'store'])->name('doctor.review.store');
 
+
+
+Route::get('/patient/message', [PatientController::class, 'PatientMessage'])->name('patient.message');
+
+
+
+
   });
 /// End Patient Group Middleware
  
