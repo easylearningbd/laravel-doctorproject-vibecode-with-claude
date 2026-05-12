@@ -825,5 +825,10 @@ class DoctorController extends Controller
     }
     // End Method
 
+    public function DoctorMessage(){
+    return view('doctor.dashboard.message.doctor_message');
+    }
+        // End Method
+
 
 }

@@ -105,11 +105,11 @@
                 </li>
 
                 {{-- Message (no route yet) --}}
-                <li>
-                    <a href="#">
+              <li class="{{ request()->routeIs('doctor.message') ? 'active' : '' }}">
+                    <a href="{{ route('doctor.message') }}">
                         <i class="isax isax-messages-1"></i>
                         <span>Message</span>
-                        <small class="unread-msg">7</small>
+                        <small class="unread-msg">0</small>
                     </a>
                 </li>
 
