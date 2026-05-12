@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\SpecialityController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\FavouriteController;
 use App\Http\Controllers\FrontendController;
+use App\Http\Controllers\ChatController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [FrontendController::class, 'index'])->name('home');
@@ -157,6 +158,7 @@ Route::get('/doctor/reviews', [DoctorController::class, 'DoctorReviews'])->name(
 
 
 Route::get('/doctor/message', [DoctorController::class, 'DoctorMessage'])->name('doctor.message');
+Route::post('/doctor/availability', [DoctorController::class, 'updateAvailability'])->name('doctor.availability');
 
 
 
@@ -233,6 +235,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Chat AJAX routes — accessible by both doctors and patients
+    Route::post('/chat/heartbeat',          [ChatController::class, 'heartbeat'])->name('chat.heartbeat');
+    Route::get('/chat/contacts',            [ChatController::class, 'getContacts'])->name('chat.contacts');
+    Route::get('/chat/messages/{userId}',   [ChatController::class, 'getMessages'])->name('chat.messages');
+    Route::post('/chat/send/{userId}',      [ChatController::class, 'sendMessage'])->name('chat.send');
+    Route::get('/chat/unread',              [ChatController::class, 'unreadCount'])->name('chat.unread');
 });
 
 require __DIR__.'/auth.php';

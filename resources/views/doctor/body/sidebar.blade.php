@@ -30,12 +30,28 @@
     <div class="doctor-available-head">
         <div class="input-block input-block-new">
             <label class="form-label">Availability <span class="text-danger">*</span></label>
-            <select class="select form-control">
-                <option>I am Available Now</option>
-                <option>Not Available</option>
+            <select class="select form-control" id="doctorAvailabilitySelect">
+                <option value="1" {{ $doctor->is_available ? 'selected' : '' }}>I am Available Now</option>
+                <option value="0" {{ !$doctor->is_available ? 'selected' : '' }}>Not Available</option>
             </select>
         </div>
     </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var sel = document.getElementById('doctorAvailabilitySelect');
+        if (!sel) return;
+        sel.addEventListener('change', function () {
+            fetch('{{ route("doctor.availability") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ is_available: parseInt(this.value) })
+            });
+        });
+    });
+    </script>
 
     <div class="dashboard-widget">
         <nav class="dashboard-menu">

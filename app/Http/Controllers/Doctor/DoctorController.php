@@ -830,5 +830,12 @@ class DoctorController extends Controller
     }
         // End Method
 
+    public function updateAvailability(Request $request)
+    {
+        $request->validate(['is_available' => 'required|boolean']);
+        auth()->user()->update(['is_available' => $request->boolean('is_available')]);
+        return response()->json(['ok' => true, 'is_available' => $request->boolean('is_available')]);
+    }
+    // End Method
 
 }

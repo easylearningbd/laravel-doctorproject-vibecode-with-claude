@@ -32,6 +32,7 @@ class User extends Authenticatable
         'specialization',
         'known_languages',
         'is_available',
+        'last_seen_at',
     ];
 
     protected $hidden = [
@@ -47,6 +48,7 @@ class User extends Authenticatable
             'date_of_birth'     => 'date',
             'is_available'      => 'boolean',
             'known_languages'   => 'array',
+            'last_seen_at'      => 'datetime',
         ];
     }
 

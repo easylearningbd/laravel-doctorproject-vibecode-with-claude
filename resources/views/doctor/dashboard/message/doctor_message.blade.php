@@ -1,927 +1,493 @@
-<!DOCTYPE html> 
+@php
+    $me = auth()->user();
+    $mePhoto = $me->profile_photo
+        ? asset('storage/' . $me->profile_photo)
+        : asset('backend/assets/img/doctors-dashboard/doctor-profile-img.jpg');
+    $meName = 'Dr ' . $me->first_name . ' ' . $me->last_name;
+    $openWith = request()->query('with');
+@endphp
+<!DOCTYPE html>
 <html lang="en">
-	<head>
-		
-		<meta charset="utf-8">
-		<title>Doccure</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta name="description" content="The responsive professional Doccure template offers many features, like scheduling appointments with  top doctors, clinics, and hospitals via voice, video call & chat.">
-		<meta name="keywords" content="practo clone, doccure, doctor appointment, Practo clone html template, doctor booking template">
-		<meta name="author" content="Practo Clone HTML Template - Doctor Booking Template">
-		<meta property="og:url" content="https://doccure.dreamstechnologies.com/html/">
-		<meta property="og:type" content="website">
-		<meta property="og:title" content="Doctors Appointment HTML Website Templates | Doccure">
-		<meta property="og:description" content="The responsive professional Doccure template offers many features, like scheduling appointments with  top doctors, clinics, and hospitals via voice, video call & chat.">
-		<meta property="og:image" content="assets/img/preview-banner.jpg">
-		<meta name="twitter:card" content="summary_large_image">
-		<meta property="twitter:domain" content="https://doccure.dreamstechnologies.com/html/">
-		<meta property="twitter:url" content="https://doccure.dreamstechnologies.com/html/">
-		<meta name="twitter:title" content="Doctors Appointment HTML Website Templates | Doccure">
-		<meta name="twitter:description" content="The responsive professional Doccure template offers many features, like scheduling appointments with  top doctors, clinics, and hospitals via voice, video call & chat.">
-		<meta name="twitter:image" content="assets/img/preview-banner.jpg">	
-		
-		<!-- Favicon -->
-		<link rel="shortcut icon" href="{{ asset('backend/assets/img/favicon.png') }}" type="image/x-icon">
+<head>
+    <meta charset="utf-8">
+    <title>Messages — Doccure</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{{ asset('backend/assets/img/favicon.png') }}" type="image/x-icon">
+    <script src="{{ asset('backend/assets/js/theme-script.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('backend/assets/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/assets/plugins/fontawesome/css/fontawesome.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/assets/plugins/fontawesome/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/assets/css/iconsax.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/assets/css/feather.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/assets/css/custom.css') }}">
+    <style>
+        .chat-empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:#9e9e9e;}
+        .chat-empty-state i{font-size:4rem;margin-bottom:1rem;opacity:.4;}
+        .contact-search-wrap{padding:12px 16px;}
+        .online-row{display:flex;gap:10px;overflow-x:auto;padding:6px 16px 10px;}
+        .online-row::-webkit-scrollbar{height:4px;}
+        .online-row::-webkit-scrollbar-thumb{background:#ddd;border-radius:4px;}
+        .chat-img-preview{padding:6px 16px;}
+        .chat-img-preview img{max-height:90px;border-radius:8px;}
+        .chat-img-preview .remove-img-btn{cursor:pointer;color:#dc3545;margin-left:8px;font-size:.85rem;}
+        .msg-image img{max-width:220px;max-height:220px;border-radius:8px;display:block;margin-top:4px;}
+        .user-list-item.active{background:rgba(var(--bs-primary-rgb),.07);}
+        #middle{display:flex;flex-direction:column;min-height:0;}
+        #activeChatArea{display:flex;flex-direction:column;flex:1;min-height:0;}
+        .chat-body-scroll{flex:1;overflow-y:auto;padding:16px;}
+        .chat-body-scroll .messages{display:flex;flex-direction:column;gap:4px;}
+    </style>
+</head>
+<body class="main-chat-blk">
 
-		<!-- Apple Touch Icon -->
-		<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('backend/assets/img/apple-touch-icon.png') }}">
+<div class="main-wrapper">
 
-		<!-- Theme Settings Js -->
-		<script src="{{ asset('backend/assets/js/theme-script.js') }}"></script>
-		
-		<!-- Bootstrap CSS -->
-		<link rel="stylesheet" href="{{ asset('backend/assets/css/bootstrap.min.css') }}">
-		
-		<!-- Fontawesome CSS -->
-		<link rel="stylesheet" href="{{ asset('backend/assets/plugins/fontawesome/css/fontawesome.min.css') }}">
-		<link rel="stylesheet" href="{{ asset('backend/assets/plugins/fontawesome/css/all.min.css') }}">
+    @include('doctor.body.header')
 
-		<!-- Iconsax CSS-->
-		<link rel="stylesheet" href="{{ asset('backend/assets/css/iconsax.css') }}">
+    <div class="page-wrapper chat-page-wrapper">
+        <div class="container">
+            <div class="content doctor-content">
+                <div class="chat-sec">
 
-		<!-- Feathericon CSS -->
-    	<link rel="stylesheet" href="{{ asset('backend/assets/css/feather.css') }}">
+                    {{-- ── LEFT SIDEBAR ──────────────────────────────── --}}
+                    <div class="sidebar-group left-sidebar chat_sidebar">
+                        <div id="chats" class="left-sidebar-wrap sidebar active slimscroll">
+                            <div class="slimscroll-active-sidebar">
 
-		<!-- Swiper CSS -->
-		<link rel="stylesheet" href="{{ asset('backend/assets/plugins/swiper/swiper.min.css') }}">
-		
-		<!-- Main CSS -->
-		<link rel="stylesheet" href="{{ asset('backend/assets/css/custom.css') }}">
-	
-	</head>
-	<body class="main-chat-blk">
-
-		<!-- Main Wrapper -->
-		<div class="main-wrapper">
-		
-			<!-- Header -->
-			@include('doctor.body.header')	
-			<!-- /Header -->
-			
-<div class="page-wrapper chat-page-wrapper">
-    <div class="container">
-
-        <div class="content doctor-content">
-            <div class="chat-sec">
-
-                <!-- sidebar group -->
-                <div class="sidebar-group left-sidebar chat_sidebar">
-
-                    <!-- Chats sidebar -->
-                    <div id="chats" class="left-sidebar-wrap sidebar active slimscroll">
-    
-        <div class="slimscroll-active-sidebar">
-
-            <!-- Left Chat Title -->
-            <div class="left-chat-title all-chats">
-                <div class="setting-title-head">
-                    <h4> All Chats</h4>
-                </div>
-                <div class="add-section">
-                    <!-- Chat Search -->
-                    <form>
-                        <div class="user-chat-search">
-                            <span class="form-control-feedback"><i class="fa-solid fa-magnifying-glass"></i></span>
-                            <input type="text" name="chat-search" placeholder="Search" class="form-control">
-                        </div>
-                    </form>
-                    <!-- /Chat Search -->
-                </div>
-            </div>
-            <!-- /Left Chat Title -->
-
-            <!-- Top Online Contacts -->
-<div class="top-online-contacts">
-    <div class="fav-title">
-        <h6>Online Now</h6>
-        <a href="javascript:void(0);">View All</a>
-    </div>
-    <div class="swiper-container">
-        <div class="swiper-wrapper">
-            <div class="swiper-slide">
-                <div class="top-contacts-box">
-                    <div class="profile-img online">
-                        <img src="{{ asset('backend/assets/img/doctors-dashboard/profile-01.jpg') }}" alt="Img">
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="top-contacts-box">
-                    <div class="profile-img online">
-                        <img src="{{ asset('backend/assets/img/doctors-dashboard/profile-04.jpg') }}" alt="Img">
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="top-contacts-box">
-                    <div class="profile-img online">
-                        <img src="{{ asset('backend/assets/img/doctors-dashboard/profile-03.jpg') }}" alt="Img">
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="top-contacts-box">
-                    <div class="profile-img online">
-                        <img src="{{ asset('backend/assets/img/doctors-dashboard/profile-08.jpg') }}" alt="Img">
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="top-contacts-box">
-                    <div class="profile-img online">
-                        <img src="{{ asset('backend/assets/img/doctors-dashboard/profile-06.jpg') }}" alt="Img">
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="top-contacts-box">
-                    <div class="profile-img online">
-                        <img src="{{ asset('backend/assets/img/doctors-dashboard/profile-07.jpg') }}" alt="Img">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-            <!-- /Top Online Contacts -->
-
-    <div class="sidebar-body chat-body" id="chatsidebar">
-        
-        <!-- Left Chat Title -->
-        <div class="d-flex justify-content-between align-items-center ps-0 pe-0">
-            <div class="fav-title pin-chat">
-                <h6>Pinned Chat</h6>
-            </div>
-        </div>
-        <!-- /Left Chat Title -->
-
-        <ul class="user-list">
-            <li class="user-list-item">
-                <a href="javascript:void(0);" >
-                    <div class="avatar avatar-online">
-                        <img src="assets/img/doctors-dashboard/profile-01.jpg" alt="image">
-                    </div>
-                    <div class="users-list-body">
-                        <div>
-                            <h5>Adrian Marshall</h5>
-                            <p>Have you called them?</p>
-                        </div>
-                        <div class="last-chat-time">
-                            <small class="text-muted">Just Now</small>
-                            <div class="chat-pin">
-                                <i class="fa-solid fa-thumbtack me-2"></i>
-                                <i class="fa-solid fa-check-double green-check"></i>
-                            </div>
-                        </div>    
-                    </div>
-                </a>
-            </li>
-            <li class="user-list-item">
-                <a href="javascript:void(0);" >
-                        <div class="avatar ">
-                            <img src="assets/img/doctors-dashboard/doctor-profile-img.jpg" alt="image">
-                        </div>
-                    <div class="users-list-body">
-                        <div>
-                            <h5>Dr Joseph Boyd</h5>
-                            <p><i class="fa-solid fa-video me-1"></i>Video</p>
-                        </div>
-                        <div class="last-chat-time">
-                            <small class="text-muted">Yesterday</small>
-                            <div class="chat-pin">
-                                <i class="fa-solid fa-thumbtack"></i>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </li>
-            <li class="user-list-item">
-                <a href="javascript:void(0);" >
-                    <div class="avatar avatar-online">
-                        <img src="assets/img/doctors-dashboard/profile-04.jpg" alt="image">
-                    </div>
-                    <div class="users-list-body">
-                        <div>
-                            <h5>Catherine Gracey</h5>
-                            <p><i class="fa-solid fa-file-lines me-1"></i>Prescription.doc</p>
-                        </div>
-                        <div class="last-chat-time">
-                            <small class="text-muted">10:20 PM</small>
-                            <div class="chat-pin">
-                                <i class="fa-solid fa-thumbtack me-2"></i>
-                                <i class="fa-solid fa-check-double green-check"></i>
-                            </div>
-                        </div>    
-                    </div>
-                </a>
-            </li>
-        </ul>
-        <!-- Left Chat Title -->
-        <div class="d-flex justify-content-between align-items-center ps-0 pe-0">
-            <div class="fav-title pin-chat">
-                <h6>Recent Chat</h6>
-            </div>
-        </div>
-        <!-- /Left Chat Title -->
-        <ul class="user-list">
-            <li class="user-list-item">
-                <a href="javascript:void(0);" >
-                    <div class="avatar avatar-online">
-                        <img src="assets/img/doctors-dashboard/profile-02.jpg" alt="image">
-                    </div>
-                    <div class="users-list-body">
-                        <div>
-                            <h5>Kelly Stevens</h5>
-                            <p>Have you called them?</p>
-                        </div>
-                        <div class="last-chat-time">
-                            <small class="text-muted">Just Now</small>
-                            <div class="new-message-count">2</div>
-                        </div>    
-                    </div>
-                </a>
-            </li>
-            <li class="user-list-item">
-                <a href="javascript:void(0);" >
-                    <div>
-                        <div class="avatar avatar-online">
-                            <img src="assets/img/doctors-dashboard/profile-05.jpg" alt="image">
-                        </div>
-                    </div>
-                    <div class="users-list-body">
-                        <div>
-                            <h5>Robert Miller</h5>
-                            <p><i class="fa-solid fa-video me-1"></i>Video</p>
-                        </div>
-                        <div class="last-chat-time">
-                            <small class="text-muted">Yesterday</small>
-                            <div class="chat-pin">
-                                <i class="fa-solid fa-check"></i>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </li>
-            <li class="user-list-item">
-                <a href="javascript:void(0);" >
-                    <div class="avatar">
-                        <img src="assets/img/doctors-dashboard/profile-08.jpg" alt="image">
-                    </div>
-                    <div class="users-list-body">
-                        <div>
-                            <h5>Emily Musick</h5>
-                            <p><i class="fa-solid fa-file-lines me-1"></i>Project Tools.doc</p>
-                        </div>
-                        <div class="last-chat-time">
-                            <small class="text-muted">10:20 PM</small>
-                            
-                        </div>    
-                    </div>
-                </a>
-            </li>
-            <li class="user-list-item">
-                <a href="javascript:void(0);" >
-                    <div>
-                        <div class="avatar avatar-online">
-                            <img src="assets/img/doctors-dashboard/profile-03.jpg" alt="image">
-                        </div>
-                    </div>
-                    <div class="users-list-body">
-                        <div>
-                            <h5>Samuel James</h5>
-                            <p><i class="fa-solid fa-microphone me-1"></i>Audio</p>
-                        </div>
-                        <div class="last-chat-time">
-                            <small class="text-muted">12:30 PM</small>
-                            <div class="chat-pin">
-                                <i class="fa-solid fa-check-double green-check"></i>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </li>
-            <li class="user-list-item">
-                <a href="javascript:void(0);" >
-                    <div>
-                        <div class="avatar ">
-                            <img src="assets/img/doctors-dashboard/profile-02.jpg" alt="image">
-                        </div>
-                    </div>
-                    <div class="users-list-body">
-                        <div>
-                            <h5>Dr Shanta Neill</h5>
-                            <p class="missed-call-col"><i class="fa-solid fa-phone-flip me-1"></i>Missed Call</p>
-                        </div>
-                        <div class="last-chat-time">
-                            <small class="text-muted">Yesterday</small>
-                            <div class="chat-pin">
-                                <i class="bx bx-microphone-off"></i>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </li>
-            <li class="user-list-item">
-                <a href="javascript:void(0);" >
-                    <div>
-                        <div class="avatar avatar-online">
-                            <img src="assets/img/doctors-dashboard/profile-07.jpg" alt="image">
-                        </div>
-                    </div>
-                    <div class="users-list-body">
-                        <div>
-                            <h5>Peter Anderson</h5>
-                            <p>Have you called them?</p>
-                        </div>
-                        <div class="last-chat-time">
-                            <small class="text-muted">23/03/24</small>
-                            <div class="chat-pin">
-                                <i class="fa-solid fa-check"></i>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </li>
-            <li class="user-list-item">
-                <a href="javascript:void(0);" >
-                    <div>
-                        <div class="avatar">
-                            <img src="assets/img/doctors-dashboard/profile-06.jpg" alt="image">
-                        </div>
-                    </div>
-                    <div class="users-list-body">
-                        <div>
-                            <h5>Anderea Kearns</h5>
-                            <p><i class="fa-solid fa-image me-1"></i>Photo</p>
-                        </div>
-                        <div class="last-chat-time">
-                            <small class="text-muted">20/03/24</small>
-                            <div class="chat-pin">
-                                <i class="fa-solid fa-check-double"></i>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </li>
-        </ul>
-    </div>
-
-        </div>
-    
-                    </div>
-                    <!-- / Chats sidebar -->
-                </div>
-                <!-- /Sidebar group -->
-
-                <!-- Chat -->
-                <div class="chat chat-messages" id="middle">
-                    <div class="slimscroll">
-                        <div class="chat-inner-header">
-                            <div class="chat-header">
-                                <div class="user-details">
-                                    <div class="d-lg-none">
-                                        <ul class="list-inline mt-2 me-2">
-                                            <li class="list-inline-item">
-                                                <a class="text-muted px-0 left_sides" href="#" data-chat="open">
-                                                    <i class="fas fa-arrow-left"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
+                                {{-- Title --}}
+                                <div class="left-chat-title all-chats">
+                                    <div class="setting-title-head">
+                                        <h4>All Chats</h4>
                                     </div>
-                                    <figure class="avatar avatar-online">
-                                        <img src="assets/img/doctors-dashboard/profile-06.jpg" alt="image">
-                                    </figure>
-                                    <div class="mt-1">
-                                        <h5>Anderea Kearns</h5>
-                                        <small class="last-seen">
-                                            Online
-                                        </small>
+                                    <div class="add-section">
+                                        <div class="user-chat-search contact-search-wrap">
+                                            <span class="form-control-feedback"><i class="fa-solid fa-magnifying-glass"></i></span>
+                                            <input type="text" id="contactSearch" placeholder="Search" class="form-control">
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="chat-options ">
-                                    <ul class="list-inline">
-                                        <li class="list-inline-item" >
-                                            <a href="javascript:void(0)" class="btn btn-outline-light chat-search-btn" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Search">
-                                                <i class="fa-solid fa-magnifying-glass"></i>
-                                            </a>
-                                        </li>
-                                        <li class="list-inline-item">
-                                            <a class="btn btn-outline-light no-bg" href="#" data-bs-toggle="dropdown">
-                                                <i class="fa-solid fa-ellipsis-vertical"></i>
-                                            </a>
-                                            <div class="dropdown-menu dropdown-menu-end" >
-                                                <a href="#" class="dropdown-item "><span><i class="bx bx-x" ></i></span>Close Chat </a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#mute-notification"><span><i class="bx bx-volume-mute"></i></span>Mute Notification</a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#disappearing-messages"><span><i class="bx bx-time-five"></i></span>Disappearing Message</a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#clear-chat"><span><i class="bx bx-brush-alt"></i></span>Clear Message</a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#change-chat"><span><i class="bx bx-trash-alt"></i></span>Delete Chat</a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#report-user"><span><i class="bx bx-dislike"></i></span>Report</a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#block-user"><span><i class="bx bx-block"></i></span>Block</a>
-                                            </div>
+
+                                {{-- Online Now --}}
+                                <div id="onlineSection" class="top-online-contacts" style="display:none;">
+                                    <div class="fav-title">
+                                        <h6>Online Now</h6>
+                                    </div>
+                                    <div class="online-row" id="onlineRow"></div>
+                                </div>
+
+                                {{-- Contact List --}}
+                                <div class="sidebar-body chat-body" id="chatsidebar">
+                                    <div class="d-flex justify-content-between align-items-center ps-0 pe-0">
+                                        <div class="fav-title pin-chat"><h6>Recent Chat</h6></div>
+                                    </div>
+                                    <ul class="user-list" id="contactList">
+                                        <li class="text-center py-4 text-muted">
+                                            <small>Loading chats...</small>
                                         </li>
                                     </ul>
                                 </div>
-                                <!-- Chat Search -->
-                                <div class="chat-search">
-                                    <form>
-                                        <span class="form-control-feedback"><i class="fa-solid fa-magnifying-glass"></i></span>
-                                        <input type="text" name="chat-search" placeholder="Search Chats" class="form-control">
-                                        <div class="close-btn-chat"><i class="fa fa-close"></i></div>
-                                    </form>
-                                </div>
-                                <!-- /Chat Search -->
-                            </div>
-                        </div>
-                        <div class="chat-body">
-                            <div class="messages">
-                                <div class="chats">
-                                    <div class="chat-avatar">
-                                        <img src="assets/img/doctors-dashboard/profile-06.jpg" class="dreams_chat" alt="image">
-                                    </div>
-                                    <div class="chat-content">
-                                        <div class="chat-profile-name">
-                                            <h6>Andrea Kearns<span>8:16 PM</span></h6>
-                                            <div class="chat-action-btns ms-3">
-                                                <div class="chat-action-col">
-                                                    <a class="#" href="#" data-bs-toggle="dropdown">
-                                                        <i class="fa-solid fa-ellipsis"></i>
-                                                    </a>
-                                                    <div class="dropdown-menu chat-drop-menu dropdown-menu-end" >
-                                                        <a href="#" class="dropdown-item message-info-left">Message Info </a>
-                                                        <a href="#" class="dropdown-item">Reply</a>
-                                                        <a href="#" class="dropdown-item" >React</a>
-                                                        <a href="#" class="dropdown-item">Forward</a>
-                                                        <a href="#" class="dropdown-item">Delete</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="message-content">
-                                            <a href="javascript:void(0);">Hello Doctor, </a> could you tell a diet plan that suits for me?
-                                            <div class="emoj-group">
-                                                <ul>
-                                                    <li class="emoj-action"><a href="javascript:void(0);"  ><i class="fa-regular fa-face-smile"></i></a>
-                                                        <div class="emoj-group-list">
-                                                            <ul>
-                                                                <li><a href="javascript:void(0);" ><img src="assets/img/icons/emoj-icon-01.svg"  alt="Icon"></a></li>
-                                                                <li><a href="javascript:void(0);" ><img src="assets/img/icons/emoj-icon-02.svg"  alt="Icon"></a></li>
-                                                                <li><a href="javascript:void(0);" ><img src="assets/img/icons/emoj-icon-03.svg"  alt="Icon"></a></li>
-                                                                <li><a href="javascript:void(0);" ><img src="assets/img/icons/emoj-icon-04.svg"  alt="Icon"></a></li>
-                                                                <li><a href="javascript:void(0);" ><img src="assets/img/icons/emoj-icon-05.svg"  alt="Icon"></a></li>
-                                                                <li class="add-emoj"><a href="javascript:void(0);" ><i class="bx bx-plus"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </li>
-                                                    <li><a href="#" data-bs-toggle="modal" data-bs-target="#forward-message"><i class="fa-solid fa-share"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="chat-line">
-                                    <span class="chat-date">Today, March 25</span>
-                                </div>
-                                <div class="chats chats-right">
-                                    <div class="chat-content">
-                                        <div class="chat-profile-name text-end justify-content-end">
-                                            <h6>Edalin Hendry<span>9:45 AM <i class="fa-solid fa-check-double green-check"></i></span></h6>
-                                            <div class="chat-action-btns ms-3">
-                                                <div class="chat-action-col">
-                                                    <a class="#" href="#" data-bs-toggle="dropdown">
-                                                        <i class="fa-solid fa-ellipsis"></i>
-                                                    </a>
-                                                    <div class="dropdown-menu chat-drop-menu dropdown-menu-end" >
-                                                        <a href="#" class="dropdown-item message-info-left">Message Info </a>
-                                                        <a href="#" class="dropdown-item">Reply</a>
-                                                        <a href="#" class="dropdown-item" >React</a>
-                                                        <a href="#" class="dropdown-item">Forward</a>
-                                                        <a href="#" class="dropdown-item">Delete</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="message-content ">
-                                            <div class="emoj-group rig-emoji-group">
-                                                <ul>
-                                                    <li class="emoj-action"><a href="javascript:void(0);"  ><i class="fa-regular fa-face-smile"></i></a>
-                                                        <div class="emoj-group-list">
-                                                            <ul>
-                                                                <li><a href="javascript:void(0);" ><img src="assets/img/icons/emoj-icon-01.svg"  alt="Icon"></a></li>
-                                                                <li><a href="javascript:void(0);" ><img src="assets/img/icons/emoj-icon-02.svg"  alt="Icon"></a></li>
-                                                                <li><a href="javascript:void(0);" ><img src="assets/img/icons/emoj-icon-03.svg"  alt="Icon"></a></li>
-                                                                <li><a href="javascript:void(0);" ><img src="assets/img/icons/emoj-icon-04.svg"  alt="Icon"></a></li>
-                                                                <li><a href="javascript:void(0);" ><img src="assets/img/icons/emoj-icon-05.svg"  alt="Icon"></a></li>
-                                                                <li class="add-emoj"><a href="javascript:void(0);" ><i class="bx bx-plus"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </li>
-                                                    <li><a href="#" data-bs-toggle="modal" data-bs-target="#forward-message"><i class="fa-solid fa-share"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="chat-voice-group">
-                                                <ul>
-                                                    <li><a href="javascript:void(0);"><span><img src="assets/img/icons/play-01.svg" alt="image"></span></a></li>
-                                                    <li><img src="assets/img/icons/voice.svg" alt="image"></li>
-                                                    <li>0:05</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="chat-avatar">
-                                        <img src="assets/img/doctors-dashboard/doctor-profile-img.jpg" class="dreams_chat" alt="image">
-                                    </div>
-                                </div>
-                                <div class="chats">
-                                    <div class="chat-avatar">
-                                        <img src="assets/img/doctors-dashboard/profile-06.jpg" class="dreams_chat" alt="image">
-                                    </div>
-                                    <div class="chat-content">
-                                        <div class="chat-profile-name">
-                                            <h6>Andrea Kearns<span>9:47 AM</span><span class="check-star"><i class="bx bxs-star"></i></span></h6>
-                                            <div class="chat-action-btns ms-2">
-                                                <div class="chat-action-col">
-                                                    <a class="#" href="#" data-bs-toggle="dropdown">
-                                                        <i class="fa-solid fa-ellipsis"></i>
-                                                    </a>
-                                                    <div class="dropdown-menu chat-drop-menu dropdown-menu-end" >
-                                                        <a href="#" class="dropdown-item message-info-left">Message Info </a>
-                                                        <a href="#" class="dropdown-item">Reply</a>
-                                                        <a href="#" class="dropdown-item" >React</a>
-                                                        <a href="#" class="dropdown-item">Forward</a>
-                                                        <a href="#" class="dropdown-item">Delete</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="message-content award-link chat-award-link">
-                                            <a href="javascript:void(0);" class="mb-1">https://www.youtube.com/watch?v=GCmL3mS0Psk</a>
-                                            <img src="assets/img/sending-img.jpg" alt="img">
-                                            <div class="emoj-group">
-                                                <ul>
-                                                    <li class="emoj-action"><a href="javascript:void(0);"  ><i class="fa-regular fa-face-smile"></i></a>
-                                                        <div class="emoj-group-list">
-                                                            <ul>
-                                                                <li><a href="javascript:void(0);" ><img src="assets/img/icons/emoj-icon-01.svg"  alt="Icon"></a></li>
-                                                                <li><a href="javascript:void(0);" ><img src="assets/img/icons/emoj-icon-02.svg"  alt="Icon"></a></li>
-                                                                <li><a href="javascript:void(0);" ><img src="assets/img/icons/emoj-icon-03.svg"  alt="Icon"></a></li>
-                                                                <li><a href="javascript:void(0);" ><img src="assets/img/icons/emoj-icon-04.svg"  alt="Icon"></a></li>
-                                                                <li><a href="javascript:void(0);" ><img src="assets/img/icons/emoj-icon-05.svg"  alt="Icon"></a></li>
-                                                                <li class="add-emoj"><a href="javascript:void(0);" ><i class="bx bx-plus"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </li>
-                                                    <li><a href="#" data-bs-toggle="modal" data-bs-target="#forward-message"><i class="fa-solid fa-share"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="chats chats-right">
-                                    <div class="chat-content">
-                                        <div class="chat-profile-name text-end justify-content-end">
-                                            <h6>Edalin Hendry<span>9:50 AM <i class="fa-solid fa-check-double green-check"></i></span></h6>
-                                            <div class="chat-action-btns ms-3">
-                                                <div class="chat-action-col">
-                                                    <a class="#" href="#" data-bs-toggle="dropdown">
-                                                        <i class="fa-solid fa-ellipsis"></i>
-                                                    </a>
-                                                    <div class="dropdown-menu chat-drop-menu dropdown-menu-end" >
-                                                        <a href="#" class="dropdown-item message-info-left">Message Info </a>
-                                                        <a href="#" class="dropdown-item">Reply</a>
-                                                        <a href="#" class="dropdown-item" >React</a>
-                                                        <a href="#" class="dropdown-item">Forward</a>
-                                                        <a href="#" class="dropdown-item">Delete</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="message-content fancy-msg-box">
-                                            <div class="emoj-group wrap-emoji-group ">
-                                                <ul>
-                                                    <li class="emoj-action"><a href="javascript:void(0);"  ><i class="fa-regular fa-face-smile"></i></a>
-                                                        <div class="emoj-group-list">
-                                                            <ul>
-                                                                <li><a href="javascript:void(0);" ><img src="assets/img/icons/emoj-icon-01.svg"  alt="Icon"></a></li>
-                                                                <li><a href="javascript:void(0);" ><img src="assets/img/icons/emoj-icon-02.svg"  alt="Icon"></a></li>
-                                                                <li><a href="javascript:void(0);" ><img src="assets/img/icons/emoj-icon-03.svg"  alt="Icon"></a></li>
-                                                                <li><a href="javascript:void(0);" ><img src="assets/img/icons/emoj-icon-04.svg"  alt="Icon"></a></li>
-                                                                <li><a href="javascript:void(0);" ><img src="assets/img/icons/emoj-icon-05.svg"  alt="Icon"></a></li>
-                                                                <li class="add-emoj"><a href="javascript:void(0);" ><i class="bx bx-plus"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </li>
-                                                    <li><a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#forward-message"><i class="fa-solid fa-share"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="download-col">
-                                                <ul class="nav mb-0">
-                                                    <li>
-                                                        <div class="image-download-col">
-                                                            <a href="assets/img/media/media-02.jpg" data-fancybox="gallery" class="fancybox">
-                                                                <img src="assets/img/media/media-02.jpg" alt="Img">
-                                                            </a>
-                                                            
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="image-download-col ">
-                                                            <a href="assets/img/media/media-03.jpg" data-fancybox="gallery" class="fancybox">
-                                                                <img src="assets/img/media/media-03.jpg" alt="Img">
-                                                            </a>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="image-download-col image-not-download">
-                                                            <a href="assets/img/media/media-01.jpg" data-fancybox="gallery" class="fancybox">
-                                                                <img src="assets/img/media/media-01.jpg" alt="Img">
-                                                                <span>10+</span>
-                                                            </a>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="chat-avatar">
-                                        <img src="assets/img/doctors-dashboard/doctor-profile-img.jpg" class="dreams_chat" alt="image">
-                                    </div>
-                                </div>
-    
-                                <div class="chats">
-                                    <div class="chat-avatar">
-                                        <img src="assets/img/doctors-dashboard/profile-06.jpg" class="dreams_chat" alt="image">
-                                    </div>
-                                    <div class="chat-content">
-                                        <div class="chat-profile-name">
-                                            <h6>Andrea Kearns<span>8:16 PM</span></h6>
-                                            <div class="chat-action-btns ms-3">
-                                                <div class="chat-action-col">
-                                                    <a class="#" href="#" data-bs-toggle="dropdown">
-                                                        <i class="fa-solid fa-ellipsis"></i>
-                                                    </a>
-                                                    <div class="dropdown-menu chat-drop-menu dropdown-menu-end" >
-                                                        <a href="#" class="dropdown-item message-info-left">Message Info </a>
-                                                        <a href="#" class="dropdown-item">Reply</a>
-                                                        <a href="#" class="dropdown-item" >React</a>
-                                                        <a href="#" class="dropdown-item">Forward</a>
-                                                        <a href="#" class="dropdown-item">Delete</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="message-content review-files">
-                                            <div class="file-download d-flex align-items-center mb-0">
-                                                <div class="file-type d-flex align-items-center justify-content-center me-2">
-                                                    <i class="fa-solid fa-location-dot"></i>
-                                                </div>
-                                                <div class="file-details">
-                                                    <span class="file-name">My Location</span>
-                                                    <ul>
-                                                        <li><a href="javascript:void(0);">Download</a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="emoj-group">
-                                                <ul>
-                                                    <li class="emoj-action"><a href="javascript:void(0);"  ><i class="fa-regular fa-face-smile"></i></a>
-                                                        <div class="emoj-group-list">
-                                                            <ul>
-                                                                <li><a href="javascript:void(0);" ><img src="assets/img/icons/emoj-icon-01.svg"  alt="Icon"></a></li>
-                                                                <li><a href="javascript:void(0);" ><img src="assets/img/icons/emoj-icon-02.svg"  alt="Icon"></a></li>
-                                                                <li><a href="javascript:void(0);" ><img src="assets/img/icons/emoj-icon-03.svg"  alt="Icon"></a></li>
-                                                                <li><a href="javascript:void(0);" ><img src="assets/img/icons/emoj-icon-04.svg"  alt="Icon"></a></li>
-                                                                <li><a href="javascript:void(0);" ><img src="assets/img/icons/emoj-icon-05.svg"  alt="Icon"></a></li>
-                                                                <li class="add-emoj"><a href="javascript:void(0);" ><i class="bx bx-plus"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </li>
-                                                    <li><a href="#" data-bs-toggle="modal" data-bs-target="#forward-message"><i class="fa-solid fa-share"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="like-chat-grp">
-                                            <ul>
-                                                <li class="like-chat"><a href="javascript:void(0);">2<img src="assets/img/icons/like.svg"  alt="Icon"></a></li>
-                                                <li class="comment-chat"><a href="javascript:void(0);">2<img src="assets/img/icons/heart.svg"  alt="Icon"></a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="chats">
-                                    <div class="chat-avatar">
-                                        <img src="assets/img/doctors-dashboard/profile-06.jpg" class="dreams_chat" alt="image">
-                                    </div>
-                                    <div class="chat-content">
-                                        <div class="chat-profile-name">
-                                            <h6>Andrea Kearns<span>8:16 PM</span></h6>
-                                            <div class="chat-action-btns ms-3">
-                                                <div class="chat-action-col">
-                                                    <a class="#" href="#" data-bs-toggle="dropdown">
-                                                        <i class="fa-solid fa-ellipsis"></i>
-                                                    </a>
-                                                    <div class="dropdown-menu chat-drop-menu dropdown-menu-end" >
-                                                        <a href="#" class="dropdown-item message-info-left">Message Info </a>
-                                                        <a href="#" class="dropdown-item">Reply</a>
-                                                        <a href="#" class="dropdown-item" >React</a>
-                                                        <a href="#" class="dropdown-item">Forward</a>
-                                                        <a href="#" class="dropdown-item">Delete</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="message-content">
-                                            Thank you for your support
-                                                <div class="emoj-group">
-                                                    <ul>
-                                                        <li class="emoj-action"><a href="javascript:void(0);"  ><i class="fa-regular fa-face-smile"></i></a>
-                                                            <div class="emoj-group-list">
-                                                                <ul>
-                                                                    <li><a href="javascript:void(0);" ><img src="assets/img/icons/emoj-icon-01.svg"  alt="Icon"></a></li>
-                                                                    <li><a href="javascript:void(0);" ><img src="assets/img/icons/emoj-icon-02.svg"  alt="Icon"></a></li>
-                                                                    <li><a href="javascript:void(0);" ><img src="assets/img/icons/emoj-icon-03.svg"  alt="Icon"></a></li>
-                                                                    <li><a href="javascript:void(0);" ><img src="assets/img/icons/emoj-icon-04.svg"  alt="Icon"></a></li>
-                                                                    <li><a href="javascript:void(0);" ><img src="assets/img/icons/emoj-icon-05.svg"  alt="Icon"></a></li>
-                                                                    <li class="add-emoj"><a href="javascript:void(0);" ><i class="bx bx-plus"></i></a></li>
-                                                                </ul>
-                                                            </div>
-                                                        </li>
-                                                        <li><a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#forward-message"><i class="fa-solid fa-share"></i></a></li>
-                                                    </ul>
-                                                </div>
-                                        </div>                                    
-                                    </div>
-                                </div>			
-                                <div class="chats">
-                                    <div class="chat-avatar">
-                                        <img src="assets/img/doctors-dashboard/profile-06.jpg" class="dreams_chat" alt="image">
-                                    </div>
-                                    <div class="chat-content chat-cont-type">
-                                        <div class="chat-profile-name chat-type-wrapper">
-                                            <p>Andrea Kearns Typing...</p>
-                                        </div>
-                                    </div>
-                                </div>
-    
-                                <div class="chats forward-chat-msg">
-                                    <div class="chat-avatar">
-                                        <img src="assets/img/doctors-dashboard/profile-06.jpg" class="dreams_chat" alt="image">
-                                    </div>
-                                    <div class="chat-content">
-                                        <div class="chat-profile-name">
-                                            <h6>Andrea Kearns<span>8:16 PM</span></h6>
-                                            <div class="chat-action-btns ms-3">
-                                                <div class="chat-action-col">
-                                                    <a class="#" href="#" data-bs-toggle="dropdown">
-                                                        <i class="fa-solid fa-ellipsis"></i>
-                                                    </a>
-                                                    <div class="dropdown-menu chat-drop-menu dropdown-menu-end" >
-                                                        <a href="#" class="dropdown-item message-info-left">Message Info </a>
-                                                        <a href="#" class="dropdown-item">Reply</a>
-                                                        <a href="#" class="dropdown-item" >React</a>
-                                                        <a href="#" class="dropdown-item">Forward</a>
-                                                        <a href="#" class="dropdown-item">Delete</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="message-content">
-                                            Thank you for your support
-                                        </div>
-                                    </div>
-                                </div>                           
-                            
+
                             </div>
                         </div>
                     </div>
-                    <div class="chat-footer">
-                        <form>
-                            <div class="smile-foot">
-                                <div class="chat-action-btns">
-                                    <div class="chat-action-col">
-                                        <a class="action-circle" href="#" data-bs-toggle="dropdown">
-                                            <i class="fa-solid fa-ellipsis-vertical"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end" >
-                                            <a href="#" class="dropdown-item "><span><i class="fa-solid fa-file-lines"></i></span>Document</a>
-                                            <a href="#" class="dropdown-item"><span><i class="fa-solid fa-camera"></i></span>Camera</a>
-                                            <a href="#" class="dropdown-item"><span><i class="fa-solid fa-image"></i></span>Gallery</a>
-                                            <a href="#" class="dropdown-item" ><span><i class="fa-solid fa-volume-high"></i></span>Audio</a>
-                                            <a href="#" class="dropdown-item"><span><i class="fa-solid fa-location-dot"></i></span>Location</a>
-                                            <a href="#" class="dropdown-item" ><span><i class="fa-solid fa-user"></i></span>Contact</a>
+                    {{-- ── /LEFT SIDEBAR ─────────────────────────────── --}}
+
+                    {{-- ── MAIN CHAT AREA ────────────────────────────── --}}
+                    <div class="chat chat-messages" id="middle">
+
+                        {{-- Empty state --}}
+                        <div class="chat-empty-state" id="noChatSelected">
+                            <i class="fa-regular fa-comments"></i>
+                            <h6 class="text-muted">Select a patient to start chatting</h6>
+                            <p class="text-muted fs-14">Only patients with completed appointments are listed.</p>
+                        </div>
+
+                        {{-- Active chat --}}
+                        <div id="activeChatArea" style="display:none;">
+
+                            {{-- Header --}}
+                            <div class="chat-inner-header">
+                                <div class="chat-header">
+                                    <div class="user-details">
+                                        <div class="d-lg-none">
+                                            <a class="text-muted px-0 left_sides" href="#" data-chat="open">
+                                                <i class="fas fa-arrow-left"></i>
+                                            </a>
+                                        </div>
+                                        <figure class="avatar" id="chatHeaderAvatar">
+                                            <img src="" id="chatHeaderImg" alt="image" style="width:48px;height:48px;border-radius:50%;object-fit:cover;">
+                                        </figure>
+                                        <div class="mt-1 ms-2">
+                                            <h5 id="chatHeaderName"></h5>
+                                            <small id="chatHeaderStatus" class="last-seen"></small>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="smile-foot emoj-action-foot">
-                                <a href="#" class="action-circle"><i class="fa-regular fa-face-smile"></i></a>
-                                    <div class="emoj-group-list-foot down-emoji-circle">
-                                        <ul>
-                                            <li><a href="javascript:void(0);" ><img src="assets/img/icons/emoj-icon-01.svg"  alt="Icon"></a></li>
-                                            <li><a href="javascript:void(0);" ><img src="assets/img/icons/emoj-icon-02.svg"  alt="Icon"></a></li>
-                                            <li><a href="javascript:void(0);" ><img src="assets/img/icons/emoj-icon-03.svg"  alt="Icon"></a></li>
-                                            <li><a href="javascript:void(0);" ><img src="assets/img/icons/emoj-icon-04.svg"  alt="Icon"></a></li>
-                                            <li><a href="javascript:void(0);" ><img src="assets/img/icons/emoj-icon-05.svg"  alt="Icon"></a></li>
-                                            <li class="add-emoj"><a href="javascript:void(0);" ><i class="fa-solid fa-plus"></i></a></li>
-                                        </ul>
+
+                            {{-- Messages --}}
+                            <div class="slimscroll chat-body-scroll" id="msgScroll">
+                                <div class="chat-body">
+                                    <div class="messages" id="messagesContainer"></div>
+                                </div>
+                            </div>
+
+                            {{-- Image Preview --}}
+                            <div class="chat-img-preview d-none" id="imgPreviewWrap">
+                                <img id="imgPreviewImg" src="" alt="preview">
+                                <span class="remove-img-btn" id="removeImgBtn">
+                                    <i class="fa-solid fa-times"></i> Remove
+                                </span>
+                            </div>
+
+                            {{-- Footer --}}
+                            <div class="chat-footer">
+                                <form id="sendForm" enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="smile-foot">
+                                        <label for="imgInput" class="action-circle mb-0" title="Attach Image" style="cursor:pointer;">
+                                            <i class="fa-solid fa-image"></i>
+                                        </label>
+                                        <input type="file" id="imgInput" accept="image/jpeg,image/png,image/gif,image/webp" style="display:none;">
                                     </div>
+                                    <input type="text" id="msgBody" class="form-control chat_form" placeholder="Type your message here...">
+                                    <div class="form-buttons">
+                                        <button class="btn send-btn" type="submit">
+                                            <i class="fa-solid fa-paper-plane"></i>
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
-                            <div class="smile-foot">
-                                <a href="#"  class="action-circle"><i class="fa-solid fa-microphone"></i></a>
-                            </div>
-                            <input type="text" class="form-control chat_form" placeholder="Type your message here...">
-                            <div class="form-buttons">
-                                <button class="btn send-btn" type="submit">
-                                    <i class="fa-solid fa-paper-plane"></i>
-                                </button>
-                            </div>
-                        </form>
+
+                        </div>
+                        {{-- /Active chat --}}
+
                     </div>
+                    {{-- ── /MAIN CHAT AREA ───────────────────────────── --}}
+
                 </div>
-                <!-- /Chat -->
-
-
             </div>
         </div>
     </div>
+
 </div>
-		   
-		</div>
-		<!-- /Main Wrapper -->
-		
-		<!-- Voice Call Modal -->
-		<div class="modal fade call-modal" id="voice_call">
-			<div class="modal-dialog modal-dialog-centered" role="document">
-				<div class="modal-content">
-					<div class="modal-body">
-					
-						<!-- Outgoing Call -->
-						<div class="call-box incoming-box">
-							<div class="call-wrapper">
-								<div class="call-inner">
-									<div class="call-user">
-										<img alt="User Image" src="assets/img/patients/patient.jpg" class="call-avatar">
-										<h4>Richard Wilson</h4>
-										<span>Connecting...</span>
-									</div>							
-									<div class="call-items">
-										<a href="javascript:void(0);" class="btn call-item call-end" data-bs-dismiss="modal" aria-label="Close"><i class="material-icons">call_end</i></a>
-										<a href="voice-call.html" class="btn call-item call-start"><i class="material-icons">call</i></a>
-									</div>
-								</div>
-							</div>
-						</div>
-						<!-- Outgoing Call -->
 
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- /Voice Call Modal -->
-		
-		<!-- Video Call Modal -->
-		<div class="modal fade call-modal" id="video_call">
-			<div class="modal-dialog modal-dialog-centered" role="document">
-				<div class="modal-content">
-					<div class="modal-body">
-					
-						<!-- Incoming Call -->
-						<div class="call-box incoming-box">
-							<div class="call-wrapper">
-								<div class="call-inner">
-									<div class="call-user">
-										<img class="call-avatar" src="assets/img/patients/patient.jpg" alt="User Image">
-										<h4>Richard Wilson</h4>
-										<span>Calling ...</span>
-									</div>							
-									<div class="call-items">
-										<a href="javascript:void(0);" class="btn call-item call-end" data-bs-dismiss="modal" aria-label="Close"><i class="material-icons">call_end</i></a>
-										<a href="video-call.html" class="btn call-item call-start"><i class="material-icons">videocam</i></a>
-									</div>
-								</div>
-							</div>
-						</div>
-						<!-- /Incoming Call -->
-						
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- Video Call Modal -->
-	  
-		<!-- jQuery -->
-		<script src="{{ asset('backend/assets/js/jquery-3.7.1.min.js') }}"></script>
+<script src="{{ asset('backend/assets/js/jquery-3.7.1.min.js') }}"></script>
+<script src="{{ asset('backend/assets/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('backend/assets/js/script.js') }}"></script>
 
-		<!-- Slimscroll JS -->
-		<!--script src="assets/js/jquery.slimscroll.min.js"></script-->
-		
-		<!-- Bootstrap Core JS -->
-		<script src="{{ asset('backend/assets/js/bootstrap.bundle.min.js') }}"></script>
-	
-		<!-- Swiper JS -->
-		<script src="{{ asset('backend/assets/plugins/swiper/swiper.min.js') }}"></script>
-		
-		<!-- Custom JS -->
-		<script src="{{ asset('backend/assets/js/script.js') }}"></script>
-		
-	</body>
+<script>
+$(function () {
+
+    /* ── Configuration ─────────────────────────────────────── */
+    var CSRF           = '{{ csrf_token() }}';
+    var ME_PHOTO       = '{{ $mePhoto }}';
+    var ME_NAME        = '{{ addslashes($meName) }}';
+    var CONTACTS_URL   = '{{ route("chat.contacts") }}';
+    var MESSAGES_BASE  = '{{ url("chat/messages") }}';
+    var SEND_BASE      = '{{ url("chat/send") }}';
+    var HEARTBEAT_URL  = '{{ route("chat.heartbeat") }}';
+    var INITIAL_WITH   = {{ $openWith ? (int)$openWith : 'null' }};
+
+    /* ── State ─────────────────────────────────────────────── */
+    var activeContactId    = null;
+    var activeContactName  = '';
+    var activeContactPhoto = '';
+    var lastMsgId          = 0;
+    var currentDate        = '';
+    var renderedIds        = new Set(); // dedup guard: prevents poll + send racing
+
+    /* ── Init ──────────────────────────────────────────────── */
+    heartbeat();
+    loadContacts();
+    setInterval(pollMessages,   3000);
+    setInterval(loadContacts,  10000);
+    setInterval(heartbeat,     30000);
+
+    /* ── Contact search ────────────────────────────────────── */
+    $('#contactSearch').on('input', function () {
+        var val = $(this).val().toLowerCase();
+        $('#contactList li[data-id]').each(function () {
+            $(this).toggle($(this).find('h5').text().toLowerCase().includes(val));
+        });
+    });
+
+    /* ── Heartbeat ─────────────────────────────────────────── */
+    function heartbeat() {
+        $.post(HEARTBEAT_URL, { _token: CSRF });
+    }
+
+    /* ── Load contacts ─────────────────────────────────────── */
+    function loadContacts() {
+        $.get(CONTACTS_URL, function (contacts) {
+            renderContacts(contacts);
+            renderOnlineRow(contacts.filter(function (c) { return c.is_online; }));
+
+            if (INITIAL_WITH && !activeContactId) {
+                var found = contacts.find(function (c) { return c.id == INITIAL_WITH; });
+                if (found) { openChat(found); INITIAL_WITH = null; }
+            }
+        });
+    }
+
+    /* ── Render contact list ───────────────────────────────── */
+    function renderContacts(contacts) {
+        if (!contacts.length) {
+            $('#contactList').html(
+                '<li class="text-center py-4 text-muted">' +
+                '<i class="fa-regular fa-comment-dots fa-2x mb-2 d-block opacity-50"></i>' +
+                '<small>No patients available for chat.<br>Complete an appointment first.</small></li>'
+            );
+            return;
+        }
+        var html = '';
+        contacts.forEach(function (c) {
+            var onlineCls  = c.is_online ? 'avatar-online' : '';
+            var activeCls  = c.id == activeContactId ? 'active' : '';
+            var unreadBadge = c.unread_count > 0
+                ? '<div class="new-message-count">' + c.unread_count + '</div>' : '';
+            var lastMsg = c.last_message
+                ? '<p>' + escHtml(c.last_message) + '</p>'
+                : '<p class="text-muted fs-13">No messages yet</p>';
+            var lastTime = c.last_message_time
+                ? '<small class="text-muted">' + c.last_message_time + '</small>' : '';
+
+            html += '<li class="user-list-item ' + activeCls + '" data-id="' + c.id + '"' +
+                    ' data-name="' + escAttr(c.name) + '"' +
+                    ' data-photo="' + escAttr(c.photo) + '"' +
+                    ' data-online="' + (c.is_online ? 1 : 0) + '">' +
+                '<a href="javascript:void(0);">' +
+                '<div class="avatar ' + onlineCls + '">' +
+                '<img src="' + c.photo + '" alt="image" style="width:46px;height:46px;object-fit:cover;border-radius:50%;"></div>' +
+                '<div class="users-list-body"><div>' +
+                '<h5>' + escHtml(c.name) + '</h5>' + lastMsg + '</div>' +
+                '<div class="last-chat-time">' + lastTime + unreadBadge + '</div>' +
+                '</div></a></li>';
+        });
+        $('#contactList').html(html);
+    }
+
+    /* ── Render online-now row ─────────────────────────────── */
+    function renderOnlineRow(online) {
+        if (!online.length) { $('#onlineSection').hide(); return; }
+        $('#onlineSection').show();
+        var html = online.map(function (c) {
+            return '<div class="top-contacts-box" title="' + escAttr(c.name) + '">' +
+                '<div class="profile-img online">' +
+                '<img src="' + c.photo + '" alt="' + escAttr(c.name) + '" ' +
+                'style="width:48px;height:48px;border-radius:50%;object-fit:cover;cursor:pointer;" ' +
+                'data-id="' + c.id + '">' +
+                '</div></div>';
+        }).join('');
+        $('#onlineRow').html(html);
+    }
+
+    /* ── Click contact in list ─────────────────────────────── */
+    $(document).on('click', '.user-list-item', function () {
+        openChat({
+            id:        $(this).data('id'),
+            name:      $(this).data('name'),
+            photo:     $(this).data('photo'),
+            is_online: $(this).data('online') == 1
+        });
+    });
+
+    /* ── Click online avatar in top row ────────────────────── */
+    $(document).on('click', '#onlineRow img', function () {
+        var id = $(this).data('id');
+        var $li = $('#contactList li[data-id="' + id + '"]');
+        if ($li.length) $li.trigger('click');
+    });
+
+    /* ── Open a conversation ───────────────────────────────── */
+    function openChat(contact) {
+        activeContactId    = contact.id;
+        activeContactName  = contact.name;
+        activeContactPhoto = contact.photo;
+        lastMsgId          = 0;
+        currentDate        = '';
+        renderedIds        = new Set();
+
+        $('.user-list-item').removeClass('active');
+        $('.user-list-item[data-id="' + contact.id + '"]').addClass('active');
+
+        $('#chatHeaderImg').attr('src', contact.photo);
+        $('#chatHeaderName').text(contact.name);
+        setOnlineStatus(contact.is_online);
+
+        $('#noChatSelected').hide();
+        $('#activeChatArea').show();
+        $('#messagesContainer').empty();
+        $('#imgPreviewWrap').addClass('d-none');
+        $('#imgInput').val('');
+
+        fetchMessages();
+    }
+
+    /* ── Set online / offline badge ────────────────────────── */
+    function setOnlineStatus(isOnline) {
+        if (isOnline) {
+            $('#chatHeaderAvatar').addClass('avatar-online');
+            $('#chatHeaderStatus').text('Online').css('color', '#28a745');
+        } else {
+            $('#chatHeaderAvatar').removeClass('avatar-online');
+            $('#chatHeaderStatus').text('Offline').css('color', '#9e9e9e');
+        }
+    }
+
+    /* ── Fetch / poll messages ─────────────────────────────── */
+    function fetchMessages() {
+        if (!activeContactId) return;
+        $.get(MESSAGES_BASE + '/' + activeContactId, { after_id: lastMsgId }, function (data) {
+            if (data.messages && data.messages.length) {
+                appendMessages(data.messages);
+                scrollBottom();
+            }
+            setOnlineStatus(data.is_online);
+        });
+    }
+
+    function pollMessages() { fetchMessages(); }
+
+    /* ── Append messages ───────────────────────────────────── */
+    function appendMessages(msgs) {
+        var html = '';
+        msgs.forEach(function (msg) {
+            if (renderedIds.has(msg.id)) return; // skip duplicates from poll/send race
+            renderedIds.add(msg.id);
+            if (msg.id > lastMsgId) lastMsgId = msg.id;
+            if (msg.date !== currentDate) {
+                currentDate = msg.date;
+                html += '<div class="chat-line"><span class="chat-date">' + fmtDate(msg.date) + '</span></div>';
+            }
+            html += msg.mine ? buildOutgoing(msg) : buildIncoming(msg);
+        });
+        if (html) $('#messagesContainer').append(html);
+    }
+
+    /* ── Build incoming bubble ─────────────────────────────── */
+    function buildIncoming(msg) {
+        return '<div class="chats">' +
+            '<div class="chat-avatar">' +
+            '<img src="' + activeContactPhoto + '" class="dreams_chat" alt="img" ' +
+            'style="width:40px;height:40px;border-radius:50%;object-fit:cover;"></div>' +
+            '<div class="chat-content">' +
+            '<div class="chat-profile-name">' +
+            '<h6>' + escHtml(activeContactName) + '<span>' + msg.time + '</span></h6></div>' +
+            '<div class="message-content">' + buildContent(msg) + '</div>' +
+            '</div></div>';
+    }
+
+    /* ── Build outgoing bubble ─────────────────────────────── */
+    function buildOutgoing(msg) {
+        return '<div class="chats chats-right">' +
+            '<div class="chat-content">' +
+            '<div class="chat-profile-name text-end justify-content-end">' +
+            '<h6>' + escHtml(ME_NAME) + '<span>' + msg.time + ' <i class="fa-solid fa-check-double green-check"></i></span></h6></div>' +
+            '<div class="message-content">' + buildContent(msg) + '</div>' +
+            '</div>' +
+            '<div class="chat-avatar">' +
+            '<img src="' + ME_PHOTO + '" class="dreams_chat" alt="img" ' +
+            'style="width:40px;height:40px;border-radius:50%;object-fit:cover;"></div>' +
+            '</div>';
+    }
+
+    /* ── Build message content (text + optional image) ─────── */
+    function buildContent(msg) {
+        var out = '';
+        if (msg.body) out += '<p style="margin-bottom:' + (msg.image ? '6px' : '0') + ';">' + escHtml(msg.body) + '</p>';
+        if (msg.image) {
+            out += '<div class="msg-image"><a href="' + msg.image + '" target="_blank">' +
+                '<img src="' + msg.image + '" alt="img"></a></div>';
+        }
+        return out;
+    }
+
+    /* ── Send form ─────────────────────────────────────────── */
+    $('#sendForm').on('submit', function (e) {
+        e.preventDefault();
+        if (!activeContactId) return;
+
+        var body = $.trim($('#msgBody').val());
+        var file = $('#imgInput')[0].files[0];
+        if (!body && !file) return;
+
+        var fd = new FormData();
+        fd.append('_token', CSRF);
+        if (body) fd.append('body', body);
+        if (file) fd.append('image', file);
+
+        $('#msgBody').val('');
+        $('#imgInput').val('');
+        $('#imgPreviewWrap').addClass('d-none');
+
+        $.ajax({
+            url:         SEND_BASE + '/' + activeContactId,
+            type:        'POST',
+            data:        fd,
+            processData: false,
+            contentType: false,
+            success: function (msg) {
+                appendMessages([msg]);
+                scrollBottom();
+            },
+            error: function () {
+                alert('Failed to send message. Please try again.');
+            }
+        });
+    });
+
+    /* ── Enter key to send ─────────────────────────────────── */
+    $('#msgBody').on('keydown', function (e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            $('#sendForm').trigger('submit');
+        }
+    });
+
+    /* ── Image attach preview ──────────────────────────────── */
+    $('#imgInput').on('change', function () {
+        var file = this.files[0];
+        if (!file) { $('#imgPreviewWrap').addClass('d-none'); return; }
+        var reader = new FileReader();
+        reader.onload = function (ev) {
+            $('#imgPreviewImg').attr('src', ev.target.result);
+            $('#imgPreviewWrap').removeClass('d-none');
+        };
+        reader.readAsDataURL(file);
+    });
+
+    $('#removeImgBtn').on('click', function () {
+        $('#imgInput').val('');
+        $('#imgPreviewWrap').addClass('d-none');
+    });
+
+    /* ── Utilities ─────────────────────────────────────────── */
+    function scrollBottom() {
+        var el = document.getElementById('msgScroll');
+        if (el) el.scrollTop = el.scrollHeight;
+    }
+
+    function escHtml(str) {
+        if (!str) return '';
+        return $('<div>').text(str).html();
+    }
+
+    function escAttr(str) {
+        if (!str) return '';
+        return str.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    function fmtDate(d) {
+        var dt   = new Date(d);
+        var now  = new Date();
+        var yest = new Date(now); yest.setDate(yest.getDate() - 1);
+        if (dt.toDateString() === now.toDateString())  return 'Today';
+        if (dt.toDateString() === yest.toDateString()) return 'Yesterday';
+        return dt.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    }
+
+});
+</script>
+</body>
 </html>
